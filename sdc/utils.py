@@ -38,7 +38,8 @@ def common_params():
             "resolution": 0.0002,
             "dtype": "float32",
             "resampling": Resampling['bilinear'],
-            "xy_coords": 'center'}
+            "xy_coords": 'center',
+            "chunksize": (-1, 1, 'auto', 'auto')}
 
 
 def convert_asset_hrefs(list_stac_obj: List[Catalog or Collection or Item],

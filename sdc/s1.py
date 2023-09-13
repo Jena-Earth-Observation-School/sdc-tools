@@ -38,7 +38,7 @@ def load_s1_rtc(vec: str,
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bbox, time_range=time_range, time_pattern=time_pattern)
     items = utils.convert_asset_hrefs(list_stac_obj=items, href_type='absolute')
     
-    da = stackstac.stack(items=items, bounds=bbox, chunksize=(-1, 1, 'auto', 'auto'), **params)
+    da = stackstac.stack(items=items, bounds=bbox, **params)
     ds = utils.dataarray_to_dataset(da=da)
     
     return ds
