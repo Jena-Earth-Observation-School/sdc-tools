@@ -67,3 +67,15 @@ def convert_asset_hrefs(list_stac_obj: List[STACObject],
         elif href_type == 'relative':
             stac_obj.make_asset_hrefs_relative()
     return list_stac_obj_copy
+
+
+def overwrite_default_dask_chunk_size():
+    """
+    Overwrites the default dask chunk size to 256 MiB.
+    
+    Returns
+    -------
+    None
+    """
+    import dask
+    dask.config.set({'array.chunk-size': '256MiB'})
