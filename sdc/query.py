@@ -1,4 +1,3 @@
-from copy import deepcopy
 from datetime import datetime
 import pytz
 from shapely.geometry import box
@@ -59,7 +58,7 @@ def filter_collections(catalog: Catalog,
         collection for collection in catalog.get_children()
         if isinstance(collection, Collection) and
         collection.extent.spatial.bboxes is not None and
-        any(_bbox_intersection(bbox, b) is not None for b in collection.extent.spatial.bboxes)
+        any(_bbox_intersection(list(bbox), b) is not None for b in collection.extent.spatial.bboxes)
     ]
 
 
