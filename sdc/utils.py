@@ -24,33 +24,20 @@ def get_catalog_path(product):
     return base_path.joinpath(product.upper(), "catalog.json")
 
 
-def common_params(engine):
+def common_params():
     """
     Returns parameters common to all products.
-    
-    Parameters
-    ----------
-    engine : str
-        Name of the engine used to load the data.
     
     Returns
     -------
     dict
          Dictionary of parameters that are common to all products.
     """
-    if engine == "stackstac":
-        return {"epsg": 4326, 
-                "resolution": 0.0002,
-                "dtype": "float32",
-                "resampling": Resampling['bilinear'],
-                "xy_coords": 'center'}
-    elif engine == "odc-stac":
-        return {"crs": "EPSG:4326",
-                "resolution": 0.0002,
-                "dtype": "float32",
-                "resampling": 'bilinear'}
-    else:
-        raise NotImplementedError(f"Support for engine '{engine}' not implemented.")
+    return {"epsg": 4326,
+            "resolution": 0.0002,
+            "dtype": "float32",
+            "resampling": Resampling['bilinear'],
+            "xy_coords": 'center'}
 
 
 def convert_asset_hrefs(list_stac_obj: List[STACObject], 
