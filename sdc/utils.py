@@ -3,6 +3,7 @@ from pathlib import Path
 
 from typing import List
 from pystac import Catalog, Collection, Item
+from xarray import DataArray, Dataset
 
 
 def get_catalog_path(product):
@@ -79,3 +80,32 @@ def overwrite_default_dask_chunk_size():
     """
     import dask
     dask.config.set({'array.chunk-size': '256MiB'})
+
+
+def dataarray_to_dataset(da: DataArray) -> Dataset:
+    """
+    Converts an xarray.Dataarray loaded using the stackstac library to an xarray.Dataset
+    
+    Parameters
+    ----------
+    da : xarray.Dataarray
+        Dataarray loaded using the stackstac library.
+    
+    Returns
+    -------
+    xarray.Dataset
+        Dataset with band dimension dropped and band coordinates saved as attrs in variables.
+    
+    Notes
+    -----
+    Source: https://github.com/gjoseph92/stackstac/discussions/198#discussion-4760525
+    """
+    stack = da.copy()
+    ds = stack.to_dataset("band")
+    for coord, da in ds.band.coords.items():
+        if "band" in da.dims:
+            for i, band in enumerate(stack.band.values):
+                ds[band].attrs[coord] = da.values[i]
+    
+    ds = ds.drop_dims("band")
+    return ds
