@@ -21,7 +21,13 @@ def get_catalog_path(product: str) -> str:
         Path to the STAC Catalog file.
     """
     base_path = Path("/geonfs/02_vol3/SaldiDataCube/original_data")
-    return str(base_path.joinpath(product.upper(), "catalog.json"))
+    _dir = base_path.joinpath(product.upper())
+    _file = _dir.joinpath("catalog.json")
+    if not _dir.exists():
+        raise FileNotFoundError(f"Product '{product}': Could not find product directory {_dir}")
+    if not _file.exists():
+        raise FileNotFoundError(f"Product '{product}': Could not find STAC Catalog file {_file}")
+    return str(_file)
 
 
 def common_params() -> dict[str, Any]:
