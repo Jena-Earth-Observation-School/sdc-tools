@@ -1,12 +1,12 @@
 from copy import deepcopy
 from pathlib import Path
 
-from typing import List
+from typing import List, Any
 from pystac import Catalog, Collection, Item
 from xarray import DataArray, Dataset
 
 
-def get_catalog_path(product):
+def get_catalog_path(product: str) -> str:
     """
     Gets the path to the STAC Catalog file for a given product.
     
@@ -21,48 +21,49 @@ def get_catalog_path(product):
         Path to the STAC Catalog file.
     """
     base_path = Path("/geonfs/02_vol3/SaldiDataCube/original_data")
-    return base_path.joinpath(product.upper(), "catalog.json")
+    return str(base_path.joinpath(product.upper(), "catalog.json"))
 
 
-def common_params():
+def common_params() -> dict[str, Any]:
     """
     Returns parameters common to all products.
     
     Returns
     -------
-    dict
+    dict[str, Any]
          Dictionary of parameters that are common to all products.
     """
     from rasterio.enums import Resampling
     return {"epsg": 4326,
-            "resolution": 0.0002,
+            "resolution": 0.0002,  # actually pixel spacing, not resolution!
             "dtype": "float32",
             "resampling": Resampling['bilinear'],
             "xy_coords": 'center',
             "chunksize": (-1, 1, 'auto', 'auto')}
 
 
-def convert_asset_hrefs(list_stac_obj: List[Catalog or Collection or Item],
-                        href_type: str) -> List[Catalog or Collection or Item]:
+def convert_asset_hrefs(list_stac_obj: List[Catalog | Collection | Item],
+                        href_type: str
+                        ) -> List[Catalog | Collection | Item] | List[None]:
     """
-    Converts the asset hrefs of a list of STAC Objects to either absolute or relative.
+    Converts the asset hrefs of a list of STAC Objects (Catalogs, Collections or Items)
+    to either absolute or relative.
     
     Parameters
     ----------
-    list_stac_obj : List[Catalog or Collection or Item]
-        List of Catalogs, Collections or Items.
+    list_stac_obj : List[Catalog | Collection | Item]
+        List of STAC Objects.
     href_type : str
         Type of href to convert to. Can be either 'absolute' or 'relative'.
     
     Returns
     -------
-    List[Catalog or Collection or Item]
+    List[Catalog | Collection | Item] | List[None]
         A list of STAC Objects with converted asset hrefs.
     """
     list_stac_obj_copy = deepcopy(list_stac_obj)
     if len(list_stac_obj_copy) == 0:
         return list_stac_obj_copy
-    
     for stac_obj in list_stac_obj_copy:
         if href_type == 'absolute':
             stac_obj.make_asset_hrefs_absolute()
@@ -71,14 +72,8 @@ def convert_asset_hrefs(list_stac_obj: List[Catalog or Collection or Item],
     return list_stac_obj_copy
 
 
-def overwrite_default_dask_chunk_size():
-    """
-    Overwrites the default dask chunk size to 256 MiB.
-    
-    Returns
-    -------
-    None
-    """
+def overwrite_default_dask_chunk_size() -> None:
+    """Overwrites the default dask chunk size to 256 MiB."""
     import dask
     dask.config.set({'array.chunk-size': '256MiB'})
 
@@ -89,13 +84,14 @@ def dataarray_to_dataset(da: DataArray) -> Dataset:
     
     Parameters
     ----------
-    da : xarray.Dataarray
+    da : Dataarray
         Dataarray loaded using the stackstac library.
     
     Returns
     -------
-    xarray.Dataset
-        Dataset with band dimension dropped and band coordinates saved as attrs in variables.
+    Dataset
+        Dataset with band dimension dropped and band coordinates saved as attrs in
+        variables.
     
     Notes
     -----

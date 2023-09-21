@@ -9,10 +9,12 @@ from pystac import Catalog, Collection, Item
 def filter_stac_catalog(catalog: Catalog, 
                         bbox: Optional[Tuple[float, float, float, float]] = None, 
                         time_range: Optional[Tuple[str, str]] = None, 
-                        time_pattern: str = '%Y-%m-%d') -> Tuple[List[Collection], List[Item]]:
+                        time_pattern: Optional[str] = '%Y-%m-%d'
+                        ) -> Tuple[List[Collection], List[Item]]:
     """
-    The STAC Catalog is first filtered based on a provided bounding box, returning a list of STAC Collections. These 
-    Collections are then filtered based on a provided time range, returning a list of STAC Items.
+    The STAC Catalog is first filtered based on a provided bounding box, returning a
+    list of STAC Collections. These Collections are then filtered based on a provided
+    time range, returning a list of STAC Items.
     
     Parameters
     ----------
@@ -23,7 +25,7 @@ def filter_stac_catalog(catalog: Catalog,
     time_range : tuple of str, optional
         The time range in the format (start_time, end_time).
     time_pattern : str, optional
-        The pattern used to parse the time strings.
+        The pattern used to parse the time strings. Defaults to '%Y-%m-%d'.
     
     Returns
     -------
@@ -36,7 +38,8 @@ def filter_stac_catalog(catalog: Catalog,
 
 
 def filter_collections(catalog: Catalog, 
-                       bbox: Optional[Tuple[float, float, float, float]] = None) -> List[Collection]:
+                       bbox: Optional[Tuple[float, float, float, float]] = None
+                       ) -> List[Collection]:
     """
     Filters the collections in a STAC Catalog based on a bounding box.
     
@@ -53,27 +56,29 @@ def filter_collections(catalog: Catalog,
         A list of filtered collections.
     """
     if bbox is None:
-        return [collection for collection in catalog.get_children() if isinstance(collection, Collection)]
+        return [collection for collection in catalog.get_children()
+                if isinstance(collection, Collection)]
     return [
         collection for collection in catalog.get_children()
         if isinstance(collection, Collection) and
         collection.extent.spatial.bboxes is not None and
-        any(_bbox_intersection(list(bbox), b) is not None for b in collection.extent.spatial.bboxes)
+        any(_bbox_intersection(list(bbox), b) is not None
+            for b in collection.extent.spatial.bboxes)
     ]
 
 
 def _bbox_intersection(bbox1: List[float], 
-                       bbox2: List[float]) -> Optional[List[float]]:
+                       bbox2: List[float]) -> List[float] | None:
     """
     Computes the intersection of two bounding boxes.
-
+    
     Parameters
     ----------
     bbox1 : list of float
         The first bounding box in the format [west, south, east, north].
     bbox2 : list of float
         The second bounding box in the format [west, south, east, north].
-
+    
     Returns
     -------
     intersection : list or None
@@ -125,17 +130,17 @@ def _timestring_to_utc_datetime(time: str,
                                 pattern: str) -> datetime:
     """
     Convert time string to UTC datetime object.
-
+    
     Parameters
     ----------
     time : str
         The time string to convert.
     pattern : str
         The format of the time string.
-
+    
     Returns
     -------
-    datetime : datetime.datetime
+    datetime : datetime
         The converted datetime object.
     """
     return datetime.strptime(time, pattern).replace(tzinfo=pytz.UTC)
