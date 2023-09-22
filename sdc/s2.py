@@ -11,7 +11,8 @@ import sdc.query as query
 
 def load_s2_l2a(vec: str,
                 time_range: Optional[Tuple[str, str]] = None,
-                time_pattern: Optional[str] = '%Y-%m-%d') -> Dataset:
+                time_pattern: Optional[str] = '%Y-%m-%d',
+                measurements: Optional[Tuple[str]] = None) -> Dataset:
     """
     Loads the Sentinel-2 L2A data for an area of interest.
     
@@ -27,12 +28,29 @@ def load_s2_l2a(vec: str,
     time_pattern : str, optional
         The pattern used to parse the time strings of `time_range`. Defaults to
         '%Y-%m-%d'.
+    measurements : tuple of str, optional
+        The measurements to load. Defaults to ('B02', 'B03', 'B04', 'B05', 'B06', 'B07',
+        'B08', 'B8A', 'B09', 'B11', 'B12', 'AOT', 'WVP', 'SCL').
     
     Returns
     -------
     Dataset
         An xarray Dataset containing the Sentinel-2 L2A data.
+    
+    Notes
+    -----
+    The Sentinel-2 L2A data is sourced from the Digital Earth Africa STAC Catalog. For more product details,
+    see https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-2_Level-2A_specs.html
     """
+    if measurements is None:
+        measurements = ('B02', 'B03', 'B04',  # Blue, Green, Red (10 m)
+                        'B05', 'B06', 'B07',  # Red Edge 1, 2, 3 (20 m)
+                        'B08',                # NIR (10 m)
+                        'B8A',                # NIR 2 (20 m)
+                        'B09',                # Water Vapour (60 m)
+                        'B11', 'B12',         # SWIR 1, SWIR 2 (20 m)
+                        'AOT', 'WVP', 'SCL')  # Aerosol Optical Thickness, Avg Water Vapour, Scene Classification (20 m)
+    
     bbox = fiona.open(vec, 'r').bounds
     params = utils.common_params()
     
@@ -42,7 +60,7 @@ def load_s2_l2a(vec: str,
                                          time_pattern=time_pattern)
     items = utils.convert_asset_hrefs(list_stac_obj=items, href_type='absolute')
     
-    da = stackstac.stack(items=items, bounds=bbox, **params)
+    da = stackstac.stack(items=items, assets=list(measurements), bounds=bbox, **params)
     ds = utils.dataarray_to_dataset(da=da)
     
     return ds

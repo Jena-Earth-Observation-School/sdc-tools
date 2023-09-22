@@ -11,7 +11,8 @@ import sdc.query as query
 
 def load_s1_rtc(vec: str,
                 time_range: Optional[Tuple[str, str]] = None,
-                time_pattern: Optional[str] = '%Y-%m-%d') -> Dataset:
+                time_pattern: Optional[str] = '%Y-%m-%d',
+                measurements: Optional[Tuple[str]] = None) -> Dataset:
     """
     Loads the Sentinel-1 RTC data for an area of interest.
     
@@ -27,12 +28,22 @@ def load_s1_rtc(vec: str,
     time_pattern : str, optional
         The pattern used to parse the time strings of `time_range`. Defaults to
         '%Y-%m-%d'.
+    measurements : tuple of str, optional
+        The measurements to load. Defaults to ('vv', 'vh').
     
     Returns
     -------
     Dataset
         An xarray Dataset containing the Sentinel-1 RTC data.
+    
+    Notes
+    -----
+    The Sentinel-2 L2A data is sourced from the Digital Earth Africa STAC Catalog. For more product details,
+    see https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-1_specs.html
     """
+    if measurements is None:
+        measurements = ('vv', 'vh')
+    
     bbox = fiona.open(vec, 'r').bounds
     params = utils.common_params()
     
@@ -42,7 +53,7 @@ def load_s1_rtc(vec: str,
                                          time_pattern=time_pattern)
     items = utils.convert_asset_hrefs(list_stac_obj=items, href_type='absolute')
     
-    da = stackstac.stack(items=items, bounds=bbox, **params)
+    da = stackstac.stack(items=items, assets=list(measurements), bounds=bbox, **params)
     ds = utils.dataarray_to_dataset(da=da)
     
     return ds
