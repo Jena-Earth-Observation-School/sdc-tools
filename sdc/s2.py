@@ -68,7 +68,7 @@ def load_s2_l2a(vec: str,
     if apply_mask:
         params['bounds'] = bbox
         mask = _scl_mask(items=items, params=params)
-        ds = ds.where(mask, drop=True)
+        ds = ds.where(mask, other=0, drop=True)
     
     # Normalize the values to range [0, 1] and convert to float32
     ds = ds / 10000
