@@ -44,8 +44,7 @@ def load_s2_l2a(vec: str,
                     'B08',                # NIR (10 m)
                     'B8A',                # NIR 2 (20 m)
                     'B09',                # Water Vapour (60 m)
-                    'B11', 'B12',         # SWIR 1, SWIR 2 (20 m)
-                    'AOT', 'WVP')         # Aerosol Optical Thickness, Avg Water Vapour (20 m)
+                    'B11', 'B12')         # SWIR 1, SWIR 2 (20 m)
     
     bbox = fiona.open(vec, 'r').bounds
     params = utils.common_params()
