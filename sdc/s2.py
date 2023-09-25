@@ -1,7 +1,6 @@
 import fiona
 from pystac import Catalog
 import numpy as np
-import stackstac
 
 from typing import Optional, Tuple, Any
 from xarray import Dataset, DataArray
@@ -60,8 +59,10 @@ def load_s2_l2a(vec: str,
                                          time_pattern=time_pattern)
     items = utils.convert_asset_hrefs(list_stac_obj=items, href_type='absolute')
     
-    da = stackstac.stack(items=items, assets=list(measurements), bounds=bbox,
-                         dtype=np.dtype("uint16"), fill_value=0, **params)
+    stackstac_params = {'items': items, 'assets': list(measurements), 'bounds': bbox, 'dtype': np.dtype("uint16"),
+                        'fill_value': 0}
+    stackstac_params.update(params)
+    da = utils.stackstac_wrapper(params=stackstac_params)
     ds = utils.dataarray_to_dataset(da=da)
     
     # Apply cloud mask
@@ -99,7 +100,10 @@ def _scl_mask(items: list[Item],
     An overview table of the SCL classes can be found in Table 3:
     https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-2_Level-2A_specs.html#Specifications
     """
-    da = stackstac.stack(items=items, assets=['SCL'], dtype=np.dtype("uint8"), fill_value=0, **params)
+    stackstac_params = {'items': items, 'assets': ['SCL'], 'dtype': np.dtype("uint8"), 'fill_value': 0}
+    stackstac_params.update(params)
+    da = utils.stackstac_wrapper(params=stackstac_params)
+    
     scl = da.sel(band='SCL')
     mask = (
             (scl == 4) |  # Vegetation

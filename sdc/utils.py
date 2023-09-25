@@ -1,3 +1,4 @@
+import warnings
 from copy import deepcopy
 from pathlib import Path
 
@@ -111,3 +112,29 @@ def dataarray_to_dataset(da: DataArray) -> Dataset:
     
     ds = ds.drop_dims("band")
     return ds
+
+
+def stackstac_wrapper(params: dict[str, Any]) -> DataArray:
+    """
+    Wrapper function for stackstac to avoid a pandas UserWarning if the version of stackstac is <= 0.5.0.
+    
+    Parameters
+    ----------
+    params : dict[str, Any]
+        Parameters to pass to stackstac.stack.
+    
+    Returns
+    -------
+    DataArray
+        An xarray DataArray containing the stacked data.
+    """
+    import stackstac
+    if stackstac.__version__ <= "0.5.0":
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=UserWarning)
+            da = stackstac.stack(**params)
+    else:
+        da = stackstac.stack(**params)
+    
+    return da
+  
