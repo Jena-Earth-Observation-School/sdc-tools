@@ -42,7 +42,6 @@ def common_params() -> dict[str, Any]:
     from rasterio.enums import Resampling
     return {"epsg": 4326,
             "resolution": 0.0002,  # actually pixel spacing, not resolution!
-            "dtype": "float32",
             "resampling": Resampling['bilinear'],
             "xy_coords": 'center',
             "chunksize": (-1, 1, 'auto', 'auto')}
