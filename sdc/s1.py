@@ -12,8 +12,7 @@ import sdc.query as query
 
 def load_s1_rtc(vec: str,
                 time_range: Optional[Tuple[str, str]] = None,
-                time_pattern: Optional[str] = '%Y-%m-%d',
-                measurements: Optional[Tuple[str]] = None) -> Dataset:
+                time_pattern: Optional[str] = '%Y-%m-%d') -> Dataset:
     """
     Loads the Sentinel-1 RTC data for an area of interest.
     
@@ -29,8 +28,6 @@ def load_s1_rtc(vec: str,
     time_pattern : str, optional
         The pattern used to parse the time strings of `time_range`. Defaults to
         '%Y-%m-%d'.
-    measurements : tuple of str, optional
-        The measurements to load. Defaults to ('vv', 'vh').
     
     Returns
     -------
@@ -42,8 +39,7 @@ def load_s1_rtc(vec: str,
     The Sentinel-2 L2A data is sourced from the Digital Earth Africa STAC Catalog. For more product details,
     see https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-1_specs.html
     """
-    if measurements is None:
-        measurements = ('vv', 'vh')
+    measurements = ('vv', 'vh', 'area', 'angle')
     
     bbox = fiona.open(vec, 'r').bounds
     params = utils.common_params()
