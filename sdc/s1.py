@@ -54,7 +54,8 @@ def load_s1_rtc(vec: str,
                                          time_pattern=time_pattern)
     items = utils.convert_asset_hrefs(list_stac_obj=items, href_type='absolute')
     
-    da = stackstac.stack(items=items, assets=list(measurements), bounds=bbox, dtype=np.dtype("float32"), **params)
+    da = stackstac.stack(items=items, assets=list(measurements), bounds=bbox,
+                         dtype=np.dtype("float32"), fill_value=np.nan, **params)
     ds = utils.dataarray_to_dataset(da=da)
     
     return ds
