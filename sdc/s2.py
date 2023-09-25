@@ -64,17 +64,17 @@ def load_s2_l2a(vec: str,
                          dtype=np.dtype("uint16"), fill_value=0, **params)
     ds = utils.dataarray_to_dataset(da=da)
     
-    # Normalize the values to range [0, 1]
-    ds = ds / 10000
-    ds = ds.where((ds >= 0) & (ds <= 1))
-    
     # Apply cloud mask
     if apply_mask:
         params['bounds'] = bbox
         mask = _scl_mask(items=items, params=params)
         ds = ds.where(mask, drop=True)
     
-    return ds.astype("float32")
+    # Normalize the values to range [0, 1] and convert to float32
+    ds = ds / 10000
+    ds = ds.where((ds > 0) & (ds <= 1)).astype("float32")
+    
+    return ds
 
 
 def _scl_mask(items: list[Item],
