@@ -3,8 +3,9 @@ from pystac import Catalog
 import numpy as np
 import stackstac
 
-from typing import Optional, Tuple
-from xarray import Dataset
+from typing import Optional, Tuple, Any
+from xarray import Dataset, DataArray
+from pystac import Item
 
 import sdc.utils as utils
 import sdc.query as query
@@ -12,7 +13,8 @@ import sdc.query as query
 
 def load_s2_l2a(vec: str,
                 time_range: Optional[Tuple[str, str]] = None,
-                time_pattern: Optional[str] = '%Y-%m-%d') -> Dataset:
+                time_pattern: Optional[str] = '%Y-%m-%d',
+                apply_mask: bool = True) -> Dataset:
     """
     Loads the Sentinel-2 L2A data for an area of interest.
     
@@ -28,6 +30,9 @@ def load_s2_l2a(vec: str,
     time_pattern : str, optional
         The pattern used to parse the time strings of `time_range`. Defaults to
         '%Y-%m-%d'.
+    apply_mask : bool, optional
+        Whether to apply a valid-data mask to the data. Defaults to True.
+        The mask is created from the Scene Classification (SCL) band.
     
     Returns
     -------
@@ -36,8 +41,8 @@ def load_s2_l2a(vec: str,
     
     Notes
     -----
-    The Sentinel-2 L2A data is sourced from the Digital Earth Africa STAC Catalog. For more product details,
-    see https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-2_Level-2A_specs.html
+    The Sentinel-2 L2A data is sourced from Digital Earth Africa. For more product details,
+    see: https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-2_Level-2A_specs.html
     """
     measurements = ('B02', 'B03', 'B04',  # Blue, Green, Red (10 m)
                     'B05', 'B06', 'B07',  # Red Edge 1, 2, 3 (20 m)
@@ -59,4 +64,47 @@ def load_s2_l2a(vec: str,
                          dtype=np.dtype("uint16"), fill_value=0, **params)
     ds = utils.dataarray_to_dataset(da=da)
     
-    return ds
+    # Normalize the values to range [0, 1]
+    ds = ds / 10000
+    ds = ds.where((ds >= 0) & (ds <= 1))
+    
+    # Apply cloud mask
+    if apply_mask:
+        params['bounds'] = bbox
+        mask = _scl_mask(items=items, params=params)
+        ds = ds.where(mask, drop=True)
+    
+    return ds.astype("float32")
+
+
+def _scl_mask(items: list[Item],
+              params: dict[str, Any]) -> DataArray:
+    """
+    Creates a valid-data mask from the Scene Classification (SCL) band of Sentinel-2 L2A data.
+    
+    Parameters
+    ----------
+    items : list[Item]
+        A list of STAC Items from Sentinel-2 L2A data.
+    params : dict[str, Any]
+        Parameters to pass to stackstac.stack.
+    
+    Returns
+    -------
+    DataArray
+        An xarray DataArray containing the valid-data mask.
+    
+    Notes
+    -----
+    An overview table of the SCL classes can be found in Table 3:
+    https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-2_Level-2A_specs.html#Specifications
+    """
+    da = stackstac.stack(items=items, assets=['SCL'], dtype=np.dtype("uint8"), fill_value=0, **params)
+    scl = da.sel(band='SCL')
+    mask = (
+            (scl == 4) |  # Vegetation
+            (scl == 5) |  # Bare soils
+            (scl == 6) |  # Water
+            (scl == 7)    # Unclassified
+    )
+    return mask.compute()
