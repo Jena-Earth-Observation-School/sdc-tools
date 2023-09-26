@@ -43,24 +43,32 @@ def load_s2_l2a(vec: str,
     The Sentinel-2 L2A data is sourced from Digital Earth Africa. For more product details,
     see: https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-2_Level-2A_specs.html
     """
+    product = 's2_l2a'
     measurements = ('B02', 'B03', 'B04',  # Blue, Green, Red (10 m)
                     'B05', 'B06', 'B07',  # Red Edge 1, 2, 3 (20 m)
                     'B08',                # NIR (10 m)
                     'B8A',                # NIR 2 (20 m)
                     'B09',                # Water Vapour (60 m)
                     'B11', 'B12')         # SWIR 1, SWIR 2 (20 m)
+    fill_value = 0
+    dtype = np.dtype("uint16")
+    out_dtype = "float32"
     
     bbox = fiona.open(vec, 'r').bounds
     params = utils.common_params()
     
-    catalog = Catalog.from_file(utils.get_catalog_path("s2_l2a"))
+    # Load and filter STAC Items
+    catalog = Catalog.from_file(utils.get_catalog_path(product=product))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bbox,
                                          time_range=time_range,
                                          time_pattern=time_pattern)
+    
+    # https://github.com/gjoseph92/stackstac/issues/20
     items = utils.convert_asset_hrefs(list_stac_obj=items, href_type='absolute')
     
-    stackstac_params = {'items': items, 'assets': list(measurements), 'bounds': bbox, 'dtype': np.dtype("uint16"),
-                        'fill_value': 0}
+    # Turn into dask-based xarray.Dataset
+    stackstac_params = {'items': items, 'assets': list(measurements), 'bounds': bbox, 'dtype': dtype,
+                        'fill_value': fill_value}
     stackstac_params.update(params)
     da = utils.stackstac_wrapper(params=stackstac_params)
     ds = utils.dataarray_to_dataset(da=da)
@@ -71,9 +79,9 @@ def load_s2_l2a(vec: str,
         mask = _scl_mask(items=items, params=params)
         ds = ds.where(mask, other=0, drop=True)
     
-    # Normalize the values to range [0, 1] and convert to float32
+    # Normalize the values to range [0, 1] and convert to `out_dtype`
     ds = ds / 10000
-    ds = ds.where((ds > 0) & (ds <= 1)).astype("float32")
+    ds = ds.where((ds > 0) & (ds <= 1)).astype(out_dtype)
     
     return ds
 

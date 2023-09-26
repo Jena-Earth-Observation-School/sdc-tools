@@ -38,19 +38,24 @@ def load_s1_rtc(vec: str,
     The Sentinel-2 L2A data is sourced from the Digital Earth Africa STAC Catalog. For more product details,
     see https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-1_specs.html
     """
+    product = 's1_rtc'
     measurements = ('vv', 'vh', 'area', 'angle')
+    dtype = np.dtype("float32")
     
     bbox = fiona.open(vec, 'r').bounds
     params = utils.common_params()
     
-    catalog = Catalog.from_file(utils.get_catalog_path("s1_rtc"))
+    # Load and filter STAC Items
+    catalog = Catalog.from_file(utils.get_catalog_path(product=product))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bbox,
                                          time_range=time_range,
                                          time_pattern=time_pattern)
+    
+    # https://github.com/gjoseph92/stackstac/issues/20
     items = utils.convert_asset_hrefs(list_stac_obj=items, href_type='absolute')
     
-    
-    stackstac_params = {'items': items, 'assets': list(measurements), 'bounds': bbox, 'dtype': np.dtype("float32"),
+    # Turn into dask-based xarray.Dataset
+    stackstac_params = {'items': items, 'assets': list(measurements), 'bounds': bbox, 'dtype': dtype,
                         'fill_value': np.nan}
     stackstac_params.update(params)
     da = utils.stackstac_wrapper(params=stackstac_params)
