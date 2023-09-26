@@ -78,12 +78,6 @@ def convert_asset_hrefs(list_stac_obj: List[Catalog | Collection | Item],
     return list_stac_obj_copy
 
 
-def overwrite_default_dask_chunk_size() -> None:
-    """Overwrites the default dask chunk size to 256 MiB."""
-    import dask
-    dask.config.set({'array.chunk-size': '256MiB'})
-
-
 def dataarray_to_dataset(da: DataArray) -> Dataset:
     """
     Converts an xarray.Dataarray loaded using the stackstac library to an xarray.Dataset
