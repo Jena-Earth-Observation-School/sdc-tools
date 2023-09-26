@@ -131,4 +131,29 @@ def stackstac_wrapper(params: dict[str, Any]) -> DataArray:
         da = stackstac.stack(**params)
     
     return da
-  
+
+
+def groupby_solarday(ds: Dataset) -> Dataset:
+    """
+    Groups the observations of all data variables in a Dataset by calculating the mean for each solar day.
+    
+    Parameters
+    ----------
+    ds : Dataset
+        The Dataset to group by solar day.
+    
+    Returns
+    -------
+    ds_copy : Dataset
+        The grouped Dataset.
+    
+    Notes
+    -----
+    - This will result in coordinates that include the time-dimension to be dropped. Filter-operations using these
+    coordinates should be done before calling this function.
+    - The time coordinate will be rounded down to the nearest day.
+    """
+    ds_copy = ds.copy(deep=True)
+    ds_copy.coords['time'] = ds_copy.time.dt.floor('1D')
+    ds_copy = ds_copy.groupby('time').mean()
+    return ds_copy
