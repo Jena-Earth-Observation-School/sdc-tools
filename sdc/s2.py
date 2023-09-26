@@ -15,7 +15,7 @@ def load_s2_l2a(vec: str,
                 time_pattern: Optional[str] = '%Y-%m-%d',
                 apply_mask: bool = True) -> Dataset:
     """
-    Loads the Sentinel-2 L2A data for an area of interest.
+    Loads the Sentinel-2 L2A data product for an area of interest.
     
     Parameters
     ----------
@@ -31,7 +31,7 @@ def load_s2_l2a(vec: str,
         '%Y-%m-%d'.
     apply_mask : bool, optional
         Whether to apply a valid-data mask to the data. Defaults to True.
-        The mask is created from the Scene Classification (SCL) band.
+        The mask is created from the `SCL` (Scene Classification Layer) band of the product.
     
     Returns
     -------
@@ -76,8 +76,8 @@ def load_s2_l2a(vec: str,
     # Apply cloud mask
     if apply_mask:
         params['bounds'] = bbox
-        mask = _scl_mask(items=items, params=params)
-        ds = ds.where(mask, other=0, drop=True)
+        valid = _mask(items=items, params=params)
+        ds = ds.where(valid, other=0, drop=True)
     
     # Normalize the values to range [0, 1] and convert to `out_dtype`
     ds = ds / 10000
@@ -86,17 +86,17 @@ def load_s2_l2a(vec: str,
     return ds
 
 
-def _scl_mask(items: list[Item],
-              params: dict[str, Any]) -> DataArray:
+def _mask(items: list[Item],
+          params: dict[str, Any]) -> DataArray:
     """
-    Creates a valid-data mask from the Scene Classification (SCL) band of Sentinel-2 L2A data.
+    Creates a valid-data mask from the `SCL` (Scene Classification Layer) band of Sentinel-2 L2A data.
     
     Parameters
     ----------
     items : list[Item]
         A list of STAC Items from Sentinel-2 L2A data.
     params : dict[str, Any]
-        Parameters to pass to stackstac.stack.
+        Parameters to pass to `stackstac.stack`
     
     Returns
     -------
