@@ -2,8 +2,9 @@ import fiona
 from pystac import Catalog
 import numpy as np
 
-from typing import Optional, Tuple
-from xarray import Dataset
+from typing import Optional, Tuple, Any
+from xarray import Dataset, DataArray
+from pystac import Item
 
 import sdc.utils as utils
 import sdc.query as query
@@ -11,9 +12,10 @@ import sdc.query as query
 
 def load_s1_rtc(vec: str,
                 time_range: Optional[Tuple[str, str]] = None,
-                time_pattern: Optional[str] = '%Y-%m-%d') -> Dataset:
+                time_pattern: Optional[str] = '%Y-%m-%d',
+                apply_mask: bool = True) -> Dataset:
     """
-    Loads the Sentinel-1 RTC data for an area of interest.
+    Loads the Sentinel-1 RTC data product for an area of interest.
     
     Parameters
     ----------
@@ -27,6 +29,9 @@ def load_s1_rtc(vec: str,
     time_pattern : str, optional
         The pattern used to parse the time strings of `time_range`. Defaults to
         '%Y-%m-%d'.
+    apply_mask : bool, optional
+        Whether to apply a valid-data mask to the data. Defaults to True.
+        The mask is created from the `mask` band of the product.
     
     Returns
     -------
@@ -61,4 +66,40 @@ def load_s1_rtc(vec: str,
     da = utils.stackstac_wrapper(params=stackstac_params)
     ds = utils.dataarray_to_dataset(da=da)
     
+    if apply_mask:
+        params['bounds'] = bbox
+        valid = _mask(items=items, params=params)
+        ds = ds.where(valid, drop=True)
+    
     return ds
+
+
+def _mask(items: list[Item],
+          params: dict[str, Any]) -> DataArray:
+    """
+    Creates a valid-data mask from the `mask` band of Sentinel-1 RTC data.
+    
+    Parameters
+    ----------
+    items : list[Item]
+        A list of STAC Items from Sentinel-1 RTC data.
+    params : dict[str, Any]
+        Parameters to pass to `stackstac.stack`
+    
+    Returns
+    -------
+    DataArray
+        An xarray DataArray containing the valid-data mask.
+    
+    Notes
+    -----
+    An overview table of the data mask classes can be found in Table 3:
+    https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-1_specs.html
+    """
+    stackstac_params = {'items': items, 'assets': ['mask'], 'dtype': np.dtype("uint8"), 'fill_value': 0}
+    stackstac_params.update(params)
+    da = utils.stackstac_wrapper(params=stackstac_params)
+    
+    mask = da.sel(band='mask')
+    mask = (mask == 1)
+    return mask.compute()
