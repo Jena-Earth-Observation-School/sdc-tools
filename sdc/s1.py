@@ -103,3 +103,33 @@ def _mask(items: list[Item],
     mask = da.sel(band='mask')
     mask = (mask == 1)
     return mask.compute()
+
+
+def separate_asc_desc(ds: Dataset) -> Tuple[Dataset, Dataset]:
+    """
+    Separates a Dataset into ascending and descending orbits.
+    
+    Parameters
+    ----------
+    ds: Dataset
+        An xarray Dataset containing data that can be separated into ascending and descending orbits. E.g.
+        Sentinel-1 RTC.
+    
+    Returns
+    -------
+    tuple of Dataset
+        Two xarray Datasets containing the ascending and descending orbit data, respectively.
+    """
+    ds_copy = ds.copy(deep=True)
+    try:
+        ds_copy_asc = ds_copy.where(ds_copy['sat:orbit_state'] == 'ascending', drop=True)
+        ds_copy_desc = ds_copy.where(ds_copy['sat:orbit_state'] == 'descending', drop=True)
+    except KeyError:
+        _vars = list(ds_copy.data_vars)
+        ds_copy_asc = ds_copy.copy(deep=True)
+        ds_copy_asc = ds_copy_asc.drop_vars(_vars)
+        ds_copy_desc = ds_copy_asc.copy(deep=True)
+        for v in _vars:
+            ds_copy_asc[v] = ds_copy[v].where(ds_copy[v].time.dt.hour > 12, drop=True)
+            ds_copy_desc[v] = ds_copy[v].where(ds_copy[v].time.dt.hour < 12, drop=True)
+    return ds_copy_asc, ds_copy_desc
