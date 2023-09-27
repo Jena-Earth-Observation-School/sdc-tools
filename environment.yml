@@ -1,0 +1,33 @@
+name: sdc_env
+channels:
+  - pyviz
+  - conda-forge
+dependencies:
+  - python>=3.10
+  - dask
+  - dask-jobqueue
+  - pytz
+  - shapely
+  - pystac
+  - stackstac
+  - fiona
+  - xclim
+  - numpy==1.24.0
+############# Extras #############
+  - geopandas
+  - rioxarray
+  - scikit-learn
+  - leafmap
+  - matplotlib
+  - hvplot
+  - autopep8
+  - black
+  - isort
+  - ipympl
+  - nodejs
+  - jupyterlab=3.6.5
+  - dask-labextension
+  - jupyter-archive
+  - jupyterlab-spellchecker
+  - jupyterlab_code_formatter
+  - jupyter-resource-usage<1.0.0
