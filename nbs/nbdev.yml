@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "sdc"
+  site-url: "https://Jena-Earth-Observation-School.github.io/sdc"
+  description: "todo"
+  repo-branch: main
+  repo-url: "https://github.com/Jena-Earth-Observation-School/sdc"
