@@ -1,0 +1,24 @@
+# https://jupyterbook.org/customize/config.html
+
+title: SALDi Data Cube - Tools & Tutorials
+author: Marco Wolsza
+logo: _figures/logo.png
+
+execute:
+  execute_notebooks: 'off'
+
+latex:
+  latex_documents:
+    targetname: _latex/book.tex
+
+bibtex_bibfiles:
+  - _bibliography/references.bib
+
+repository:
+  url: https://github.com/Jena-Earth-Observation-School/sdc-tools
+  path_to_book: docs
+  branch: main
+
+html:
+  use_issues_button: true
+  use_repository_button: true

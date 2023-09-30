@@ -1,0 +1,9 @@
+# https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: index
+chapters:
+- file: content/01_markdown
+- file: content/02_notebooks
+- file: content/03_markdown-notebooks
+- file: content/04_test
