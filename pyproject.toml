@@ -1,0 +1,28 @@
+[project]
+name = "sdc"
+version = "0.0.1"
+authors = [
+  {name="Marco Wolsza", email="marco.wolsza@uni-jena.de" },
+]
+description = "Tools and tutorials for the SALDi Data Cube (SDC)"
+readme = "README.md"
+license = {text = "MIT License"}
+requires-python = ">=3.10"
+dependencies = [
+    "dask",
+    "dask-jobqueue",
+    "pytz",
+    "shapely",
+    "pystac",
+    "stackstac",
+    "fiona",
+    "xclim",
+    "numpy==1.24.4"
+]
+
+[project.urls]
+Repository = "https://github.com/Jena-Earth-Observation-School/sdc-tools"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
