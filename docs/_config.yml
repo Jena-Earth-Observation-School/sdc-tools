@@ -1,11 +1,11 @@
-# https://jupyterbook.org/customize/config.html
-
 title: SALDi Data Cube - Tools & Tutorials
 author: Marco Wolsza
-logo: _figures/logo.png
+copyright: "2023"
+logo: ""
 
 execute:
-  execute_notebooks: 'off'
+  execute_notebooks: auto
+  timeout: 600
 
 latex:
   latex_documents:

@@ -1,9 +1,15 @@
-# https://jupyterbook.org/customize/toc.html
-
 format: jb-book
 root: index
-chapters:
-- file: content/01_markdown
-- file: content/02_notebooks
-- file: content/03_markdown-notebooks
-- file: content/04_test
+parts:
+  - caption: Introduction
+    chapters:
+    - file: content/01_Introduction/01_00_Installation
+    - file: content/01_Introduction/02_00_Overview
+  - caption: Getting Started
+    chapters:
+    - file: content/02_Getting_Started/01_00_Data_Access
+    - file: content/02_Getting_Started/02_00_Datasets
+      sections:
+      - file: content/02_Getting_Started/02_01_Sentinel1
+      - file: content/02_Getting_Started/02_02_Sentinel2
+    - file: content/02_Getting_Started/03_00_How_to
