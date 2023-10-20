@@ -8,8 +8,7 @@ parts:
   - caption: Getting Started
     chapters:
     - file: content/02_Getting_Started/01_00_Data_Access
-    - file: content/02_Getting_Started/02_00_Datasets
       sections:
-      - file: content/02_Getting_Started/02_01_Sentinel1
-      - file: content/02_Getting_Started/02_02_Sentinel2
-    - file: content/02_Getting_Started/03_00_How_to
+      - file: content/02_Getting_Started/01_01_Sentinel1
+      - file: content/02_Getting_Started/01_02_Sentinel2
+    - file: content/02_Getting_Started/02_00_How_to
