@@ -11,8 +11,8 @@ kernelspec:
   name: python3
 ---
 
-# Sentinel-1
+# Sentinel-2 L2A
 
 _Coming soon..._
 
-![https://media.giphy.com/media/xUPGcxnrq8MrJ37PgY/giphy.gif](https://media.giphy.com/media/xUPGcxnrq8MrJ37PgY/giphy.gif)
+![https://media.giphy.com/media/26vUESaLcnmlZ2gQ8/giphy.gif](https://media.giphy.com/media/26vUESaLcnmlZ2gQ8/giphy.gif)
