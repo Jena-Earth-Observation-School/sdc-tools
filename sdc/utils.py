@@ -123,7 +123,7 @@ def stackstac_wrapper(params: dict[str, Any]) -> DataArray:
         An xarray DataArray containing the stacked data.
     """
     import stackstac
-    if stackstac.__version__ <= "0.5.0":
+    if stackstac.__version__ < "0.6.0":
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", category=UserWarning)
             da = stackstac.stack(**params)
