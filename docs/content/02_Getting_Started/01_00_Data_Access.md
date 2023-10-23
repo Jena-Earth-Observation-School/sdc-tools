@@ -13,7 +13,7 @@ product-specific functions and its goal is to provide a unified and easy-to-use 
 
 A lot happens in the background and certain parameters are set to default values, so that the function can be used with
 minimal effort. However, it is also possible to specify additional parameters to customize the data loading process. See
-the [Advanced loading options](#advanced-loading-options) section for more information.
+the {ref}`advanced-loading` section for more information.
 
 The following basic example shows how to load Sentinel-2 L2A data for SALDi site 06 for the year 2020:
 
@@ -31,6 +31,7 @@ The basic usage is to specify the following parameters:
 - `vec`: Filter the returned data spatially by either providing the name of a SALDi site in the format `"siteXX"`, where XX is the site number (see example above), or a vector file path if the area of interest is a subset of a SALDi site. Providing a vector file outside the spatial extent of the SALDi sites will result in an empty dataset.
 - `time_range`: Filter the returned data temporally by providing a tuple of strings in the format `("YY-MM-dd", "YY-MM-dd")`, or `None` to return all available data.
 
+(advanced-loading)=
 ## Advanced loading options
 
 _Coming soon..._
