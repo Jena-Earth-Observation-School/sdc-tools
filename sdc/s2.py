@@ -1,4 +1,3 @@
-import fiona
 from pystac import Catalog
 import numpy as np
 
@@ -10,7 +9,7 @@ import sdc.utils as utils
 import sdc.query as query
 
 
-def load_s2_l2a(vec: str,
+def load_s2_l2a(bounds: Tuple[float, float, float, float],
                 time_range: Optional[Tuple[str, str]] = None,
                 time_pattern: Optional[str] = '%Y-%m-%d',
                 apply_mask: bool = True) -> Dataset:
@@ -19,9 +18,9 @@ def load_s2_l2a(vec: str,
     
     Parameters
     ----------
-    vec : str
-        Path to a vector file. Must be readable by fiona. The bounding box of the vector
-        file will be used to filter the STAC Catalog for intersecting STAC Collections.
+    bounds: tuple of float
+        The bounding box of the area of interest in the format (minx, miny, maxx, maxy).
+        Will be used to filter the STAC Catalog for intersecting STAC Collections.
     time_range : tuple of str, optional
         The time range in the format (start_time, end_time) to filter STAC Items by.
         Defaults to None, which will load all STAC Items in the filtered STAC
@@ -31,7 +30,8 @@ def load_s2_l2a(vec: str,
         '%Y-%m-%d'.
     apply_mask : bool, optional
         Whether to apply a valid-data mask to the data. Defaults to True.
-        The mask is created from the `SCL` (Scene Classification Layer) band of the product.
+        The mask is created from the `SCL` (Scene Classification Layer) band of the
+        product.
     
     Returns
     -------
@@ -40,8 +40,9 @@ def load_s2_l2a(vec: str,
     
     Notes
     -----
-    The Sentinel-2 L2A data is sourced from Digital Earth Africa. For more product details,
-    see: https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-2_Level-2A_specs.html
+    The Sentinel-2 L2A data is sourced from Digital Earth Africa.
+    For more product details, see:
+    https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-2_Level-2A_specs.html
     """
     product = 's2_l2a'
     measurements = ('B02', 'B03', 'B04',  # Blue, Green, Red (10 m)
@@ -53,13 +54,11 @@ def load_s2_l2a(vec: str,
     fill_value = 0
     dtype = np.dtype("uint16")
     out_dtype = "float32"
-    
-    bbox = fiona.open(vec, 'r').bounds
     params = utils.common_params()
     
     # Load and filter STAC Items
     catalog = Catalog.from_file(utils.get_catalog_path(product=product))
-    _, items = query.filter_stac_catalog(catalog=catalog, bbox=bbox,
+    _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds,
                                          time_range=time_range,
                                          time_pattern=time_pattern)
     
@@ -67,15 +66,15 @@ def load_s2_l2a(vec: str,
     items = utils.convert_asset_hrefs(list_stac_obj=items, href_type='absolute')
     
     # Turn into dask-based xarray.Dataset
-    stackstac_params = {'items': items, 'assets': list(measurements), 'bounds': bbox, 'dtype': dtype,
-                        'fill_value': fill_value}
+    stackstac_params = {'items': items, 'assets': list(measurements), 'bounds': bounds,
+                        'dtype': dtype, 'fill_value': fill_value}
     stackstac_params.update(params)
     da = utils.stackstac_wrapper(params=stackstac_params)
     ds = utils.dataarray_to_dataset(da=da)
     
     # Apply cloud mask
     if apply_mask:
-        params['bounds'] = bbox
+        params['bounds'] = bounds
         valid = _mask(items=items, params=params)
         ds = ds.where(valid, other=0, drop=True)
     
@@ -89,7 +88,8 @@ def load_s2_l2a(vec: str,
 def _mask(items: list[Item],
           params: dict[str, Any]) -> DataArray:
     """
-    Creates a valid-data mask from the `SCL` (Scene Classification Layer) band of Sentinel-2 L2A data.
+    Creates a valid-data mask from the `SCL` (Scene Classification Layer) band of
+    Sentinel-2 L2A data.
     
     Parameters
     ----------
@@ -108,7 +108,8 @@ def _mask(items: list[Item],
     An overview table of the SCL classes can be found in Table 3:
     https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-2_Level-2A_specs.html#Specifications
     """
-    stackstac_params = {'items': items, 'assets': ['SCL'], 'dtype': np.dtype("uint8"), 'fill_value': 0}
+    stackstac_params = {'items': items, 'assets': ['SCL'], 'dtype': np.dtype("uint8"),
+                        'fill_value': 0}
     stackstac_params.update(params)
     da = utils.stackstac_wrapper(params=stackstac_params)
     
