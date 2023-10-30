@@ -6,9 +6,9 @@ from typing import List, Optional, Tuple
 from pystac import Catalog, Collection, Item
 
 
-def filter_stac_catalog(catalog: Catalog, 
-                        bbox: Optional[Tuple[float, float, float, float]] = None, 
-                        time_range: Optional[Tuple[str, str]] = None, 
+def filter_stac_catalog(catalog: Catalog,
+                        bbox: Optional[Tuple[float, float, float, float]] = None,
+                        time_range: Optional[Tuple[str, str]] = None,
                         time_pattern: Optional[str] = '%Y-%m-%d'
                         ) -> Tuple[List[Collection], List[Item]]:
     """
@@ -37,7 +37,7 @@ def filter_stac_catalog(catalog: Catalog,
     return filtered_collections, filtered_items
 
 
-def filter_collections(catalog: Catalog, 
+def filter_collections(catalog: Catalog,
                        bbox: Optional[Tuple[float, float, float, float]] = None
                        ) -> List[Collection]:
     """
@@ -61,13 +61,13 @@ def filter_collections(catalog: Catalog,
     return [
         collection for collection in catalog.get_children()
         if isinstance(collection, Collection) and
-        collection.extent.spatial.bboxes is not None and
-        any(_bbox_intersection(list(bbox), b) is not None
-            for b in collection.extent.spatial.bboxes)
+           collection.extent.spatial.bboxes is not None and
+           any(_bbox_intersection(list(bbox), b) is not None
+               for b in collection.extent.spatial.bboxes)
     ]
 
 
-def _bbox_intersection(bbox1: List[float], 
+def _bbox_intersection(bbox1: List[float],
                        bbox2: List[float]) -> List[float] | None:
     """
     Computes the intersection of two bounding boxes.
@@ -94,8 +94,8 @@ def _bbox_intersection(bbox1: List[float],
         return list(intersection.bounds)
 
 
-def filter_items(collections: List[Collection], 
-                 time_range: Optional[Tuple[str, str]] = None, 
+def filter_items(collections: List[Collection],
+                 time_range: Optional[Tuple[str, str]] = None,
                  time_pattern: str = '%Y-%m-%d') -> List[Item]:
     """
     Filters the items in a list of collections based on a time range.
@@ -118,15 +118,17 @@ def filter_items(collections: List[Collection],
     for collection in collections:
         for item in collection.get_items():
             if time_range is not None:
-                start_date = _timestring_to_utc_datetime(time=time_range[0], pattern=time_pattern)
-                end_date = _timestring_to_utc_datetime(time=time_range[1], pattern=time_pattern)
+                start_date = _timestring_to_utc_datetime(time=time_range[0],
+                                                         pattern=time_pattern)
+                end_date = _timestring_to_utc_datetime(time=time_range[1],
+                                                       pattern=time_pattern)
                 if not (start_date <= item.datetime <= end_date):
                     continue
             items.append(item)
     return items
 
 
-def _timestring_to_utc_datetime(time: str, 
+def _timestring_to_utc_datetime(time: str,
                                 pattern: str) -> datetime:
     """
     Convert time string to UTC datetime object.
