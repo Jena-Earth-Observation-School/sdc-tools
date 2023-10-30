@@ -3,9 +3,9 @@ from dask_jobqueue import SLURMCluster
 from distributed import Client
 
 
-def start_slurm_cluster(cores: int = 4,
+def start_slurm_cluster(cores: int = 10,
                         processes: int = 1,
-                        memory: str = "10GB",
+                        memory: str = "20 GiB",
                         walltime: str = "00:30:00") -> (Client, SLURMCluster):
     """
     Start a dask_jobqueue.SLURMCluster and a distributed.Client. The cluster will
@@ -14,12 +14,12 @@ def start_slurm_cluster(cores: int = 4,
     Parameters
     ----------
     cores : int, optional
-        Total number of cores per job. Default is 4.
+        Total number of cores per job. Default is 10.
     processes : int, optional
         Number of (Python) processes per job. Default is 1, which is a good default for
         numpy-based workloads.
     memory : str, optional
-        Total amount of memory per job. Default is "10GB".
+        Total amount of memory per job. Default is "20 GiB".
     walltime : str, optional
         The walltime for the job in the format HH:MM:SS. Default is "00:30:00".
     
