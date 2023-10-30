@@ -39,21 +39,19 @@ def start_slurm_cluster(cores: int = 10,
     -----
     The default values seem low, however, it is important to keep in mind that these
     values are defined per job and that the cluster will automatically be scaled up and
-    down as needed. So, with a maximum of 10 jobs running at the same time, you will
-    have 10 * 4 = 40 cores and 10 * 10GB = 100GB of memory available.
+    down as needed.
     """
-    queue = 'short' if int(walltime[:2]) <= 3 else 'normal'
-    max_jobs = math.ceil(40/cores)
-    
-    cluster = SLURMCluster(queue=queue,
+    cluster = SLURMCluster(queue="short",
                            cores=cores,
                            processes=processes,
                            memory=memory,
                            walltime=walltime,
-                           worker_extra_args=["--lifetime", '25m' if
-                                              queue == 'short' else '1h'])
+                           worker_extra_args=["--lifetime", "25m"])
     
     dask_client = Client(cluster)
-    cluster.adapt(maximum=max_jobs)
+    cluster.adapt(minimum_jobs=1, maximum_jobs=4,
+                  # https://github.com/dask/dask-jobqueue/issues/498#issuecomment-1233716189
+                  worker_key=lambda state: state.address.split(":")[0],
+                  interval="10s")
     
     return dask_client, cluster
