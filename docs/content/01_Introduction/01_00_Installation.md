@@ -1,8 +1,9 @@
 # Installation
 
-Provided that a Conda-based package manager (e.g. [Micromamba](https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html)) 
-is installed on your system, the most up-to-date version of the `sdc-tools` package can be installed using the following 
-steps:
+Provided that a Conda-based package manager (e.g. 
+[Micromamba](https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html))
+is installed on your system, the most up-to-date version of the `sdc-tools` 
+package can be installed using the following steps:
 
 ## Create and activate environment
 
@@ -11,8 +12,10 @@ micromamba create --file https://raw.githubusercontent.com/Jena-Earth-Observatio
 micromamba activate sdc_env
 ```
 
-If you are not able to install the environment directly from the GitHub repository (e.g., due to firewall restrictions 
-on HPC systems), you can also download the `environment.yml` file and install the environment from a local file.
+If you are not able to install the environment directly from the GitHub 
+repository (e.g., due to firewall restrictions on HPC systems), you can also 
+download the `environment.yml` file and install the environment from a local 
+file.
 
 ## Install `sdc-tools` package
 
@@ -22,7 +25,8 @@ pip install git+https://github.com/Jena-Earth-Observation-School/sdc-tools.git
 
 ### _Optional_: Installation of a specific version
 
-If you wish to install a specific version of the package, you can do so by specifying the version tag:
+If you wish to install a specific version of the package, you can do so by 
+specifying the version tag:
 
 ```bash
 micromamba create --file https://raw.githubusercontent.com/Jena-Earth-Observation-School/sdc-tools/v0.1.0/environment.yml
