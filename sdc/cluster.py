@@ -9,6 +9,7 @@ def start_slurm_cluster(cores: int = 10,
                         processes: int = 1,
                         memory: str = '20 GiB',
                         walltime: str = '00:30:00',
+                        log_directory: str = None,
                         scheduler_options: dict = None) -> (Client, SLURMCluster):
     """
     Start a dask_jobqueue.SLURMCluster and a distributed.Client. The cluster will
@@ -25,6 +26,9 @@ def start_slurm_cluster(cores: int = 10,
         Total amount of memory per job. Default is '20 GiB'.
     walltime : str, optional
         The walltime for the job in the format HH:MM:SS. Default is '00:30:00'.
+    log_directory : str, optional
+        The directory to write the log files to. Default is None, which writes the log
+        files to ~/.sdc_logs/<date>.
     scheduler_options : dict, optional
         Additional scheduler options. Default is None, which sets the dashboard address
         to a free port based on the user id.
@@ -48,8 +52,11 @@ def start_slurm_cluster(cores: int = 10,
     down as needed.
     """
     local_directory = os.path.join('/', 'scratch', os.getenv('USER'))
-    now = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')
-    log_directory = os.path.join(os.getenv('HOME'), '.sdc_logs', now)
+    
+    if log_directory is None:
+        if os.path.exists(os.getenv('HOME')):
+            now = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')
+            log_directory = os.path.join(os.getenv('HOME'), '.sdc_logs', now)
     
     if scheduler_options is None:
         port = _dashboard_port()
