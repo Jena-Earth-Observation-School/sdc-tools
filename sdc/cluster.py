@@ -1,4 +1,5 @@
 import os
+import datetime
 from dask_jobqueue import SLURMCluster
 from distributed import Client
 
@@ -42,6 +43,8 @@ def start_slurm_cluster(cores: int = 10,
     down as needed.
     """
     local_directory = os.path.join('/', 'scratch', os.getenv('USER'))
+    now = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')
+    log_directory = os.path.join(os.getenv('HOME'), '.sdc_logs', now)
     
     cluster = SLURMCluster(queue='short',
                            cores=cores,
@@ -51,7 +54,8 @@ def start_slurm_cluster(cores: int = 10,
                            interface='ib0',
                            job_script_prologue=['mkdir -p /scratch/$USER'],
                            worker_extra_args=['--lifetime', '25m'],
-                           local_directory=local_directory)
+                           local_directory=local_directory,
+                           log_directory=log_directory)
     
     dask_client = Client(cluster)
     cluster.adapt(minimum_jobs=1, maximum_jobs=4,
