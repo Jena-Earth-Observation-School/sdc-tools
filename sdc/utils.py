@@ -133,14 +133,15 @@ def stackstac_wrapper(params: dict[str, Any]) -> DataArray:
     return da
 
 
-def groupby_solarday(ds: Dataset) -> Dataset:
+def groupby_acq_slices(ds: Dataset) -> Dataset:
     """
-    Groups the observations of all data variables in a Dataset by calculating the mean for each solar day.
+    Groups acquisition slices of all data variables in a Dataset by calculating the mean
+    for each 1-hour time interval.
     
     Parameters
     ----------
     ds : Dataset
-        The Dataset to group by solar day.
+        The Dataset to be grouped.
     
     Returns
     -------
@@ -149,13 +150,14 @@ def groupby_solarday(ds: Dataset) -> Dataset:
     
     Notes
     -----
-    - This will result in coordinates that include the time-dimension to be dropped. Filter-operations using these
+    This will result in coordinates that include the time-dimension to be dropped. Filter-operations using these
     coordinates should be done before calling this function.
-    - The time coordinate will be rounded down to the nearest day.
     """
     ds_copy = ds.copy(deep=True)
-    ds_copy.coords['time'] = ds_copy.time.dt.floor('1D')
+    ds_copy.coords['time'] = ds_copy.time.dt.floor('1H')
     ds_copy = ds_copy.groupby('time').mean()
+    if len(np.unique(ds.time.dt.date)) < len(ds_copy.time):
+        print("Warning: Might have missed to group some acquisition slices!")
     return ds_copy
 
 
