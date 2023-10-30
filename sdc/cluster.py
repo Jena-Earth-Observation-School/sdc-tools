@@ -1,5 +1,6 @@
 import os
 import datetime
+import subprocess as sp
 from dask_jobqueue import SLURMCluster
 from distributed import Client
 
@@ -7,7 +8,8 @@ from distributed import Client
 def start_slurm_cluster(cores: int = 10,
                         processes: int = 1,
                         memory: str = '20 GiB',
-                        walltime: str = '00:30:00') -> (Client, SLURMCluster):
+                        walltime: str = '00:30:00',
+                        scheduler_options: dict = None) -> (Client, SLURMCluster):
     """
     Start a dask_jobqueue.SLURMCluster and a distributed.Client. The cluster will
     automatically scale up and down as needed.
@@ -23,6 +25,9 @@ def start_slurm_cluster(cores: int = 10,
         Total amount of memory per job. Default is '20 GiB'.
     walltime : str, optional
         The walltime for the job in the format HH:MM:SS. Default is '00:30:00'.
+    scheduler_options : dict, optional
+        Additional scheduler options. Default is None, which sets the dashboard address
+        to a free port based on the user id.
     
     Returns
     -------
@@ -46,6 +51,10 @@ def start_slurm_cluster(cores: int = 10,
     now = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')
     log_directory = os.path.join(os.getenv('HOME'), '.sdc_logs', now)
     
+    if scheduler_options is None:
+        port = _dashboard_port()
+        scheduler_options = {'dashboard_address': f':{port}'}
+    
     cluster = SLURMCluster(queue='short',
                            cores=cores,
                            processes=processes,
@@ -55,7 +64,8 @@ def start_slurm_cluster(cores: int = 10,
                            job_script_prologue=['mkdir -p /scratch/$USER'],
                            worker_extra_args=['--lifetime', '25m'],
                            local_directory=local_directory,
-                           log_directory=log_directory)
+                           log_directory=log_directory,
+                           scheduler_options=scheduler_options)
     
     dask_client = Client(cluster)
     cluster.adapt(minimum_jobs=1, maximum_jobs=4,
@@ -64,3 +74,17 @@ def start_slurm_cluster(cores: int = 10,
                   interval='10s')
     
     return dask_client, cluster
+
+
+def _dashboard_port(port: int = 8787):
+    """Finding a free port for the dask dashboard based on the user id.
+    """
+    uid = sp.check_output('id -u', shell=True).decode('utf-8').replace('\n','')
+    for i in uid:
+        port += int(i)
+    sp_check = 'lsof -i -P -n | grep LISTEN'
+    while port in [int(x.split(':')[1].split(' (')[0]) for x in
+                   sp.check_output(sp_check, shell=True).decode('utf-8').split('\n')
+                   if x != '']:
+        port += 1
+    return port
