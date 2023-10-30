@@ -1,12 +1,12 @@
-import math
+import os
 from dask_jobqueue import SLURMCluster
 from distributed import Client
 
 
 def start_slurm_cluster(cores: int = 10,
                         processes: int = 1,
-                        memory: str = "20 GiB",
-                        walltime: str = "00:30:00") -> (Client, SLURMCluster):
+                        memory: str = '20 GiB',
+                        walltime: str = '00:30:00') -> (Client, SLURMCluster):
     """
     Start a dask_jobqueue.SLURMCluster and a distributed.Client. The cluster will
     automatically scale up and down as needed.
@@ -19,9 +19,9 @@ def start_slurm_cluster(cores: int = 10,
         Number of (Python) processes per job. Default is 1, which is a good default for
         numpy-based workloads.
     memory : str, optional
-        Total amount of memory per job. Default is "20 GiB".
+        Total amount of memory per job. Default is '20 GiB'.
     walltime : str, optional
-        The walltime for the job in the format HH:MM:SS. Default is "00:30:00".
+        The walltime for the job in the format HH:MM:SS. Default is '00:30:00'.
     
     Returns
     -------
@@ -41,17 +41,22 @@ def start_slurm_cluster(cores: int = 10,
     values are defined per job and that the cluster will automatically be scaled up and
     down as needed.
     """
-    cluster = SLURMCluster(queue="short",
+    local_directory = os.path.join('/', 'scratch', os.getenv('USER'))
+    
+    cluster = SLURMCluster(queue='short',
                            cores=cores,
                            processes=processes,
                            memory=memory,
                            walltime=walltime,
-                           worker_extra_args=["--lifetime", "25m"])
+                           interface='ib0',
+                           job_script_prologue=['mkdir -p /scratch/$USER'],
+                           worker_extra_args=['--lifetime', '25m'],
+                           local_directory=local_directory)
     
     dask_client = Client(cluster)
     cluster.adapt(minimum_jobs=1, maximum_jobs=4,
                   # https://github.com/dask/dask-jobqueue/issues/498#issuecomment-1233716189
-                  worker_key=lambda state: state.address.split(":")[0],
-                  interval="10s")
+                  worker_key=lambda state: state.address.split(':')[0],
+                  interval='10s')
     
     return dask_client, cluster
