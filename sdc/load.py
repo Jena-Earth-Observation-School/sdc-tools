@@ -8,8 +8,8 @@ from sdc.s1 import load_s1_rtc
 from sdc.s2 import load_s2_l2a
 
 
-def load_product(product: str, 
-                 vec: str, 
+def load_product(product: str,
+                 vec: str,
                  time_range: Optional[Tuple[str, str]] = None,
                  time_pattern: Optional[str] = '%Y-%m-%d',
                  apply_mask: bool = True) -> Dataset:
@@ -36,13 +36,13 @@ def load_product(product: str,
         the mask depend on the product. See the documentation of the specific product
         for details.
     """
-    if vec.lower() in ['site01', 'site02', 'site03', 'site04', 'site05',  'site06']:
+    if vec.lower() in ['site01', 'site02', 'site03', 'site04', 'site05', 'site06']:
         bounds = get_site_bounds(site=vec.lower())
     else:
         bounds = fiona.open(vec, 'r').bounds
     
-    kwargs = {'bounds': bounds, 
-              'time_range': time_range, 
+    kwargs = {'bounds': bounds,
+              'time_range': time_range,
               'time_pattern': time_pattern,
               'apply_mask': apply_mask}
     
