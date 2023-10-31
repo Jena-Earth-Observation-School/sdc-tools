@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -142,6 +142,7 @@ const thebe_selector_output = ".output, .cell_output"
   
 
 <a class="navbar-brand logo" href="../../index.html">
+  
   
   
   
@@ -384,17 +385,20 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h1>
-<p>Provided that a Conda-based package manager (e.g. <a class="reference external" href="https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html">Micromamba</a>)
-is installed on your system, the most up-to-date version of the <code class="docutils literal notranslate"><span class="pre">sdc-tools</span></code> package can be installed using the following
-steps:</p>
+<p>Provided that a Conda-based package manager (e.g.
+<a class="reference external" href="https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html">Micromamba</a>)
+is installed on your system, the most up-to-date version of the <code class="docutils literal notranslate"><span class="pre">sdc-tools</span></code>
+package can be installed using the following steps:</p>
 <section id="create-and-activate-environment">
 <h2>Create and activate environment<a class="headerlink" href="#create-and-activate-environment" title="Permalink to this heading">#</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>micromamba<span class="w"> </span>create<span class="w"> </span>--file<span class="w"> </span>https://raw.githubusercontent.com/Jena-Earth-Observation-School/sdc-tools/main/environment.yml
 micromamba<span class="w"> </span>activate<span class="w"> </span>sdc_env
 </pre></div>
 </div>
-<p>If you are not able to install the environment directly from the GitHub repository (e.g., due to firewall restrictions
-on HPC systems), you can also download the <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code> file and install the environment from a local file.</p>
+<p>If you are not able to install the environment directly from the GitHub
+repository (e.g., due to firewall restrictions on HPC systems), you can also
+download the <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code> file and install the environment from a local
+file.</p>
 </section>
 <section id="install-sdc-tools-package">
 <h2>Install <code class="docutils literal notranslate"><span class="pre">sdc-tools</span></code> package<a class="headerlink" href="#install-sdc-tools-package" title="Permalink to this heading">#</a></h2>
@@ -403,7 +407,8 @@ on HPC systems), you can also download the <code class="docutils literal notrans
 </div>
 <section id="optional-installation-of-a-specific-version">
 <h3><em>Optional</em>: Installation of a specific version<a class="headerlink" href="#optional-installation-of-a-specific-version" title="Permalink to this heading">#</a></h3>
-<p>If you wish to install a specific version of the package, you can do so by specifying the version tag:</p>
+<p>If you wish to install a specific version of the package, you can do so by
+specifying the version tag:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>micromamba<span class="w"> </span>create<span class="w"> </span>--file<span class="w"> </span>https://raw.githubusercontent.com/Jena-Earth-Observation-School/sdc-tools/v0.1.0/environment.yml
 micromamba<span class="w"> </span>activate<span class="w"> </span>sdc_env
 pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/Jena-Earth-Observation-School/sdc-tools.git@v0.1.0
@@ -529,8 +534,8 @@ By Marco Wolsza
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
 
   <footer class="bd-footer">
   </footer>

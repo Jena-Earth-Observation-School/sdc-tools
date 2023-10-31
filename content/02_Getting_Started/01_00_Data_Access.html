@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -142,6 +142,7 @@ const thebe_selector_output = ".output, .cell_output"
   
 
 <a class="navbar-brand logo" href="../../index.html">
+  
   
   
   
@@ -381,8 +382,9 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="data-access">
 <h1>Data Access<a class="headerlink" href="#data-access" title="Permalink to this heading">#</a></h1>
-<p>The following pages provide an overview of the datasets that are currently available in the SDC, how to access them,
-and furthermore, any additional information that might be useful for working with them.</p>
+<p>The following pages provide an overview of the datasets that are currently
+available in the SDC, how to access them, and furthermore, any additional
+information that might be useful for working with them.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="01_01_Sentinel1.html">Sentinel-1 RTC</a></li>
@@ -391,27 +393,39 @@ and furthermore, any additional information that might be useful for working wit
 </div>
 <section id="using-the-load-product-function">
 <h2>Using the <code class="docutils literal notranslate"><span class="pre">load_product</span></code>-function<a class="headerlink" href="#using-the-load-product-function" title="Permalink to this heading">#</a></h2>
-<p>This function is the recommended main entry point for loading data from the SDC. It is a wrapper around various other,
-product-specific functions and its goal is to provide a unified and easy-to-use interface for loading data from the SDC.</p>
-<p>A lot happens in the background and certain parameters are set to default values, so that the function can be used with
-minimal effort. However, it is also possible to specify additional parameters to customize the data loading process. See
-the <a class="reference internal" href="#advanced-loading"><span class="std std-ref">Advanced loading options</span></a> section for more information.</p>
-<p>The following basic example shows how to load Sentinel-2 L2A data for SALDi site 06 for the year 2020:</p>
+<p>This function is the recommended main entry point for loading data from the SDC.
+It is a wrapper around various other, product-specific functions and its goal is
+to provide a unified and easy-to-use interface for loading data from the SDC.</p>
+<p>A lot happens in the background and certain parameters are set to default values,
+so that the function can be used with minimal effort. However, it is also
+possible to specify additional parameters to customize the data loading process.
+See the <a class="reference internal" href="#advanced-loading"><span class="std std-ref">Advanced loading options</span></a> section for more information.</p>
+<p>The following basic example shows how to load Sentinel-2 L2A data for SALDi
+site 06 for the year 2020:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sdc.load</span> <span class="kn">import</span> <span class="n">load_product</span>
 
-<span class="n">s2_data</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;s2_l2a&quot;</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s2">&quot;site06&quot;</span><span class="p">,</span> <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2020-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2021-01-01))</span>
+<span class="n">s2_data</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;s2_l2a&quot;</span><span class="p">,</span> 
+                       <span class="n">vec</span><span class="o">=</span><span class="s2">&quot;site06&quot;</span><span class="p">,</span> 
+                       <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2020-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2021-01-01))</span>
 </pre></div>
 </div>
 <p>The basic usage is to specify the following parameters:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">product</span></code>: The name of the data product to load. The following strings are supported at the moment:</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">product</span></code>: The name of the data product to load. The following strings are
+supported at the moment:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;s1_rtc&quot;</span></code>: Sentinel-1 RTC</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;s2_l2a&quot;</span></code>: Sentinel-2 L2A</p></li>
 </ul>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">vec</span></code>: Filter the returned data spatially by either providing the name of a SALDi site in the format <code class="docutils literal notranslate"><span class="pre">&quot;siteXX&quot;</span></code>, where XX is the site number (see example above), or a vector file path if the area of interest is a subset of a SALDi site. Providing a vector file outside the spatial extent of the SALDi sites will result in an empty dataset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">time_range</span></code>: Filter the returned data temporally by providing a tuple of strings in the format <code class="docutils literal notranslate"><span class="pre">(&quot;YY-MM-dd&quot;,</span> <span class="pre">&quot;YY-MM-dd&quot;)</span></code>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> to return all available data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vec</span></code>: Filter the returned data spatially by either providing the name of a
+SALDi site in the format <code class="docutils literal notranslate"><span class="pre">&quot;siteXX&quot;</span></code>, where XX is the site number (see example
+above), or a vector file path if the area of interest is a subset of a SALDi
+site. Providing a vector file outside the spatial extent of the SALDi sites
+will result in an empty dataset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">time_range</span></code>: Filter the returned data temporally by providing a tuple of
+strings in the format <code class="docutils literal notranslate"><span class="pre">(&quot;YY-MM-dd&quot;,</span> <span class="pre">&quot;YY-MM-dd&quot;)</span></code>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> to return all
+available data.</p></li>
 </ul>
 </section>
 <section id="advanced-loading-options">
@@ -533,8 +547,8 @@ By Marco Wolsza
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
 
   <footer class="bd-footer">
   </footer>
