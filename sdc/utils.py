@@ -1,4 +1,3 @@
-import warnings
 from copy import deepcopy
 from pathlib import Path
 import numpy as np
@@ -43,12 +42,10 @@ def common_params() -> Dict[str, Any]:
     dict[str, Any]
          Dictionary of parameters that are common to all products.
     """
-    from rasterio.enums import Resampling
-    return {"epsg": 4326,
+    return {"crs": 'EPSG:4326',
             "resolution": 0.0002,
-            "resampling": Resampling['bilinear'],
-            "xy_coords": 'center',
-            "chunksize": (-1, 1, 'auto', 'auto')}
+            "resampling": 'bilinear',
+            "chunks": {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}}
 
 
 def convert_asset_hrefs(list_stac_obj: List[Catalog | Collection | Item],
@@ -79,87 +76,6 @@ def convert_asset_hrefs(list_stac_obj: List[Catalog | Collection | Item],
         elif href_type == 'relative':
             stac_obj.make_asset_hrefs_relative()
     return list_stac_obj_copy
-
-
-def dataarray_to_dataset(da: DataArray) -> Dataset:
-    """
-    Converts a DataArray loaded using the stackstac library to a Dataset.
-    
-    Parameters
-    ----------
-    da : DataArray
-        The DataArray to convert.
-    
-    Returns
-    -------
-    Dataset
-        The converted Dataset with band dimension dropped and band coordinates saved as
-        attrs in variables.
-    
-    Notes
-    -----
-    Source: https://github.com/gjoseph92/stackstac/discussions/198#discussion-4760525
-    """
-    stack = da.copy()
-    ds = stack.to_dataset("band")
-    for coord, da in ds.band.coords.items():
-        if "band" in da.dims:
-            for i, band in enumerate(stack.band.values):
-                ds[band].attrs[coord] = da.values[i]
-    
-    ds = ds.drop_dims("band")
-    return ds
-
-
-def stackstac_wrapper(params: dict[str, Any]) -> DataArray:
-    """
-    Wrapper function for stackstac to avoid a pandas UserWarning if the version of stackstac is < 0.6.0.
-    
-    Parameters
-    ----------
-    params : dict[str, Any]
-        Parameters to pass to stackstac.stack.
-    
-    Returns
-    -------
-    DataArray
-        An xarray DataArray containing the stacked data.
-    """
-    import stackstac
-    if stackstac.__version__ < "0.6.0":
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", category=UserWarning)
-            da = stackstac.stack(**params)
-    else:
-        da = stackstac.stack(**params)
-    
-    return da
-
-
-def groupby_solarday(ds: Dataset) -> Dataset:
-    """
-    Groups the observations of all data variables in a Dataset by calculating the mean for each solar day.
-    
-    Parameters
-    ----------
-    ds : Dataset
-        The Dataset to group by solar day.
-    
-    Returns
-    -------
-    ds_copy : Dataset
-        The grouped Dataset.
-    
-    Notes
-    -----
-    - This will result in coordinates that include the time-dimension to be dropped. Filter-operations using these
-    coordinates should be done before calling this function.
-    - The time coordinate will be rounded down to the nearest day.
-    """
-    ds_copy = ds.copy(deep=True)
-    ds_copy.coords['time'] = ds_copy.time.dt.floor('1D')
-    ds_copy = ds_copy.groupby('time').mean()
-    return ds_copy
 
 
 def ds_nanquantiles(ds: Dataset,
