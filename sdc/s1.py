@@ -1,7 +1,7 @@
 from pystac import Catalog
-import numpy as np
+from odc.stac import load as odc_stac_load
 
-from typing import Optional, Tuple, Any
+from typing import Optional, Tuple, List
 from xarray import Dataset, DataArray
 from pystac import Item
 
@@ -11,8 +11,9 @@ import sdc.query as query
 
 def load_s1_rtc(bounds: Tuple[float, float, float, float],
                 time_range: Optional[Tuple[str, str]] = None,
-                time_pattern: Optional[str] = '%Y-%m-%d',
-                apply_mask: bool = True) -> Dataset:
+                time_pattern: str = '%Y-%m-%d',
+                apply_mask: bool = True
+                ) -> Dataset:
     """
     Loads the Sentinel-1 RTC data product for an area of interest.
     
@@ -39,14 +40,13 @@ def load_s1_rtc(bounds: Tuple[float, float, float, float],
     
     Notes
     -----
-    The Sentinel-2 L2A data is sourced from the Digital Earth Africa STAC Catalog.
+    The Sentinel-1 RTC data is sourced from the Digital Earth Africa STAC Catalog.
     For more product details, see:
     https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-1_specs.html
     """
     product = 's1_rtc'
-    measurements = ('vv', 'vh', 'area', 'angle')
-    dtype = np.dtype("float32")
-    params = utils.common_params()
+    bands = ['vv', 'vh', 'area']
+    common_params = utils.common_params()
     
     # Load and filter STAC Items
     catalog = Catalog.from_file(utils.get_catalog_path(product=product))
@@ -54,54 +54,29 @@ def load_s1_rtc(bounds: Tuple[float, float, float, float],
                                          time_range=time_range,
                                          time_pattern=time_pattern)
     
-    # https://github.com/gjoseph92/stackstac/issues/20
-    items = utils.convert_asset_hrefs(list_stac_obj=items, href_type='absolute')
-    
     # Turn into dask-based xarray.Dataset
-    stackstac_params = {'items': items, 'assets': list(measurements), 'bounds': bounds,
-                        'dtype': dtype, 'fill_value': np.nan}
-    stackstac_params.update(params)
-    da = utils.stackstac_wrapper(params=stackstac_params)
-    ds = utils.dataarray_to_dataset(da=da)
+    ds = odc_stac_load(items=items, bands=bands, bbox=list(bounds), dtype='float32',
+                       **common_params)
     
     if apply_mask:
-        params['bounds'] = bounds
-        valid = _mask(items=items, params=params)
-        ds = ds.where(valid, drop=True)
+        valid = _mask(items=items, bounds=bounds)
+        ds = ds.where(valid)
     
     return ds
 
 
-def _mask(items: list[Item],
-          params: dict[str, Any]) -> DataArray:
+def _mask(items: List[Item],
+          bounds: Tuple[float, float, float, float]) -> DataArray:
     """
     Creates a valid-data mask from the `mask` band of Sentinel-1 RTC data.
     
-    Parameters
-    ----------
-    items : list[Item]
-        A list of STAC Items from Sentinel-1 RTC data.
-    params : dict[str, Any]
-        Parameters to pass to `stackstac.stack`
-    
-    Returns
-    -------
-    DataArray
-        An xarray DataArray containing the valid-data mask.
-    
-    Notes
-    -----
     An overview table of the data mask classes can be found in Table 3:
     https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-1_specs.html
     """
-    stackstac_params = {'items': items, 'assets': ['mask'], 'dtype': np.dtype("uint8"),
-                        'fill_value': 0}
-    stackstac_params.update(params)
-    da = utils.stackstac_wrapper(params=stackstac_params)
-    
-    mask = da.sel(band='mask')
-    mask = (mask == 1)
-    return mask.compute()
+    ds = odc_stac_load(items=items, bands='mask', bbox=list(bounds),
+                       crs='EPSG:4326', resolution=0.0002)
+    mask = (ds.mask == 1)
+    return mask
 
 
 def separate_asc_desc(ds: Dataset) -> Tuple[Dataset, Dataset]:

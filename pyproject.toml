@@ -14,7 +14,7 @@ dependencies = [
     "pytz",
     "shapely",
     "pystac",
-    "stackstac",
+    "odc-stac",
     "fiona",
     "xclim",
     "numpy==1.24.4"
