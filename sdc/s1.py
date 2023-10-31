@@ -1,7 +1,7 @@
 from pystac import Catalog
 from odc.stac import load as odc_stac_load
 
-from typing import Optional, Tuple, Any
+from typing import Optional, Tuple, List
 from xarray import Dataset, DataArray
 from pystac import Item
 
@@ -11,8 +11,9 @@ import sdc.query as query
 
 def load_s1_rtc(bounds: Tuple[float, float, float, float],
                 time_range: Optional[Tuple[str, str]] = None,
-                time_pattern: Optional[str] = '%Y-%m-%d',
-                apply_mask: bool = True) -> Dataset:
+                time_pattern: str = '%Y-%m-%d',
+                apply_mask: bool = True
+                ) -> Dataset:
     """
     Loads the Sentinel-1 RTC data product for an area of interest.
     
@@ -39,7 +40,7 @@ def load_s1_rtc(bounds: Tuple[float, float, float, float],
     
     Notes
     -----
-    The Sentinel-2 L2A data is sourced from the Digital Earth Africa STAC Catalog.
+    The Sentinel-1 RTC data is sourced from the Digital Earth Africa STAC Catalog.
     For more product details, see:
     https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-1_specs.html
     """
@@ -64,7 +65,7 @@ def load_s1_rtc(bounds: Tuple[float, float, float, float],
     return ds
 
 
-def _mask(items: list[Item], 
+def _mask(items: List[Item],
           bounds: Tuple[float, float, float, float]) -> DataArray:
     """
     Creates a valid-data mask from the `mask` band of Sentinel-1 RTC data.

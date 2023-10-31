@@ -1,7 +1,7 @@
 from pystac import Catalog
 from odc.stac import load as odc_stac_load
 
-from typing import Optional, Tuple, Any
+from typing import Optional, Tuple, List
 from xarray import Dataset, DataArray
 from pystac import Item
 
@@ -11,7 +11,7 @@ import sdc.query as query
 
 def load_s2_l2a(bounds: Tuple[float, float, float, float],
                 time_range: Optional[Tuple[str, str]] = None,
-                time_pattern: Optional[str] = '%Y-%m-%d',
+                time_pattern: str = '%Y-%m-%d',
                 apply_mask: bool = True) -> Dataset:
     """
     Loads the Sentinel-2 L2A data product for an area of interest.
@@ -74,7 +74,7 @@ def load_s2_l2a(bounds: Tuple[float, float, float, float],
     return ds
 
 
-def _mask(items: list[Item],
+def _mask(items: List[Item],
           bounds: Tuple[float, float, float, float]) -> DataArray:
     """
     Creates a valid-data mask from the `SCL` (Scene Classification Layer) band of

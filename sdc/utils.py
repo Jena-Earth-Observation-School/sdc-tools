@@ -2,7 +2,7 @@ from copy import deepcopy
 from pathlib import Path
 import numpy as np
 
-from typing import List, Any
+from typing import List, Dict, Any
 from pystac import Catalog, Collection, Item
 from xarray import DataArray, Dataset
 
@@ -25,13 +25,15 @@ def get_catalog_path(product: str) -> str:
     _dir = base_path.joinpath(product.upper())
     _file = _dir.joinpath("catalog.json")
     if not _dir.exists():
-        raise FileNotFoundError(f"Product '{product}': Could not find product directory {_dir}")
+        raise FileNotFoundError(f"Product '{product}': "
+                                f"Could not find product directory {_dir}")
     if not _file.exists():
-        raise FileNotFoundError(f"Product '{product}': Could not find STAC Catalog file {_file}")
+        raise FileNotFoundError(f"Product '{product}': "
+                                f"Could not find STAC Catalog file {_file}")
     return str(_file)
 
 
-def common_params() -> dict[str, Any]:
+def common_params() -> Dict[str, Any]:
     """
     Returns parameters common to all products.
     
@@ -82,8 +84,8 @@ def ds_nanquantiles(ds: Dataset,
                     quantiles: float | tuple[float] = (0.05, 0.95),
                     compute: bool = False) -> Dataset:
     """
-    Aggregate the time dimension of a Dataset by calculating quantiles for each data variable. Returns a new Dataset
-    with the quantiles as new variables.
+    Aggregate the time dimension of a Dataset by calculating quantiles for each data
+    variable. Returns a new Dataset with the quantiles as new variables.
     
     Parameters
     ----------
@@ -92,12 +94,13 @@ def ds_nanquantiles(ds: Dataset,
     dim : str or tuple of str, optional
         Dimension(s) to reduce. Default is 'time'.
     variables : str or tuple of str or None, optional
-        The data variables to calculate quantiles for. If None (default), all data variables will be used.
+        The data variables to calculate quantiles for. If None (default), all data
+        variables will be used.
     quantiles : float or tuple of float, optional
         The quantiles to calculate. Default is (0.05, 0.95).
     compute : bool, optional
-        Whether to compute the new variables into memory. Default is False, which means that the new variables will
-        be lazily evaluated.
+        Whether to compute the new variables into memory. Default is False, which means
+        that the new variables will be lazily evaluated.
     
     Returns
     -------
@@ -127,7 +130,8 @@ def ds_nanquantiles(ds: Dataset,
             ds_copy[f'{v}_q{q_str}'] = ds_copy[f'{v}_quantiles'].sel(quantile=x)
     
     # Cleanup; we only want the new quantile variables
-    ds_copy = ds_copy.drop_vars(variables + other_variables + [f'{v}_quantiles' for v in variables])
+    ds_copy = ds_copy.drop_vars(variables + other_variables +
+                                [f'{v}_quantiles' for v in variables])
     ds_copy = ds_copy.drop_dims(['quantile'] + list(dim))
     
     if compute:
@@ -147,7 +151,8 @@ def xclim_nanquantile(da: DataArray,
     da: DataArray
         The DataArray to calculate quantiles for.
     q: float or sequence of float
-        Quantiles to compute, which must be between 0 and 1 (inclusive). E.g., [0.1, 0.9]
+        Quantiles to compute, which must be between 0 and 1 (inclusive).
+        E.g., [0.1, 0.9]
     dim: str or tuple of str, optional
         Dimension(s) over which to apply this function. Default is 'time'.
     
@@ -164,7 +169,8 @@ def xclim_nanquantile(da: DataArray,
     -----
     The structure of this function is based on:
     https://github.com/pydata/xarray/blob/6c5840e1198707cdcf7dc459f27ea9510eb76388/xarray/core/variable.py#L2128-L2271
-    Instead of `numpy.nanquantile`, the following `_nan_quantile` method of the xclim package is implemented:
+    Instead of `numpy.nanquantile`, the following `_nan_quantile` method of the xclim
+    package is implemented:
     https://github.com/Ouranosinc/xclim/blob/0a48bbc137a11d1c295b0f803183df5996f2dd6a/xclim/core/utils.py#L410-L474
     """
     from xarray.core.utils import is_scalar
