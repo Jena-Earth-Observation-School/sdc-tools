@@ -12,7 +12,8 @@ def load_product(product: str,
                  vec: str,
                  time_range: Optional[Tuple[str, str]] = None,
                  time_pattern: Optional[str] = '%Y-%m-%d',
-                 apply_mask: bool = True) -> Dataset:
+                 apply_mask: bool = True,
+                 ) -> Dataset:
     """
     Load data products available in the SALDi Data Cube (SDC).
     
@@ -35,6 +36,11 @@ def load_product(product: str,
         Whether to apply a quality mask to the data. Default is True. The specifics of
         the mask depend on the product. See the documentation of the specific product
         for details.
+    
+    Returns
+    -------
+    ds : Dataset
+        Dataset containing the loaded data.
     """
     if vec.lower() in ['site01', 'site02', 'site03', 'site04', 'site05', 'site06']:
         bounds = get_site_bounds(site=vec.lower())
