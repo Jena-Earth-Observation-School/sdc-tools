@@ -3,7 +3,7 @@ from copy import deepcopy
 from pathlib import Path
 import numpy as np
 
-from typing import List, Any
+from typing import List, Dict, Any
 from pystac import Catalog, Collection, Item
 from xarray import DataArray, Dataset
 
@@ -26,13 +26,15 @@ def get_catalog_path(product: str) -> str:
     _dir = base_path.joinpath(product.upper())
     _file = _dir.joinpath("catalog.json")
     if not _dir.exists():
-        raise FileNotFoundError(f"Product '{product}': Could not find product directory {_dir}")
+        raise FileNotFoundError(f"Product '{product}': "
+                                f"Could not find product directory {_dir}")
     if not _file.exists():
-        raise FileNotFoundError(f"Product '{product}': Could not find STAC Catalog file {_file}")
+        raise FileNotFoundError(f"Product '{product}': "
+                                f"Could not find STAC Catalog file {_file}")
     return str(_file)
 
 
-def common_params() -> dict[str, Any]:
+def common_params() -> Dict[str, Any]:
     """
     Returns parameters common to all products.
     
@@ -91,7 +93,8 @@ def dataarray_to_dataset(da: DataArray) -> Dataset:
     Returns
     -------
     Dataset
-        The converted Dataset with band dimension dropped and band coordinates saved as attrs in variables.
+        The converted Dataset with band dimension dropped and band coordinates saved as
+        attrs in variables.
     
     Notes
     -----

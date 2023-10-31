@@ -1,5 +1,6 @@
 import geopandas as gpd
 
+from typing import Tuple
 
 SITE01 = '''{
   "type": "FeatureCollection",
@@ -278,7 +279,7 @@ SITE06 = '''{
 }'''
 
 
-def get_site_bounds(site: str) -> tuple[float, float, float, float]:
+def get_site_bounds(site: str) -> Tuple[float, float, float, float]:
     """
     Get the bounds as a tuple of (min_x, min_y, max_x, max_y) of a SALDi site.
     

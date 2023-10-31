@@ -4,13 +4,16 @@ import subprocess as sp
 from dask_jobqueue import SLURMCluster
 from distributed import Client
 
+from typing import Optional
+
 
 def start_slurm_cluster(cores: int = 10,
                         processes: int = 1,
                         memory: str = '20 GiB',
                         walltime: str = '00:30:00',
-                        log_directory: str = None,
-                        scheduler_options: dict = None) -> (Client, SLURMCluster):
+                        log_directory: Optional[str] = None,
+                        scheduler_options: Optional[dict] = None
+                        ) -> (Client, SLURMCluster):
     """
     Start a dask_jobqueue.SLURMCluster and a distributed.Client. The cluster will
     automatically scale up and down as needed.
@@ -83,10 +86,10 @@ def start_slurm_cluster(cores: int = 10,
     return dask_client, cluster
 
 
-def _dashboard_port(port: int = 8787):
+def _dashboard_port(port: int = 8787) -> int:
     """Finding a free port for the dask dashboard based on the user id.
     """
-    uid = sp.check_output('id -u', shell=True).decode('utf-8').replace('\n','')
+    uid = sp.check_output('id -u', shell=True).decode('utf-8').replace('\n', '')
     for i in uid:
         port += int(i)
     sp_check = 'lsof -i -P -n | grep LISTEN'
