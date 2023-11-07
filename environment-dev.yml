@@ -10,7 +10,7 @@ dependencies:
   - shapely
   - pystac
   - stackstac
-  - odc-stac
+  - odc-stac>=0.3.7
   - fiona
   - xclim
   - numpy==1.24.4
