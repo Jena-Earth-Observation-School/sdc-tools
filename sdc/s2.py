@@ -1,3 +1,4 @@
+import xarray as xr
 from pystac import Catalog
 from odc.stac import load as odc_stac_load
 
@@ -65,7 +66,7 @@ def load_s2_l2a(bounds: Tuple[float, float, float, float],
     
     if apply_mask:
         valid = _mask(items=items, bounds=bounds)
-        ds = ds.where(valid, other=0)
+        ds = xr.where(valid, ds, 0)
     
     # Normalize the values to range [0, 1] and convert to float32
     ds = ds / 10000

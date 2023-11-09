@@ -1,3 +1,5 @@
+import numpy as np
+import xarray as xr
 from pystac import Catalog
 from odc.stac import load as odc_stac_load
 
@@ -60,7 +62,7 @@ def load_s1_rtc(bounds: Tuple[float, float, float, float],
     
     if apply_mask:
         valid = _mask(items=items, bounds=bounds)
-        ds = ds.where(valid)
+        ds = xr.where(valid, ds, np.nan)
     
     return ds
 
