@@ -73,8 +73,8 @@ def _mask(items: List[Item],
     An overview table of the data mask classes can be found in Table 3:
     https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-1_specs.html
     """
-    ds = odc_stac_load(items=items, bands='mask', bbox=list(bounds),
-                       crs='EPSG:4326', resolution=0.0002)
+    ds = odc_stac_load(items=items, bands='mask', bbox=bounds, dtype='uint8',
+                       **utils.common_params())
     mask = (ds.mask == 1)
     return mask
 

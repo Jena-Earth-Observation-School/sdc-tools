@@ -85,8 +85,8 @@ def _mask(items: List[Item],
     An overview table of the SCL classes can be found in Table 3:
     https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-2_Level-2A_specs.html#Specifications
     """
-    ds = odc_stac_load(items=items, bands='SCL', bbox=list(bounds), 
-                       crs='EPSG:4326', resolution=0.0002)
+    ds = odc_stac_load(items=items, bands='SCL', bbox=bounds, dtype='uint8',
+                       **utils.common_params())
     mask = (
             (ds.SCL == 4) |  # Vegetation
             (ds.SCL == 5) |  # Bare soils
