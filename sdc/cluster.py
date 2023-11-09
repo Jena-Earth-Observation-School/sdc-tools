@@ -72,7 +72,7 @@ def start_slurm_cluster(cores: int = 20,
                            interface='ib0',
                            job_script_prologue=['mkdir -p /scratch/$USER'],
                            worker_extra_args=['--lifetime', '25m',
-                                              '--lifetime-stagger', '4m'],
+                                              '--lifetime-stagger', '2m'],
                            local_directory=local_directory,
                            log_directory=log_directory,
                            scheduler_options=scheduler_options)
