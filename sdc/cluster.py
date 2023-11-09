@@ -10,7 +10,7 @@ from typing import Optional
 def start_slurm_cluster(cores: int = 20,
                         processes: int = 5,
                         memory: str = '40 GiB',
-                        walltime: str = '00:30:00',
+                        walltime: str = '00:45:00',
                         log_directory: Optional[str] = None,
                         scheduler_options: Optional[dict] = None
                         ) -> (Client, SLURMCluster):
@@ -27,7 +27,7 @@ def start_slurm_cluster(cores: int = 20,
     memory : str, optional
         Total amount of memory per job. Default is '40 GiB'.
     walltime : str, optional
-        The walltime for the job in the format HH:MM:SS. Default is '00:30:00'.
+        The walltime for the job in the format HH:MM:SS. Default is '00:45:00'.
     log_directory : str, optional
         The directory to write the log files to. Default is None, which writes the log
         files to ~/.sdc_logs/<YYYY-mm-ddTHH:MM>.
@@ -71,7 +71,7 @@ def start_slurm_cluster(cores: int = 20,
                            walltime=walltime,
                            interface='ib0',
                            job_script_prologue=['mkdir -p /scratch/$USER'],
-                           worker_extra_args=['--lifetime', '25m',
+                           worker_extra_args=['--lifetime', '40m',
                                               '--lifetime-stagger', '2m'],
                            local_directory=local_directory,
                            log_directory=log_directory,
