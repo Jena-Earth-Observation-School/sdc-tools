@@ -48,7 +48,6 @@ def load_s1_rtc(bounds: Tuple[float, float, float, float],
     """
     product = 's1_rtc'
     bands = ['vv', 'vh', 'area']
-    common_params = utils.common_params()
     
     # Load and filter STAC Items
     catalog = Catalog.from_file(utils.get_catalog_path(product=product))
@@ -57,8 +56,8 @@ def load_s1_rtc(bounds: Tuple[float, float, float, float],
                                          time_pattern=time_pattern)
     
     # Turn into dask-based xarray.Dataset
-    ds = odc_stac_load(items=items, bands=bands, bbox=list(bounds), dtype='float32',
-                       **common_params)
+    ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='float32',
+                       **utils.common_params())
     
     if apply_mask:
         valid = _mask(items=items, bounds=bounds)

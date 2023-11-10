@@ -12,7 +12,7 @@ def load_product(product: str,
                  vec: str,
                  time_range: Optional[Tuple[str, str]] = None,
                  time_pattern: Optional[str] = '%Y-%m-%d',
-                 apply_mask: bool = True,
+                 apply_mask: bool = True                 
                  ) -> Dataset:
     """
     Load data products available in the SALDi Data Cube (SDC).

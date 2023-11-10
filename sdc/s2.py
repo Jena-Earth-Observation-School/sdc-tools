@@ -52,7 +52,6 @@ def load_s2_l2a(bounds: Tuple[float, float, float, float],
              'B8A',                # NIR 2 (20 m)
              'B09',                # Water Vapour (60 m)
              'B11', 'B12']         # SWIR 1, SWIR 2 (20 m)
-    common_params = utils.common_params()
     
     # Load and filter STAC Items
     catalog = Catalog.from_file(utils.get_catalog_path(product=product))
@@ -61,8 +60,8 @@ def load_s2_l2a(bounds: Tuple[float, float, float, float],
                                          time_pattern=time_pattern)
     
     # Turn into dask-based xarray.Dataset
-    ds = odc_stac_load(items=items, bands=bands, bbox=list(bounds), dtype='uint16',
-                       **common_params)
+    ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='uint16',
+                       **utils.common_params())
     
     if apply_mask:
         valid = _mask(items=items, bounds=bounds)
