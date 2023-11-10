@@ -8,7 +8,7 @@ from typing import Optional
 
 
 def start_slurm_cluster(cores: int = 20,
-                        processes: int = 5,
+                        processes: int = 4,
                         memory: str = '40 GiB',
                         walltime: str = '00:45:00',
                         log_directory: Optional[str] = None,
@@ -23,7 +23,7 @@ def start_slurm_cluster(cores: int = 20,
     cores : int, optional
         Total number of cores per job. Default is 20.
     processes : int, optional
-        Number of processes per job. Default is 5.
+        Number of processes per job. Default is 4.
     memory : str, optional
         Total amount of memory per job. Default is '40 GiB'.
     walltime : str, optional
