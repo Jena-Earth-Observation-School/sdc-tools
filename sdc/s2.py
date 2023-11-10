@@ -1,3 +1,4 @@
+import numpy as np
 import xarray as xr
 from pystac import Catalog
 from odc.stac import load as odc_stac_load
@@ -69,7 +70,8 @@ def load_s2_l2a(bounds: Tuple[float, float, float, float],
     
     # Normalize the values to range [0, 1] and convert to float32
     ds = ds / 10000
-    ds = ds.where((ds > 0) & (ds <= 1)).astype("float32")
+    cond = (ds > 0) & (ds <= 1)
+    ds = xr.where(cond, ds, np.nan).astype("float32")
     
     return ds
 
