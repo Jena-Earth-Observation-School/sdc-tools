@@ -1,3 +1,5 @@
+import numpy as np
+import xarray as xr
 from pystac import Catalog
 from odc.stac import load as odc_stac_load
 
@@ -46,7 +48,6 @@ def load_s1_rtc(bounds: Tuple[float, float, float, float],
     """
     product = 's1_rtc'
     bands = ['vv', 'vh', 'area']
-    common_params = utils.common_params()
     
     # Load and filter STAC Items
     catalog = Catalog.from_file(utils.get_catalog_path(product=product))
@@ -54,27 +55,36 @@ def load_s1_rtc(bounds: Tuple[float, float, float, float],
                                          time_range=time_range,
                                          time_pattern=time_pattern)
     
+    common_params = utils.common_params()
+    if not apply_mask:
+        common_params['chunks']['time'] = -1
+    
     # Turn into dask-based xarray.Dataset
-    ds = odc_stac_load(items=items, bands=bands, bbox=list(bounds), dtype='float32',
+    ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='float32',
                        **common_params)
     
     if apply_mask:
-        valid = _mask(items=items, bounds=bounds)
-        ds = ds.where(valid)
+        valid = _mask(items=items, bounds=bounds, common_params=common_params)
+        ds = xr.where(valid, ds, np.nan)
+        ds = ds.chunk({'time': -1,
+                       'latitude': common_params['chunks']['latitude'],
+                       'longitude': common_params['chunks']['longitude']})
     
     return ds
 
 
 def _mask(items: List[Item],
-          bounds: Tuple[float, float, float, float]) -> DataArray:
+          bounds: Tuple[float, float, float, float],
+          common_params: dict
+          ) -> DataArray:
     """
     Creates a valid-data mask from the `mask` band of Sentinel-1 RTC data.
     
     An overview table of the data mask classes can be found in Table 3:
     https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-1_specs.html
     """
-    ds = odc_stac_load(items=items, bands='mask', bbox=list(bounds),
-                       crs='EPSG:4326', resolution=0.0002)
+    ds = odc_stac_load(items=items, bands='mask', bbox=bounds, dtype='uint8',
+                       **common_params)
     mask = (ds.mask == 1)
     return mask
 

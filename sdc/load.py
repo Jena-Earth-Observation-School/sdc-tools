@@ -12,7 +12,7 @@ def load_product(product: str,
                  vec: str,
                  time_range: Optional[Tuple[str, str]] = None,
                  time_pattern: Optional[str] = '%Y-%m-%d',
-                 apply_mask: bool = True,
+                 apply_mask: bool = True
                  ) -> Dataset:
     """
     Load data products available in the SALDi Data Cube (SDC).
@@ -43,6 +43,11 @@ def load_product(product: str,
         Dataset containing the loaded data.
     """
     if vec.lower() in ['site01', 'site02', 'site03', 'site04', 'site05', 'site06']:
+        print("WARNING: Loading data for an entire SALDi site will likely result in "
+              "performance issues as it will load data from multiple tiles. "
+              "Only do so if you know what you are doing and have optimized your "
+              "workflow! It is recommended to start with a small subset to test your "
+              "workflow before scaling up.")
         bounds = get_site_bounds(site=vec.lower())
     else:
         bounds = fiona.open(vec, 'r').bounds

@@ -7,9 +7,9 @@ from distributed import Client
 from typing import Optional
 
 
-def start_slurm_cluster(cores: int = 10,
-                        processes: int = 1,
-                        memory: str = '20 GiB',
+def start_slurm_cluster(cores: int = 20,
+                        processes: int = 4,
+                        memory: str = '40 GiB',
                         walltime: str = '00:30:00',
                         log_directory: Optional[str] = None,
                         scheduler_options: Optional[dict] = None
@@ -21,17 +21,16 @@ def start_slurm_cluster(cores: int = 10,
     Parameters
     ----------
     cores : int, optional
-        Total number of cores per job. Default is 10.
+        Total number of cores per job. Default is 20.
     processes : int, optional
-        Number of (Python) processes per job. Default is 1, which is a good default for
-        numpy-based workloads.
+        Number of processes per job. Default is 4.
     memory : str, optional
-        Total amount of memory per job. Default is '20 GiB'.
+        Total amount of memory per job. Default is '40 GiB'.
     walltime : str, optional
         The walltime for the job in the format HH:MM:SS. Default is '00:30:00'.
     log_directory : str, optional
         The directory to write the log files to. Default is None, which writes the log
-        files to ~/.sdc_logs/<date>.
+        files to ~/.sdc_logs/<YYYY-mm-ddTHH:MM>.
     scheduler_options : dict, optional
         Additional scheduler options. Default is None, which sets the dashboard address
         to a free port based on the user id.
@@ -72,13 +71,14 @@ def start_slurm_cluster(cores: int = 10,
                            walltime=walltime,
                            interface='ib0',
                            job_script_prologue=['mkdir -p /scratch/$USER'],
-                           worker_extra_args=['--lifetime', '25m'],
+                           worker_extra_args=['--lifetime', '25m',
+                                              '--lifetime-stagger', '2m'],
                            local_directory=local_directory,
                            log_directory=log_directory,
                            scheduler_options=scheduler_options)
     
     dask_client = Client(cluster)
-    cluster.adapt(minimum_jobs=1, maximum_jobs=4,
+    cluster.adapt(minimum=1, maximum=8,
                   # https://github.com/dask/dask-jobqueue/issues/498#issuecomment-1233716189
                   worker_key=lambda state: state.address.split(':')[0],
                   interval='10s')
