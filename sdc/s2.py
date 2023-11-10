@@ -14,7 +14,8 @@ import sdc.query as query
 def load_s2_l2a(bounds: Tuple[float, float, float, float],
                 time_range: Optional[Tuple[str, str]] = None,
                 time_pattern: str = '%Y-%m-%d',
-                apply_mask: bool = True) -> Dataset:
+                apply_mask: bool = True
+                ) -> Dataset:
     """
     Loads the Sentinel-2 L2A data product for an area of interest.
     
@@ -60,12 +61,16 @@ def load_s2_l2a(bounds: Tuple[float, float, float, float],
                                          time_range=time_range,
                                          time_pattern=time_pattern)
     
+    common_params = utils.common_params()
+    if not apply_mask:
+        common_params['chunks']['time'] = -1
+    
     # Turn into dask-based xarray.Dataset
     ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='uint16',
-                       **utils.common_params())
+                       **common_params)
     
     if apply_mask:
-        valid = _mask(items=items, bounds=bounds)
+        valid = _mask(items=items, bounds=bounds, common_params=common_params)
         ds = xr.where(valid, ds, 0)
     
     # Normalize the values to range [0, 1] and convert to float32
@@ -73,11 +78,17 @@ def load_s2_l2a(bounds: Tuple[float, float, float, float],
     cond = (ds > 0) & (ds <= 1)
     ds = xr.where(cond, ds, np.nan).astype("float32")
     
+    if apply_mask:
+        ds = ds.chunk({'time': -1,
+                       'latitude': common_params['chunks']['latitude'],
+                       'longitude': common_params['chunks']['longitude']})
     return ds
 
 
 def _mask(items: List[Item],
-          bounds: Tuple[float, float, float, float]) -> DataArray:
+          bounds: Tuple[float, float, float, float],
+          common_params: dict
+          ) -> DataArray:
     """
     Creates a valid-data mask from the `SCL` (Scene Classification Layer) band of
     Sentinel-2 L2A data.
@@ -88,7 +99,7 @@ def _mask(items: List[Item],
     https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-2_Level-2A_specs.html#Specifications
     """
     ds = odc_stac_load(items=items, bands='SCL', bbox=bounds, dtype='uint8',
-                       **utils.common_params())
+                       **common_params)
     mask = (
             (ds.SCL == 4) |  # Vegetation
             (ds.SCL == 5) |  # Bare soils

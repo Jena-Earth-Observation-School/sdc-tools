@@ -55,19 +55,28 @@ def load_s1_rtc(bounds: Tuple[float, float, float, float],
                                          time_range=time_range,
                                          time_pattern=time_pattern)
     
+    common_params = utils.common_params()
+    if not apply_mask:
+        common_params['chunks']['time'] = -1
+    
     # Turn into dask-based xarray.Dataset
     ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='float32',
-                       **utils.common_params())
+                       **common_params)
     
     if apply_mask:
-        valid = _mask(items=items, bounds=bounds)
+        valid = _mask(items=items, bounds=bounds, common_params=common_params)
         ds = xr.where(valid, ds, np.nan)
+        ds = ds.chunk({'time': -1,
+                       'latitude': common_params['chunks']['latitude'],
+                       'longitude': common_params['chunks']['longitude']})
     
     return ds
 
 
 def _mask(items: List[Item],
-          bounds: Tuple[float, float, float, float]) -> DataArray:
+          bounds: Tuple[float, float, float, float],
+          common_params: dict
+          ) -> DataArray:
     """
     Creates a valid-data mask from the `mask` band of Sentinel-1 RTC data.
     
@@ -75,7 +84,7 @@ def _mask(items: List[Item],
     https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-1_specs.html
     """
     ds = odc_stac_load(items=items, bands='mask', bbox=bounds, dtype='uint8',
-                       **utils.common_params())
+                       **common_params)
     mask = (ds.mask == 1)
     return mask
 
