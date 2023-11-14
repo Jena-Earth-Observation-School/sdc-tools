@@ -62,8 +62,8 @@ def load_s2_l2a(bounds: Tuple[float, float, float, float],
                                          time_pattern=time_pattern)
     
     common_params = utils.common_params()
-    if not apply_mask:
-        common_params['chunks']['time'] = -1
+    if apply_mask:
+        common_params['chunks']['time'] = 1
     
     # Turn into dask-based xarray.Dataset
     ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='uint16',
@@ -97,13 +97,15 @@ def _mask(items: List[Item],
     -----
     An overview table of the SCL classes can be found in Table 3:
     https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-2_Level-2A_specs.html#Specifications
+    
+    The selection of which classes to consider as valid data is based on
+    Baetens et al. (2019): https://doi.org/10.3390/rs11040433 (Table 4).
     """
     ds = odc_stac_load(items=items, bands='SCL', bbox=bounds, dtype='uint8',
                        **common_params)
-    mask = (
-            (ds.SCL == 4) |  # Vegetation
-            (ds.SCL == 5) |  # Bare soils
-            (ds.SCL == 6) |  # Water
-            (ds.SCL == 7)    # Unclassified
-    )
+    mask = ((ds.SCL == 2) |  # dark area pixels
+            (ds.SCL > 3) &   # vegetation, bare soils, water, unclassified
+            (ds.SCL <= 7) |
+            (ds.SCL == 11)   # snow/ice
+            )
     return mask

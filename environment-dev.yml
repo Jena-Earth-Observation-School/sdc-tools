@@ -14,6 +14,7 @@ dependencies:
   - fiona
   - xclim
   - numpy==1.24.4
+  - flox
   - jupyter-book
 ############# Extras #############
   - spyndex
