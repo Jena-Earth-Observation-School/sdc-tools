@@ -12,7 +12,7 @@ def load_product(product: str,
                  vec: str,
                  time_range: Optional[Tuple[str, str]] = None,
                  time_pattern: Optional[str] = '%Y-%m-%d',
-                 apply_mask: bool = True
+                 s2_apply_mask: Optional[bool] = True
                  ) -> Dataset:
     """
     Load data products available in the SALDi Data Cube (SDC).
@@ -32,10 +32,10 @@ def load_product(product: str,
         None, which loads all available data.
     time_pattern : str, optional
         Time pattern to parse the time range. Default is '%Y-%m-%d'.
-    apply_mask : bool, optional
-        Whether to apply a quality mask to the data. Default is True. The specifics of
-        the mask depend on the product. See the documentation of the specific product
-        for details.
+    s2_apply_mask : bool, optional
+        Whether to apply a valid-data mask to the Sentinel-2 data. Default is True.
+        The mask is created from the `SCL` (Scene Classification Layer) band of the
+        product.
     
     Returns
     -------
@@ -54,13 +54,12 @@ def load_product(product: str,
     
     kwargs = {'bounds': bounds,
               'time_range': time_range,
-              'time_pattern': time_pattern,
-              'apply_mask': apply_mask}
+              'time_pattern': time_pattern}
     
     if product == 's1_rtc':
         ds = load_s1_rtc(**kwargs)
     elif product == 's2_l2a':
-        ds = load_s2_l2a(**kwargs)
+        ds = load_s2_l2a(apply_mask=s2_apply_mask, **kwargs)
     else:
         raise ValueError(f'Product {product} not supported')
     
