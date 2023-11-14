@@ -99,7 +99,7 @@ def _mask(items: List[Item],
     https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-2_Level-2A_specs.html#Specifications
     
     The selection of which classes to consider as valid data is based on
-    Baetens et al. (2019): https://doi.org/10.3390/rs11040433
+    Baetens et al. (2019): https://doi.org/10.3390/rs11040433 (Table 4).
     """
     ds = odc_stac_load(items=items, bands='SCL', bbox=bounds, dtype='uint8',
                        **common_params)
