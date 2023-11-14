@@ -81,26 +81,26 @@ def convert_asset_hrefs(list_stac_obj: List[Catalog | Collection | Item],
 def groupby_acq_slices(ds: Dataset) -> Dataset:
     """
     Groups acquisition slices of all data variables in a Dataset by calculating the mean
-    for each 1-hour time interval.
-
+    for each rounded 1-hour time interval.
+    
     Parameters
     ----------
     ds : Dataset
         The Dataset to be grouped.
-
+    
     Returns
     -------
     ds_copy : Dataset
         The grouped Dataset.
-
+    
     Notes
     -----
     This will result in coordinates that include the time-dimension to be dropped. Filter-operations using these
     coordinates should be done before calling this function.
     """
     ds_copy = ds.copy(deep=True)
-    ds_copy.coords['time'] = ds_copy.time.dt.floor('1H')
-    ds_copy = ds_copy.groupby('time').mean()
+    ds_copy.coords['time'] = ds_copy.time.dt.round('1H')
+    ds_copy = ds_copy.groupby('time').mean(skipna=True)
     if len(np.unique(ds.time.dt.date)) < len(ds_copy.time):
         print("Warning: Might have missed to group some acquisition slices!")
     return ds_copy
