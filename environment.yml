@@ -13,6 +13,7 @@ dependencies:
   - fiona
   - xclim
   - numpy==1.24.4
+  - flox
 ############# Extras #############
   - spyndex
   - geopandas
