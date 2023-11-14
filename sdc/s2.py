@@ -62,8 +62,8 @@ def load_s2_l2a(bounds: Tuple[float, float, float, float],
                                          time_pattern=time_pattern)
     
     common_params = utils.common_params()
-    if not apply_mask:
-        common_params['chunks']['time'] = -1
+    if apply_mask:
+        common_params['chunks']['time'] = 1
     
     # Turn into dask-based xarray.Dataset
     ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='uint16',

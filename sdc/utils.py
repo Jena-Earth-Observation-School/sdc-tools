@@ -45,7 +45,7 @@ def common_params() -> Dict[str, Any]:
     return {"crs": 'EPSG:4326',
             "resolution": 0.0002,
             "resampling": 'bilinear',
-            "chunks": {'time': 1, 'latitude': 'auto', 'longitude': 'auto'}}
+            "chunks": {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}}
 
 
 def convert_asset_hrefs(list_stac_obj: List[Catalog | Collection | Item],
