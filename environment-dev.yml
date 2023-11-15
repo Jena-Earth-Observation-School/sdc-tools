@@ -24,6 +24,8 @@ dependencies:
   - leafmap
   - matplotlib
   - hvplot
+  - geoviews
+  - datashader
   - autopep8
   - black
   - isort
