@@ -27,7 +27,7 @@ from sdc.load import load_product
 s2_data = load_product(product="s2_l2a", 
                        vec="/path/to/my_area_of_interest.geojson", 
                        time_range=("2020-01-01", "2021-01-01),
-                       apply_mask=True)
+                       s2_apply_mask=True)
 ```
 
 The basic usage is to specify the following parameters:
@@ -43,9 +43,9 @@ a vector file outside the spatial extent of the SALDi sites will result in an em
 dataset.
 - `time_range`: Filter the returned data temporally by providing a tuple of strings in 
 the format `("YY-MM-dd", "YY-MM-dd")`, or `None` to return all available data.
-- `apply_mask`: Apply a quality mask to the data. This is only supported for 
-Sentinel-1 RTC and Sentinel-2 L2A data, using the `mask` and `SCL`-bands respectively. 
-The default value is `True`.
+- `s2_apply_mask`: Apply a quality mask to the Sentinel-2 L2A product by using its 
+`SCL`-band. The default value is `True`. As the name already suggests, this is only
+relevant for Sentinel-2 L2A data.
 
 ```{warning}
 While it is possible to load data for an entire SALDi site by providing the site name
@@ -64,3 +64,44 @@ _Coming soon..._
 
 ![https://media.giphy.com/media/fky7SCCsAqGZy/giphy.gif](https://media.giphy.com/media/fky7SCCsAqGZy/giphy.gif)
 
+(xarray-dask-intro)=
+## Xarray, Dask and lazy loading
+
+The `load_product`-function returns an `xarray.Dataset` object, which is a powerful
+data structure for working with multi-dimensional data. [Xarray](https://xarray.dev/) 
+is a Python library that _"[...] introduces labels in the form of dimensions, 
+coordinates and attributes on top of raw NumPy-like arrays, which allows for a more 
+intuitive, more concise, and less error-prone developer experience."_. See the following 
+resources for more information:
+- [Overview: Why Xarray?](https://docs.xarray.dev/en/latest/getting-started-guide/why-xarray.html)
+- Pretty much everything in the [Xarray documentation](https://docs.xarray.dev/en/latest/index.html) 😉
+- [Tutorial: Xarray in 45 minutes](https://tutorial.xarray.dev/overview/xarray-in-45-min.html)
+
+Xarray closely integrates with the [Dask](https://dask.org/) library, which is a 
+_"[...] flexible library for parallel computing in Python."_ and allows for datasets to
+be loaded lazily, meaning that the data is not loaded into memory until it is actually
+needed. This is especially useful when working with large datasets that might not fit
+into the available memory. These datasets are split into smaller chunks that can then
+be processed in parallel. Most of this is happening in the background so you don't have 
+to worry too much about it. However, it is important to be aware of it, as it affects
+the way you need to work with the data. For example, you need to be careful when
+applying certain operations, such as calling [`.values`](https://docs.xarray.dev/en/latest/generated/xarray.DataArray.values.html#xarray.DataArray.values), 
+as they might trigger the entire dataset to be loaded into memory and can result in 
+performance issues if the data has not been [aggregated](https://docs.xarray.dev/en/latest/api.html#aggregation) 
+or [indexed](https://docs.xarray.dev/en/latest/user-guide/indexing.html) beforehand. 
+Furthermore, you might reach a point where you need to use advanced techniques to
+optimize your workflow, such as re-orienting the chunks or [persisting](https://docs.dask.org/en/latest/best-practices.html#persist-when-you-can) 
+intermediate results in memory.
+
+The following resources provide more information:
+- [User Guide: Using Dask with xarray](https://docs.xarray.dev/en/latest/user-guide/dask.html#using-dask-with-xarray)
+- [Tutorial: Parallel computing with Dask](https://tutorial.xarray.dev/intermediate/xarray_and_dask.html#parallel-computing-with-dask)
+
+```{note}
+By default, the `load_product`-function returns an `xarray.Dataset` object that has been 
+loaded lazily. Please make sure to familiarize yourself with the resources mentioned 
+above to get the most out of working with the SDC! But also don't worry too much about
+this huge amount of information. The default settings applied by `sdc-tools` in the 
+background should be fine for most use cases and you will also get more experienced 
+over time.
+```
