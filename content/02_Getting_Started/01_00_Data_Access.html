@@ -369,6 +369,7 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-load-product-function">Using the <code class="docutils literal notranslate"><span class="pre">load_product</span></code>-function</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-loading-options">Advanced loading options</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-dask-and-lazy-loading">Xarray, Dask and lazy loading</a></li>
 </ul>
             </nav>
         </div>
@@ -382,9 +383,9 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="data-access">
 <h1>Data Access<a class="headerlink" href="#data-access" title="Permalink to this heading">#</a></h1>
-<p>The following pages provide an overview of the datasets that are currently
-available in the SDC, how to access them, and furthermore, any additional
-information that might be useful for working with them.</p>
+<p>The following pages provide an overview of the datasets that are currently available in
+the SDC, how to access them, and furthermore, any additional information that might be
+useful for working with them.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="01_01_Sentinel1.html">Sentinel-1 RTC</a></li>
@@ -393,45 +394,100 @@ information that might be useful for working with them.</p>
 </div>
 <section id="using-the-load-product-function">
 <h2>Using the <code class="docutils literal notranslate"><span class="pre">load_product</span></code>-function<a class="headerlink" href="#using-the-load-product-function" title="Permalink to this heading">#</a></h2>
-<p>This function is the recommended main entry point for loading data from the SDC.
-It is a wrapper around various other, product-specific functions and its goal is
-to provide a unified and easy-to-use interface for loading data from the SDC.</p>
-<p>A lot happens in the background and certain parameters are set to default values,
-so that the function can be used with minimal effort. However, it is also
-possible to specify additional parameters to customize the data loading process.
-See the <a class="reference internal" href="#advanced-loading"><span class="std std-ref">Advanced loading options</span></a> section for more information.</p>
-<p>The following basic example shows how to load Sentinel-2 L2A data for SALDi
-site 06 for the year 2020:</p>
+<p>This function is the recommended main entry point for loading data from the SDC. It is a
+wrapper around various other, product-specific functions and its goal is to provide a
+unified and easy-to-use interface for loading data from the SDC.</p>
+<p>A lot happens in the background and certain parameters are set to default values, so
+that the function can be used with minimal effort. However, it is also possible to
+specify additional parameters to customize the data loading process. See the
+<a class="reference internal" href="#advanced-loading"><span class="std std-ref">Advanced loading options</span></a> section for more information.</p>
+<p>The following basic example shows how to load Sentinel-2 L2A data for the year 2020 of
+an area of interest, which has been saved locally as a vector file:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sdc.load</span> <span class="kn">import</span> <span class="n">load_product</span>
 
 <span class="n">s2_data</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;s2_l2a&quot;</span><span class="p">,</span> 
-                       <span class="n">vec</span><span class="o">=</span><span class="s2">&quot;site06&quot;</span><span class="p">,</span> 
-                       <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2020-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2021-01-01))</span>
+                       <span class="n">vec</span><span class="o">=</span><span class="s2">&quot;/path/to/my_area_of_interest.geojson&quot;</span><span class="p">,</span> 
+                       <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2020-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2021-01-01),</span>
+                       <span class="n">s2_apply_mask</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The basic usage is to specify the following parameters:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">product</span></code>: The name of the data product to load. The following strings are
-supported at the moment:</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">product</span></code>: The name of the data product to load. The following strings are supported
+at the moment:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;s1_rtc&quot;</span></code>: Sentinel-1 RTC</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;s2_l2a&quot;</span></code>: Sentinel-2 L2A</p></li>
 </ul>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">vec</span></code>: Filter the returned data spatially by either providing the name of a
-SALDi site in the format <code class="docutils literal notranslate"><span class="pre">&quot;siteXX&quot;</span></code>, where XX is the site number (see example
-above), or a vector file path if the area of interest is a subset of a SALDi
-site. Providing a vector file outside the spatial extent of the SALDi sites
-will result in an empty dataset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">time_range</span></code>: Filter the returned data temporally by providing a tuple of
-strings in the format <code class="docutils literal notranslate"><span class="pre">(&quot;YY-MM-dd&quot;,</span> <span class="pre">&quot;YY-MM-dd&quot;)</span></code>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> to return all
-available data.</p></li>
+SALDi site in the format <code class="docutils literal notranslate"><span class="pre">&quot;siteXX&quot;</span></code>, where XX is the site number (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;site06&quot;</span></code>), or
+a vector file path defining an area of interest as a subset of a SALDi site. Providing
+a vector file outside the spatial extent of the SALDi sites will result in an empty
+dataset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">time_range</span></code>: Filter the returned data temporally by providing a tuple of strings in
+the format <code class="docutils literal notranslate"><span class="pre">(&quot;YY-MM-dd&quot;,</span> <span class="pre">&quot;YY-MM-dd&quot;)</span></code>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> to return all available data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s2_apply_mask</span></code>: Apply a quality mask to the Sentinel-2 L2A product by using its
+<code class="docutils literal notranslate"><span class="pre">SCL</span></code>-band. The default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>. As the name already suggests, this is only
+relevant for Sentinel-2 L2A data.</p></li>
 </ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>While it is possible to load data for an entire SALDi site by providing the site name
+(e.g. <code class="docutils literal notranslate"><span class="pre">&quot;site06&quot;</span></code>), please be aware that this will result in a large dataset and will
+very likely result in performance issues if your workflow is not optimized.</p>
+<p>It is therefore recommended to load only a subset by providing a vector file defining an
+area of interest (e.g., using <a class="reference external" href="https://geojson.io/">https://geojson.io/</a>). Develop your workflow on a small
+subset of the data before scaling up.</p>
+</div>
 </section>
 <section id="advanced-loading-options">
 <span id="advanced-loading"></span><h2>Advanced loading options<a class="headerlink" href="#advanced-loading-options" title="Permalink to this heading">#</a></h2>
 <p><em>Coming soon…</em></p>
 <p><img alt="https://media.giphy.com/media/fky7SCCsAqGZy/giphy.gif" src="https://media.giphy.com/media/fky7SCCsAqGZy/giphy.gif" /></p>
+</section>
+<section id="xarray-dask-and-lazy-loading">
+<span id="xarray-dask-intro"></span><h2>Xarray, Dask and lazy loading<a class="headerlink" href="#xarray-dask-and-lazy-loading" title="Permalink to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">load_product</span></code>-function returns an <code class="docutils literal notranslate"><span class="pre">xarray.Dataset</span></code> object, which is a powerful
+data structure for working with multi-dimensional data. <a class="reference external" href="https://xarray.dev/">Xarray</a>
+is a Python library that <em>“[…] introduces labels in the form of dimensions,
+coordinates and attributes on top of raw NumPy-like arrays, which allows for a more
+intuitive, more concise, and less error-prone developer experience.”</em>. See the following
+resources for more information:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.xarray.dev/en/latest/getting-started-guide/why-xarray.html">Overview: Why Xarray?</a></p></li>
+<li><p>Pretty much everything in the <a class="reference external" href="https://docs.xarray.dev/en/latest/index.html">Xarray documentation</a> 😉</p></li>
+<li><p><a class="reference external" href="https://tutorial.xarray.dev/overview/xarray-in-45-min.html">Tutorial: Xarray in 45 minutes</a></p></li>
+</ul>
+<p>Xarray closely integrates with the <a class="reference external" href="https://dask.org/">Dask</a> library, which is a
+<em>“[…] flexible library for parallel computing in Python.”</em> and allows for datasets to
+be loaded lazily, meaning that the data is not loaded into memory until it is actually
+needed. This is especially useful when working with large datasets that might not fit
+into the available memory. These datasets are split into smaller chunks that can then
+be processed in parallel. Most of this is happening in the background so you don’t have
+to worry too much about it. However, it is important to be aware of it, as it affects
+the way you need to work with the data. For example, you need to be careful when
+applying certain operations, such as calling <a class="reference external" href="https://docs.xarray.dev/en/latest/generated/xarray.DataArray.values.html#xarray.DataArray.values"><code class="docutils literal notranslate"><span class="pre">.values</span></code></a>,
+as they might trigger the entire dataset to be loaded into memory and can result in
+performance issues if the data has not been <a class="reference external" href="https://docs.xarray.dev/en/latest/api.html#aggregation">aggregated</a>
+or <a class="reference external" href="https://docs.xarray.dev/en/latest/user-guide/indexing.html">indexed</a> beforehand.
+Furthermore, you might reach a point where you need to use advanced techniques to
+optimize your workflow, such as re-orienting the chunks or <a class="reference external" href="https://docs.dask.org/en/latest/best-practices.html#persist-when-you-can">persisting</a>
+intermediate results in memory.</p>
+<p>The following resources provide more information:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.xarray.dev/en/latest/user-guide/dask.html#using-dask-with-xarray">User Guide: Using Dask with xarray</a></p></li>
+<li><p><a class="reference external" href="https://tutorial.xarray.dev/intermediate/xarray_and_dask.html#parallel-computing-with-dask">Tutorial: Parallel computing with Dask</a></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By default, the <code class="docutils literal notranslate"><span class="pre">load_product</span></code>-function returns an <code class="docutils literal notranslate"><span class="pre">xarray.Dataset</span></code> object that has been
+loaded lazily. Please make sure to familiarize yourself with the resources mentioned
+above to get the most out of working with the SDC! But also don’t worry too much about
+this huge amount of information. The default settings applied by <code class="docutils literal notranslate"><span class="pre">sdc-tools</span></code> in the
+background should be fine for most use cases and you will also get more experienced
+over time.</p>
+</div>
 </section>
 </section>
 
@@ -500,6 +556,7 @@ available data.</p></li>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-load-product-function">Using the <code class="docutils literal notranslate"><span class="pre">load_product</span></code>-function</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-loading-options">Advanced loading options</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-dask-and-lazy-loading">Xarray, Dask and lazy loading</a></li>
 </ul>
   </nav></div>
 

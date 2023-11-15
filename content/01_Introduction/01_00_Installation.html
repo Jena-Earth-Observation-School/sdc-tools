@@ -387,18 +387,17 @@ document.write(`
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h1>
 <p>Provided that a Conda-based package manager (e.g.
 <a class="reference external" href="https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html">Micromamba</a>)
-is installed on your system, the most up-to-date version of the <code class="docutils literal notranslate"><span class="pre">sdc-tools</span></code>
-package can be installed using the following steps:</p>
+is installed on your system, the most up-to-date version of the <code class="docutils literal notranslate"><span class="pre">sdc-tools</span></code> package can
+be installed using the following steps:</p>
 <section id="create-and-activate-environment">
 <h2>Create and activate environment<a class="headerlink" href="#create-and-activate-environment" title="Permalink to this heading">#</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>micromamba<span class="w"> </span>create<span class="w"> </span>--file<span class="w"> </span>https://raw.githubusercontent.com/Jena-Earth-Observation-School/sdc-tools/main/environment.yml
 micromamba<span class="w"> </span>activate<span class="w"> </span>sdc_env
 </pre></div>
 </div>
-<p>If you are not able to install the environment directly from the GitHub
-repository (e.g., due to firewall restrictions on HPC systems), you can also
-download the <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code> file and install the environment from a local
-file.</p>
+<p>If you are not able to install the environment directly from the GitHub repository
+(e.g., due to firewall restrictions on HPC systems), you can also download the
+<code class="docutils literal notranslate"><span class="pre">environment.yml</span></code> file and install the environment from it locally.</p>
 </section>
 <section id="install-sdc-tools-package">
 <h2>Install <code class="docutils literal notranslate"><span class="pre">sdc-tools</span></code> package<a class="headerlink" href="#install-sdc-tools-package" title="Permalink to this heading">#</a></h2>
@@ -407,14 +406,16 @@ file.</p>
 </div>
 <section id="optional-installation-of-a-specific-version">
 <h3><em>Optional</em>: Installation of a specific version<a class="headerlink" href="#optional-installation-of-a-specific-version" title="Permalink to this heading">#</a></h3>
-<p>If you wish to install a specific version of the package, you can do so by
-specifying the version tag:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>micromamba<span class="w"> </span>create<span class="w"> </span>--file<span class="w"> </span>https://raw.githubusercontent.com/Jena-Earth-Observation-School/sdc-tools/v0.1.0/environment.yml
+<p>If you wish to install a specific version of the package, you can do so by specifying
+the version tag. It is important to specify the same version tag for both the
+environment and the package installation.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>micromamba<span class="w"> </span>create<span class="w"> </span>--file<span class="w"> </span>https://raw.githubusercontent.com/Jena-Earth-Observation-School/sdc-tools/v0.2.0/environment.yml
 micromamba<span class="w"> </span>activate<span class="w"> </span>sdc_env
-pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/Jena-Earth-Observation-School/sdc-tools.git@v0.1.0
+pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/Jena-Earth-Observation-School/sdc-tools.git@v0.2.0
 </pre></div>
 </div>
-<p>See the <a class="reference external" href="https://github.com/Jena-Earth-Observation-School/sdc-tools/releases">releases page</a> for a list of available versions.</p>
+<p>See the <a class="reference external" href="https://github.com/Jena-Earth-Observation-School/sdc-tools/releases">releases page</a>
+for a list of available versions.</p>
 </section>
 </section>
 </section>
