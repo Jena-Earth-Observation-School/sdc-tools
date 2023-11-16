@@ -11,4 +11,5 @@ parts:
       sections:
       - file: content/02_Getting_Started/01_01_Sentinel1
       - file: content/02_Getting_Started/01_02_Sentinel2
+      - file: content/02_Getting_Started/01_03_SANLC
     - file: content/02_Getting_Started/02_00_How_to
