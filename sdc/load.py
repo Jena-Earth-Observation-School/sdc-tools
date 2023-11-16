@@ -6,6 +6,7 @@ from xarray import Dataset
 from sdc.vec import get_site_bounds
 from sdc.s1 import load_s1_rtc
 from sdc.s2 import load_s2_l2a
+from sdc.sanlc import load_sanlc
 
 
 def load_product(product: str,
@@ -23,6 +24,7 @@ def load_product(product: str,
         Product to load. Currently supported products are:
         - 's1_rtc'
         - 's2_l2a'
+        - 'sanlc'
     vec : str
         Vector file path or SALDi site name in the format 'siteXX', where XX is the site
         number.
@@ -43,11 +45,12 @@ def load_product(product: str,
         Dataset containing the loaded data.
     """
     if vec.lower() in ['site01', 'site02', 'site03', 'site04', 'site05', 'site06']:
-        print("WARNING: Loading data for an entire SALDi site will likely result in "
-              "performance issues as it will load data from multiple tiles.\n"
-              "Only do so if you know what you are doing and have optimized your "
-              "workflow! It is recommended to start with a small subset to develop your"
-              " workflow before scaling up.")
+        if product in ['s1_rtc', 's2_l2a']:
+            print("WARNING: Loading data for an entire SALDi site will likely result in "
+                "performance issues as it will load data from multiple tiles. "
+                "Only do so if you know what you are doing and have optimized your "
+                "workflow! It is recommended to start with a small subset to test your "
+                "workflow before scaling up.")
         bounds = get_site_bounds(site=vec.lower())
     else:
         bounds = fiona.open(vec, 'r').bounds
@@ -60,6 +63,8 @@ def load_product(product: str,
         ds = load_s1_rtc(**kwargs)
     elif product == 's2_l2a':
         ds = load_s2_l2a(apply_mask=s2_apply_mask, **kwargs)
+    elif product == 'sanlc':
+        ds = load_sanlc(bounds=bounds)
     else:
         raise ValueError(f'Product {product} not supported')
     
