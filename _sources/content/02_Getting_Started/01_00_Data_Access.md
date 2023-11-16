@@ -100,8 +100,7 @@ The following resources provide more information:
 ```{note}
 By default, the `load_product`-function returns an `xarray.Dataset` object that has been 
 loaded lazily. Please make sure to familiarize yourself with the resources mentioned 
-above to get the most out of working with the SDC! But also don't worry too much about
-this huge amount of information. The default settings applied by `sdc-tools` in the 
-background should be fine for most use cases and you will also get more experienced 
-over time.
+above to get the most out of working with the SDC! But also don't worry too much 
+as the default settings should be fine for most use cases and you will also get more 
+experienced over time.
 ```
