@@ -1,7 +1,9 @@
+import glob
 from datetime import datetime
 import pytz
 from shapely.geometry import box
 
+from pathlib import Path
 from typing import List, Optional, Tuple
 from pystac import Catalog, Collection, Item
 
@@ -126,6 +128,36 @@ def filter_items(collections: List[Collection],
                     continue
             items.append(item)
     return items
+
+
+def filter_mswep_nc(directory: Path, 
+                    time_range: Optional[Tuple[str, str]] = None,
+                    time_pattern: str = '%Y-%m-%d') -> List[str]:
+    """
+    Find and filter MSWEP NetCDF files based on a time range.
+    
+    Parameters
+    ----------
+    directory : Path
+        The directory to search for MSWEP NetCDF files.
+    time_range : tuple of str, optional
+        The time range in the format (start_time, end_time).
+    time_pattern : str, optional
+        The pattern used to parse the time strings. Defaults to '%Y-%m-%d'.
+    
+    Returns
+    -------
+    List[str]
+        A list of paths to MSWEP NetCDF files.
+    """
+    files = glob.glob(str(directory.joinpath('*.nc')))
+    
+    if time_range is not None:
+        start_time = _timestring_to_utc_datetime(time_range[0], time_pattern)
+        end_time = _timestring_to_utc_datetime(time_range[1], time_pattern)
+        years = [start_time.year + i for i in range(end_time.year - start_time.year + 1)]    
+        files = [f for f in files if any(str(y) in f for y in years)]
+    return files
 
 
 def _timestring_to_utc_datetime(time: str,

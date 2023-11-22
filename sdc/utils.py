@@ -7,7 +7,7 @@ from pystac import Catalog, Collection, Item
 from xarray import DataArray, Dataset
 
 
-def get_catalog_path(product: str) -> str:
+def get_catalog_path(product: str) -> str | Path:
     """
     Gets the path to the STAC Catalog file for a given product.
     
@@ -18,8 +18,9 @@ def get_catalog_path(product: str) -> str:
     
     Returns
     -------
-    str
-        Path to the STAC Catalog file.
+    str or Path
+        The path to the STAC Catalog file of a given product or the path to the product 
+         directory if product is 'MSWEP'.
     """
     base_path = Path("/geonfs/02_vol3/SaldiDataCube/original_data")
     _dir = base_path.joinpath(product.upper())
@@ -27,10 +28,13 @@ def get_catalog_path(product: str) -> str:
     if not _dir.exists():
         raise FileNotFoundError(f"Product '{product}': "
                                 f"Could not find product directory {_dir}")
+    if product == 'mswep':
+        return _dir
     if not _file.exists():
         raise FileNotFoundError(f"Product '{product}': "
                                 f"Could not find STAC Catalog file {_file}")
-    return str(_file)
+    else:
+        return str(_file)
 
 
 def common_params() -> Dict[str, Any]:
