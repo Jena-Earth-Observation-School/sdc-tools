@@ -4,10 +4,7 @@ from typing import Optional, Tuple
 from xarray import Dataset, DataArray
 
 from sdc.vec import get_site_bounds
-from sdc.s1 import load_s1_rtc
-from sdc.s2 import load_s2_l2a
-from sdc.sanlc import load_sanlc
-from sdc.mswep import load_mswep
+import sdc.products as prod
 
 
 def load_product(product: str,
@@ -63,13 +60,13 @@ def load_product(product: str,
               'time_pattern': time_pattern}
     
     if product == 's1_rtc':
-        ds = load_s1_rtc(**kwargs)
+        ds = prod.load_s1_rtc(**kwargs)
     elif product == 's2_l2a':
-        ds = load_s2_l2a(apply_mask=s2_apply_mask, **kwargs)
+        ds = prod.load_s2_l2a(apply_mask=s2_apply_mask, **kwargs)
     elif product == 'sanlc':
-        ds = load_sanlc(bounds=bounds)
+        ds = prod.load_sanlc(bounds=bounds)
     elif product == 'mswep':
-        ds = load_mswep(**kwargs)
+        ds = prod.load_mswep(**kwargs)
     else:
         raise ValueError(f'Product {product} not supported')
     
