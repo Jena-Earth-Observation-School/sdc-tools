@@ -154,9 +154,11 @@ def ds_nanquantiles(ds: Dataset,
     q = quantiles
     quantiles = np.atleast_1d(np.asarray(quantiles, dtype=np.float64))
     
-    # Calculate quantiles
+    # Calculate quantiles for each variable (DataArray) using da_nanquantiles
     for v in variables:
-        ds_copy[f'{v}_quantiles'] = xclim_nanquantile(da=ds_copy[v], q=q, dim=dim)
+        ds_copy[f'{v}_quantiles'] = da_nanquantiles(da=ds_copy[v], 
+                                                    quantiles=q,
+                                                    dim=dim)
         for x in quantiles:
             q_str = str(int(x * 100))
             ds_copy[f'{v}_q{q_str}'] = ds_copy[f'{v}_quantiles'].sel(quantile=x)
@@ -171,9 +173,10 @@ def ds_nanquantiles(ds: Dataset,
     return ds_copy
 
 
-def xclim_nanquantile(da: DataArray,
-                      q: float | tuple[float],
-                      dim: str | tuple[str] = 'time') -> DataArray:
+def da_nanquantiles(da: DataArray,
+                    dim: Optional[str | Tuple[str]] = None,
+                    quantiles: float | Tuple[float] = None
+                    ) -> DataArray:
     """
     Simple workaround for https://github.com/pydata/xarray/issues/7377
     See notes for more information.
@@ -182,11 +185,11 @@ def xclim_nanquantile(da: DataArray,
     ----------
     da: DataArray
         The DataArray to calculate quantiles for.
-    q: float or sequence of float
-        Quantiles to compute, which must be between 0 and 1 (inclusive).
-        E.g., [0.1, 0.9]
-    dim: str or tuple of str, optional
-        Dimension(s) over which to apply this function. Default is 'time'.
+    dim : str or tuple of str, optional
+        Dimension(s) to reduce. If None (default), the 'time' dimension will be reduced.
+    quantiles : float or tuple of float, optional
+        The quantiles to calculate. If None (default), the quantiles (0.05, 0.95) will
+        be calculated.
     
     Returns
     -------
@@ -201,24 +204,33 @@ def xclim_nanquantile(da: DataArray,
     -----
     The structure of this function is based on:
     https://github.com/pydata/xarray/blob/6c5840e1198707cdcf7dc459f27ea9510eb76388/xarray/core/variable.py#L2128-L2271
-    Instead of `numpy.nanquantile`, the following `_nan_quantile` method of the xclim
+    Instead of `numpy.nanquantile`, the following `nanquantile` method of the numbagg
     package is implemented:
-    https://github.com/Ouranosinc/xclim/blob/0a48bbc137a11d1c295b0f803183df5996f2dd6a/xclim/core/utils.py#L410-L474
+    https://github.com/numbagg/numbagg/blob/50357a2545c831a911c2fa92fc7de485a2f610aa/numbagg/funcs.py#L184
     """
     from xarray.core.utils import is_scalar
     from xarray.core.computation import apply_ufunc
-    from xclim.core.utils import _nan_quantile
+    from numbagg import nanquantile
     
-    scalar = is_scalar(q)
-    q = np.atleast_1d(np.asarray(q, dtype=np.float64))
-    
-    if is_scalar(dim):
+    if dim is None:
+        dim = 'time'
+    if isinstance(dim, str):
         dim = [dim]
     else:
         dim = list(dim)
+    if quantiles is None:
+        quantiles = (0.05, 0.95)
+    else:
+        if isinstance(quantiles, float):
+            quantiles = (quantiles,)
+        else:
+            quantiles = tuple(quantiles)
+    scalar = is_scalar(quantiles)
+    quantiles = np.atleast_1d(np.asarray(quantiles, dtype=np.float64))
     
     def _wrapper(x, **kwargs):
-        return np.moveaxis(_nan_quantile(x.copy(), **kwargs), source=0, destination=-1)
+        # move quantile axis to end. required for apply_ufunc
+        return np.moveaxis(nanquantile(x.copy(), **kwargs), source=0, destination=-1)
     
     result = apply_ufunc(
         _wrapper,
@@ -227,11 +239,11 @@ def xclim_nanquantile(da: DataArray,
         exclude_dims=set(dim),
         output_core_dims=[["quantile"]],
         output_dtypes=[np.float64],
-        dask_gufunc_kwargs=dict(output_sizes={"quantile": len(q)}),
+        dask_gufunc_kwargs=dict(output_sizes={"quantile": len(quantiles)}),
         dask="parallelized",
-        kwargs={'quantiles': q, 'axis': -1},
+        kwargs={'quantiles': quantiles, 'axis': [-1]},
     )
-    result = result.assign_coords(quantile=DataArray(q, dims=("quantile",)))
+    result = result.assign_coords(quantile=DataArray(quantiles, dims=("quantile",)))
     result = result.transpose("quantile", ...)
     
     if scalar:
