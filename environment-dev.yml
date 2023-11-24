@@ -4,16 +4,12 @@ channels:
   - conda-forge
 dependencies:
   - python>=3.10
-  - dask
   - dask-jobqueue
-  - pytz
-  - shapely
-  - pystac
-  - stackstac
   - odc-stac>=0.3.7
-  - fiona
   - numbagg>=0.6.1
+  - fiona
   - flox
+  - pytz
   - jupyter-book
 ############# Extras #############
   - spyndex
