@@ -12,8 +12,7 @@ dependencies:
   - stackstac
   - odc-stac>=0.3.7
   - fiona
-  - xclim
-  - numpy==1.24.4
+  - numbagg>=0.6.1
   - flox
   - jupyter-book
 ############# Extras #############
