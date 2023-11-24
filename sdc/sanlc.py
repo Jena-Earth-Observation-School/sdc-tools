@@ -2,14 +2,14 @@ from pystac import Catalog
 from odc.stac import load as odc_stac_load
 
 from typing import Tuple
-from xarray import Dataset
+from xarray import DataArray
 
 import sdc.utils as utils
 import sdc.query as query
 
 
-def load_sanlc(bounds: Tuple[float, float, float, float],
-                ) -> Dataset:
+def load_sanlc(bounds: Tuple[float, float, float, float]
+               ) -> DataArray:
     """
     Loads the South African National Land Cover (SANLC) data product for an area of 
     interest.
@@ -22,8 +22,8 @@ def load_sanlc(bounds: Tuple[float, float, float, float],
     
     Returns
     -------
-    Dataset
-        An xarray Dataset containing the SANLC data.
+    DataArray
+        An xarray DataArray containing the SANLC data.
     """
     product = 'sanlc'
     bands = ['nlc']

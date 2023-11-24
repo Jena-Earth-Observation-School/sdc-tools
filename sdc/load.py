@@ -13,8 +13,8 @@ from sdc.mswep import load_mswep
 def load_product(product: str,
                  vec: str,
                  time_range: Optional[Tuple[str, str]] = None,
-                 time_pattern: Optional[str] = '%Y-%m-%d',
-                 s2_apply_mask: Optional[bool] = True
+                 time_pattern: Optional[str] = None,
+                 s2_apply_mask: bool = True
                  ) -> Dataset | DataArray:
     """
     Load data products available in the SALDi Data Cube (SDC).
@@ -35,7 +35,8 @@ def load_product(product: str,
         stop_time are strings in the format specified by `time_pattern`. Default is
         None, which loads all available data.
     time_pattern : str, optional
-        Time pattern to parse the time range. Default is '%Y-%m-%d'.
+        Time pattern to parse the time range. Only needed if it deviates from the
+        default: '%Y-%m-%d'.
     s2_apply_mask : bool, optional
         Whether to apply a valid-data mask to the Sentinel-2 data. Default is True.
         The mask is created from the `SCL` (Scene Classification Layer) band of the

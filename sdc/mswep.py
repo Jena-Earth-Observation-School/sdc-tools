@@ -10,7 +10,7 @@ import sdc.query as query
 
 def load_mswep(bounds: Tuple[float, float, float, float],
                time_range: Optional[Tuple[str, str]] = None,
-               time_pattern: str = '%Y-%m-%d'
+               time_pattern: Optional[str] = None
                ) -> DataArray:
     """
     Loads the MSWEP (Multi-Source Weighted-Ensemble Precipitation) data product for an 
@@ -26,8 +26,8 @@ def load_mswep(bounds: Tuple[float, float, float, float],
         Defaults to None, which will load all STAC Items in the filtered STAC
         Collections.
     time_pattern : str, optional
-        The pattern used to parse the time strings of `time_range`. Defaults to
-        '%Y-%m-%d'.
+        Time pattern to parse the time range. Only needed if it deviates from the
+        default: '%Y-%m-%d'.
     
     Returns
     -------

@@ -43,7 +43,7 @@ def common_params() -> Dict[str, Any]:
     
     Returns
     -------
-    dict[str, Any]
+    dict
          Dictionary of parameters that are common to all products.
     """
     return {"crs": 'EPSG:4326',
@@ -61,7 +61,7 @@ def convert_asset_hrefs(list_stac_obj: List[Catalog | Collection | Item],
     
     Parameters
     ----------
-    list_stac_obj : List[Catalog | Collection | Item]
+    list_stac_obj : list of Catalog or Collection or Item
         List of STAC Objects.
     href_type : str
         Type of href to convert to. Can be either 'absolute' or 'relative'.

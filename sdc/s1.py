@@ -10,7 +10,7 @@ import sdc.query as query
 
 def load_s1_rtc(bounds: Tuple[float, float, float, float],
                 time_range: Optional[Tuple[str, str]] = None,
-                time_pattern: str = '%Y-%m-%d'
+                time_pattern: Optional[str] = None
                 ) -> Dataset:
     """
     Loads the Sentinel-1 RTC data product for an area of interest.
@@ -25,8 +25,8 @@ def load_s1_rtc(bounds: Tuple[float, float, float, float],
         Defaults to None, which will load all STAC Items in the filtered STAC
         Collections.
     time_pattern : str, optional
-        The pattern used to parse the time strings of `time_range`. Defaults to
-        '%Y-%m-%d'.
+        Time pattern to parse the time range. Only needed if it deviates from the
+        default: '%Y-%m-%d'.
     
     Returns
     -------
