@@ -5,7 +5,7 @@ from typing import Optional, Tuple
 from xarray import Dataset
 
 import sdc.utils as utils
-import sdc.query as query
+from sdc.products import _query as query
 
 
 def load_s1_rtc(bounds: Tuple[float, float, float, float],

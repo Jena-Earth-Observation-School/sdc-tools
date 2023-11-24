@@ -8,7 +8,7 @@ from xarray import Dataset, DataArray
 from pystac import Item
 
 import sdc.utils as utils
-import sdc.query as query
+from sdc.products import _query as query
 
 
 def load_s2_l2a(bounds: Tuple[float, float, float, float],

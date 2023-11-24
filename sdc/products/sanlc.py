@@ -5,7 +5,7 @@ from typing import Tuple
 from xarray import DataArray
 
 import sdc.utils as utils
-import sdc.query as query
+from sdc.products import _query as query
 
 
 def load_sanlc(bounds: Tuple[float, float, float, float]

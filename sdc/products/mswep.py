@@ -5,7 +5,7 @@ from typing import Optional, Tuple
 from xarray import DataArray
 
 import sdc.utils as utils
-import sdc.query as query
+from sdc.products import _query as query
 
 
 def load_mswep(bounds: Tuple[float, float, float, float],
