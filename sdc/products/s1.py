@@ -4,7 +4,7 @@ from odc.stac import load as odc_stac_load
 from typing import Optional, Tuple
 from xarray import Dataset
 
-import sdc.utils as utils
+from sdc.products import _ancillary as anc
 from sdc.products import _query as query
 
 
@@ -43,14 +43,14 @@ def load_s1_rtc(bounds: Tuple[float, float, float, float],
     bands = ['vv', 'vh', 'area']
     
     # Load and filter STAC Items
-    catalog = Catalog.from_file(utils.get_catalog_path(product=product))
+    catalog = Catalog.from_file(anc.get_catalog_path(product=product))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds,
                                          time_range=time_range,
                                          time_pattern=time_pattern)
     
     # Turn into dask-based xarray.Dataset
     ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='float32',
-                       **utils.common_params())
+                       **anc.common_params())
     
     return ds
 

@@ -7,7 +7,7 @@ from typing import Optional, Any, Tuple, List, Dict
 from xarray import Dataset, DataArray
 from pystac import Item
 
-import sdc.utils as utils
+from sdc.products import _ancillary as anc
 from sdc.products import _query as query
 
 
@@ -56,12 +56,12 @@ def load_s2_l2a(bounds: Tuple[float, float, float, float],
              'B11', 'B12']         # SWIR 1, SWIR 2 (20 m)
     
     # Load and filter STAC Items
-    catalog = Catalog.from_file(utils.get_catalog_path(product=product))
+    catalog = Catalog.from_file(anc.get_catalog_path(product=product))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds,
                                          time_range=time_range,
                                          time_pattern=time_pattern)
     
-    common_params = utils.common_params()
+    common_params = anc.common_params()
     if apply_mask:
         common_params['chunks']['time'] = 1
     
