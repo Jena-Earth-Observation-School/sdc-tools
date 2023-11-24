@@ -2,7 +2,7 @@ from copy import deepcopy
 from pathlib import Path
 import numpy as np
 
-from typing import List, Dict, Any
+from typing import List, Tuple, Dict, Any, Optional
 from pystac import Catalog, Collection, Item
 from xarray import DataArray, Dataset
 
@@ -111,10 +111,11 @@ def groupby_acq_slices(ds: Dataset) -> Dataset:
 
 
 def ds_nanquantiles(ds: Dataset,
-                    dim: str | tuple[str] = 'time',
-                    variables: str | tuple[str] | None = None,
-                    quantiles: float | tuple[float] = (0.05, 0.95),
-                    compute: bool = False) -> Dataset:
+                    dim: Optional[str | Tuple[str]] = None,
+                    variables: Optional[str | Tuple[str]] = None,
+                    quantiles: Optional[float | Tuple[float]] = None,
+                    compute: bool = False
+                    ) -> Dataset:
     """
     Aggregate the time dimension of a Dataset by calculating quantiles for each data
     variable. Returns a new Dataset with the quantiles as new variables.
@@ -124,12 +125,13 @@ def ds_nanquantiles(ds: Dataset,
     ds : Dataset
         The Dataset to calculate quantiles for.
     dim : str or tuple of str, optional
-        Dimension(s) to reduce. Default is 'time'.
-    variables : str or tuple of str or None, optional
-        The data variables to calculate quantiles for. If None (default), all data
-        variables will be used.
+        Dimension(s) to reduce. If None (default), the 'time' dimension will be reduced.
+    variables : str or tuple of str, optional
+        The data variables to calculate quantiles for. If None (default), quantiles will
+        be calculated for all data variables.
     quantiles : float or tuple of float, optional
-        The quantiles to calculate. Default is (0.05, 0.95).
+        The quantiles to calculate. If None (default), the quantiles (0.05, 0.95) will
+        be calculated.
     compute : bool, optional
         Whether to compute the new variables into memory. Default is False, which means
         that the new variables will be lazily evaluated.
@@ -140,8 +142,12 @@ def ds_nanquantiles(ds: Dataset,
         The new Dataset with the quantiles as new variables.
     """
     ds_copy = ds.copy(deep=True)
+    if dim is None:
+        dim = 'time'
     if isinstance(dim, str):
         dim = (dim,)
+    else:
+        dim = tuple(dim)
     if variables is None:
         variables = list(ds_copy.data_vars)
         other_variables = []
@@ -151,6 +157,13 @@ def ds_nanquantiles(ds: Dataset,
         else:
             variables = list(variables)
         other_variables = [v for v in list(ds_copy.data_vars) if v not in variables]
+    if quantiles is None:
+        quantiles = (0.05, 0.95)
+    else:
+        if isinstance(quantiles, float):
+            quantiles = (quantiles,)
+        else:
+            quantiles = tuple(quantiles)
     q = quantiles
     quantiles = np.atleast_1d(np.asarray(quantiles, dtype=np.float64))
     
@@ -167,6 +180,9 @@ def ds_nanquantiles(ds: Dataset,
     ds_copy = ds_copy.drop_vars(variables + other_variables +
                                 [f'{v}_quantiles' for v in variables])
     ds_copy = ds_copy.drop_dims(['quantile'] + list(dim))
+    
+    # Cast back to float32
+    ds_copy = ds_copy.astype('float32')
     
     if compute:
         ds_copy = ds_copy.compute()
