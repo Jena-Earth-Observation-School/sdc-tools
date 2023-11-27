@@ -167,7 +167,8 @@ def filter_mswep_nc(directory: Path,
     if time_range is not None:
         start_time = _timestring_to_utc_datetime(time_range[0], time_pattern)
         end_time = _timestring_to_utc_datetime(time_range[1], time_pattern)
-        years = [start_time.year + i for i in range(end_time.year - start_time.year + 1)]    
+        years = [start_time.year + i for i in range(end_time.year -
+                                                    start_time.year + 1)]
         files = [f for f in files if any(str(y) in f for y in years)]
     return files
 

@@ -20,24 +20,25 @@ def load_product(product: str,
     ----------
     product : str
         Product to load. Currently supported products are:
-        - 's1_rtc'
-        - 's2_l2a'
-        - 'sanlc'
-        - 'mswep'
+        - s1_rtc
+        - s2_l2a
+        - sanlc
+        - mswep
     vec : str
-        Vector file path or SALDi site name in the format 'siteXX', where XX is the site
-        number.
+        Path to a vector file readable by fiona (e.g. shapefile, GeoJSON, etc.) or
+        SALDi site name in the format 'siteXX', where XX is the site number. If a
+        vector file is provided, its bounding box will be used to load the data.
     time_range : tuple of str, optional
-        Time range to load as a tuple of (start_time, stop_time), where start_time and
-        stop_time are strings in the format specified by `time_pattern`. Default is
-        None, which loads all available data.
+        Time range to load as a tuple of strings in the form of: (start_time, stop_time)
+        , where start_time and stop_time are strings in the format specified by
+        `time_pattern`. Default is None, which loads all available data.
     time_pattern : str, optional
         Time pattern to parse the time range. Only needed if it deviates from the
         default: '%Y-%m-%d'.
     s2_apply_mask : bool, optional
-        Whether to apply a valid-data mask to the Sentinel-2 data. Default is True.
-        The mask is created from the `SCL` (Scene Classification Layer) band of the
-        product.
+        Whether to apply a valid-data mask to the Sentinel-2 L2A product based on its
+        `SCL` (Scene Classification Layer) band. Default is True. This parameter will
+        be ignored if `product` is not `s2_l2a`.
     
     Returns
     -------

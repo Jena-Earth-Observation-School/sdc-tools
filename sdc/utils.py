@@ -18,11 +18,6 @@ def groupby_acq_slices(ds: Dataset) -> Dataset:
     -------
     ds_copy : Dataset
         The grouped Dataset.
-    
-    Notes
-    -----
-    This will result in coordinates that include the time-dimension to be dropped. Filter-operations using these
-    coordinates should be done before calling this function.
     """
     ds_copy = ds.copy(deep=True)
     ds_copy.coords['time'] = ds_copy.time.dt.round('1H')
