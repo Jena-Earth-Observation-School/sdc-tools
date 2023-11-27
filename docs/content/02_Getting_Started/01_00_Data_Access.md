@@ -14,9 +14,16 @@ It is a wrapper around various other, product-specific functions and its goal is
 to provide a unified and easy-to-use interface for loading data from the SDC.
 
 A lot happens in the background and certain parameters are set to default 
-values, so that the function can be used with minimal effort. However, it is 
-also possible to specify additional parameters to customize the data loading 
-process. See the {ref}`advanced-loading` section for more information.
+values, so that the function can be used with minimal effort. Most importantly,
+all data products are loaded with the coordinate reference system (CRS) 
+[EPSG:4326](https://epsg.io/4326) and resolution set to 0.0002°, which
+corresponds to approximately 20 x 20 m at the equator.
+
+```{note}
+In the future, it will be possible to specify additional parameters to customize the data
+loading process. This is currently being tracked in 
+[this issue](https://github.com/Jena-Earth-Observation-School/sdc-tools/issues/7).
+```
 
 The following basic example shows how to load Sentinel-2 L2A data for the year 
 2020 of an area of interest, which has been saved locally as a vector file:
@@ -40,9 +47,11 @@ supported at the moment:
     - `"mswep"`: Multi-Source Weighted-Ensemble Precipitation (MSWEP) daily
 - `vec`: Filter the returned data spatially by either providing the name of a 
 SALDi site in the format `"siteXX"`, where XX is the site number (e.g. 
-`"site06"`), or a vector file path defining an area of interest as a subset of 
-a SALDi site. Providing a vector file outside the spatial extent of the SALDi 
-sites will result in an empty dataset.
+`"site06"`), or a path to a vector file (any format [fiona](https://github.com/Toblerity/Fiona) 
+can handle, e.g. `.geojson`, `.shp`, `.gpkg`) that defines an area of interest 
+as a subset of a SALDi site. Providing a vector file outside the spatial extent 
+of the SALDi sites will result in an empty dataset. Please note, that always the
+bounding box of the provided geometry will be used to load the data.
 - `time_range`: Filter the returned data temporally by providing a tuple of 
 strings in the format `("YY-MM-dd", "YY-MM-dd")`, or `None` to return all 
 available data.
@@ -60,13 +69,6 @@ It is therefore recommended to load only a subset by providing a vector file
 defining an area of interest (e.g., using https://geojson.io/). Develop your 
 workflow on a small subset of the data before scaling up.
 ```
-
-(advanced-loading)=
-## Advanced loading options
-
-_Coming soon..._
-
-![https://media.giphy.com/media/fky7SCCsAqGZy/giphy.gif](https://media.giphy.com/media/fky7SCCsAqGZy/giphy.gif)
 
 (xarray-dask-intro)=
 ## Xarray, Dask and lazy loading
