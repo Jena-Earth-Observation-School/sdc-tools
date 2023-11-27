@@ -151,6 +151,8 @@ def da_nanquantiles(da: DataArray,
         dim = [dim]
     else:
         dim = list(dim)
+    
+    scalar = is_scalar(quantiles)
     if quantiles is None:
         quantiles = (0.05, 0.95)
     else:
@@ -158,7 +160,6 @@ def da_nanquantiles(da: DataArray,
             quantiles = (quantiles,)
         else:
             quantiles = tuple(quantiles)
-    scalar = is_scalar(quantiles)
     quantiles = np.atleast_1d(np.asarray(quantiles, dtype=np.float64))
     
     def _wrapper(x, **kwargs):
