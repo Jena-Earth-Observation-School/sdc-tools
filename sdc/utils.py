@@ -132,8 +132,10 @@ def da_nanquantiles(da: DataArray,
                     quantiles: float | Tuple[float] = None
                     ) -> DataArray:
     """
-    Simple workaround for https://github.com/pydata/xarray/issues/7377
-    See notes for more information.
+    Calculate quantiles along a given dimension of a DataArray, ignoring NaN values.
+    If multiple quantiles are given, the returned DataArray will have a new dimension
+    'quantile' with the quantile values as coordinates. If only a single quantile is
+    given, the quantile dimension will be dropped.
     
     Parameters
     ----------
@@ -143,15 +145,14 @@ def da_nanquantiles(da: DataArray,
         Dimension(s) to reduce. If None (default), the 'time' dimension will be reduced.
     quantiles : float or tuple of float, optional
         The quantiles to calculate. If None (default), the quantiles (0.05, 0.95) will
-        be calculated.
+        be returned.
     
     Returns
     -------
     result: DataArray
-        If `q` is a single quantile, then the result
-        is a scalar. If multiple percentiles are given, first axis of
-        the result corresponds to the quantile and a quantile dimension
-        is added to the return array. The other dimensions are the
+        If `q` is a single quantile, then the result is a scalar. If multiple
+        quantiles are given, first axis of the result corresponds to the quantile and a
+        quantile dimension is added to the return array. The other dimensions are the
         dimensions that remain after the reduction of the array.
     
     Examples
@@ -166,6 +167,7 @@ def da_nanquantiles(da: DataArray,
     
     Notes
     -----
+    This is a simple workaround for https://github.com/pydata/xarray/issues/7377.
     The structure of this function is based on:
     https://github.com/pydata/xarray/blob/6c5840e1198707cdcf7dc459f27ea9510eb76388/xarray/core/variable.py#L2128-L2271
     Instead of `numpy.nanquantile`, the following `nanquantile` method of the numbagg
