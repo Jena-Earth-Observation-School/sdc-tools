@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -139,6 +139,7 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../../index.html">
@@ -329,6 +330,7 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -338,6 +340,7 @@ document.write(`
   </button>
 `);
 </script>
+
 
 <script>
 document.write(`
@@ -387,14 +390,14 @@ document.write(`
 <span id="sanlc"></span><h1>South African National Land Cover (SANLC)<a class="headerlink" href="#south-african-national-land-cover-sanlc" title="Permalink to this heading">#</a></h1>
 <section id="product-description">
 <h2>Product description<a class="headerlink" href="#product-description" title="Permalink to this heading">#</a></h2>
-<p>The South African National Land Cover (SANLC) 2020 product available in the SALDi Data Cube
-(SDC) has been acquired from the <a class="reference external" href="https://egis.environment.gov.za/sa_national_land_cover_datasets">Department of Forest, Fisheries and the Environment of
-the Republic of South Africa</a>.</p>
+<p>The South African National Land Cover (SANLC) 2020 product available in the
+SALDi Data Cube (SDC) has been acquired from the
+<a class="reference external" href="https://egis.environment.gov.za/sa_national_land_cover_datasets">Department of Forest, Fisheries and the Environment of the Republic of South Africa</a>.</p>
 <p>The product abbreviation used in this package is <code class="docutils literal notranslate"><span class="pre">sanlc</span></code></p>
 <p>You can find here a list of the classes available in the product:</p>
 <p><img alt="SANLC" src="../../_images/sanlc_classes.png" /></p>
-<p><em>Source: Thompson, M., 2021, “2020 SANLC Technical Presentation”, Presentation to the
-South African National Land Cover Data Users 2020 SANLC Data Launch</em></p>
+<p><em>Source: Thompson, M., 2021, “2020 SANLC Technical Presentation”, Presentation
+to the South African National Land Cover Data Users 2020 SANLC Data Launch</em></p>
 </section>
 <section id="loading-data">
 <h2>Loading data<a class="headerlink" href="#loading-data" title="Permalink to this heading">#</a></h2>
@@ -850,11 +853,12 @@ Coordinates:
 </div>
 </section>
 <section id="xarray-shorts-creating-and-applying-a-boolean-mask">
-<h2>Xarray Shorts: Creating and applying a boolean mask<a class="headerlink" href="#xarray-shorts-creating-and-applying-a-boolean-mask" title="Permalink to this heading">#</a></h2>
-<p>The SANLC product can be used to create a boolean mask, which can be applied to other
-datasets to extract only the pixels that are of interest. Xarray’s <a class="reference external" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.isin.html"><code class="docutils literal notranslate"><span class="pre">isin</span></code>-method</a>
-makes this very easy. Just pass the values you want to keep as a list to the method and
-it will return a boolean mask.</p>
+<span id="xarray-shorts-4"></span><h2>Xarray Shorts: Creating and applying a boolean mask<a class="headerlink" href="#xarray-shorts-creating-and-applying-a-boolean-mask" title="Permalink to this heading">#</a></h2>
+<p>The SANLC product can be used to create a boolean mask, which can be applied to
+other datasets to extract only the pixels that are of interest. Xarray’s
+<a class="reference external" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.isin.html"><code class="docutils literal notranslate"><span class="pre">isin</span></code>-method</a>
+makes this very easy. Just pass the values you want to keep as a list to the
+method and it will return a boolean mask.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
@@ -1304,8 +1308,8 @@ Coordinates:
        32.0497, 32.0499],
       dtype=&#x27;float64&#x27;, name=&#x27;longitude&#x27;, length=6500))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-76f820cf-6fdb-4d90-b77b-ae5a345d5050' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-76f820cf-6fdb-4d90-b77b-ae5a345d5050' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
-<p>A boolean mask is a binary array filled with 1s and 0s. The 1s indicate the pixels that
-are of interest, the 0s the pixels that are not:</p>
+<p>A boolean mask is a binary array filled with 1s and 0s. The 1s indicate the
+pixels that are of interest, the 0s the pixels that are not:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mask</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -1349,8 +1353,8 @@ are of interest, the 0s the pixels that are not:</p>
 <img alt="../../_images/e29a6e59134828f7153bfadc79fcee2048a44336992d94376cfd8651703f90d1.png" src="../../_images/e29a6e59134828f7153bfadc79fcee2048a44336992d94376cfd8651703f90d1.png" />
 </div>
 </div>
-<p>As expected, the mask has been applied to the dataset and only the pixels that are of
-interest are left. The rest has been set to <code class="docutils literal notranslate"><span class="pre">NaN</span></code>.</p>
+<p>As expected, the mask has been applied to the dataset and only the pixels that
+are of interest are left. The rest has been set to <code class="docutils literal notranslate"><span class="pre">NaN</span></code>.</p>
 </section>
 </section>
 
@@ -1382,7 +1386,7 @@ interest are left. The rest has been set to <code class="docutils literal notran
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="01_02_Sentinel2.html"
@@ -1441,6 +1445,7 @@ By Marco Wolsza
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2023.
@@ -1467,8 +1472,8 @@ By Marco Wolsza
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
   </footer>

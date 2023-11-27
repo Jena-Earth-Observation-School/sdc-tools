@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -139,6 +139,7 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../../index.html">
@@ -329,6 +330,7 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -338,6 +340,7 @@ document.write(`
   </button>
 `);
 </script>
+
 
 <script>
 document.write(`
@@ -386,18 +389,18 @@ document.write(`
 <span id="mswep"></span><h1>Multi-Source Weighted-Ensemble Precipitation (MSWEP)<a class="headerlink" href="#multi-source-weighted-ensemble-precipitation-mswep" title="Permalink to this heading">#</a></h1>
 <section id="product-description">
 <h2>Product description<a class="headerlink" href="#product-description" title="Permalink to this heading">#</a></h2>
-<p>The Multi-Source Weighted-Ensemble Precipitation (MSWEP) is a global precipitation
-dataset that merges precipitation estimates from a variety of sources into a single
-gridded product. The MSWEP dataset available in the SALDi Data Cube (SDC) has been
-acquired from <a class="reference external" href="https://www.gloh2o.org/mswep/">GloH2O</a> with daily, 0.1° (~11 km)
-resolution.</p>
-<p>The product abbreviation used in this package is <code class="docutils literal notranslate"><span class="pre">mswep</span></code>.</p>
+<p>The Multi-Source Weighted-Ensemble Precipitation (MSWEP) is a global
+precipitation dataset that merges precipitation estimates from a variety of
+sources into a single gridded product. The MSWEP dataset available in the SALDi
+Data Cube (SDC) has been acquired from <a class="reference external" href="https://www.gloh2o.org/mswep/">GloH2O</a>
+with daily, 0.1° (~11 km) resolution.</p>
+<p>The product abbreviation used in this package is <code class="docutils literal notranslate"><span class="pre">mswep</span></code></p>
 </section>
 <section id="loading-data">
 <h2>Loading data<a class="headerlink" href="#loading-data" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 
 <span class="kn">from</span> <span class="nn">sdc.load</span> <span class="kn">import</span> <span class="n">load_product</span>
 
@@ -820,7 +823,7 @@ Coordinates:
   * latitude     (latitude) float32 -24.95 -25.05 -25.15 ... -25.85 -25.95
     spatial_ref  int32 4326
 Attributes:
-    units:    mm d-1</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.DataArray</div><div class='xr-array-name'>'precipitation'</div><ul class='xr-dim-list'><li><span class='xr-has-index'>time</span>: 1461</li><li><span class='xr-has-index'>latitude</span>: 11</li><li><span class='xr-has-index'>longitude</span>: 13</li></ul></div><ul class='xr-sections'><li class='xr-section-item'><div class='xr-array-wrap'><input id='section-540f2f66-b4d4-4b54-bee4-8c2733940138' class='xr-array-in' type='checkbox' checked><label for='section-540f2f66-b4d4-4b54-bee4-8c2733940138' title='Show/hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-array-preview xr-preview'><span>0.25 0.375 0.375 0.1875 0.1875 ... 0.0625 0.0625 0.0625 0.2578 0.25</span></div><div class='xr-array-data'><pre>array([[[2.50000000e-01, 3.75000000e-01, 3.75000000e-01, ...,
+    units:    mm d-1</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.DataArray</div><div class='xr-array-name'>'precipitation'</div><ul class='xr-dim-list'><li><span class='xr-has-index'>time</span>: 1461</li><li><span class='xr-has-index'>latitude</span>: 11</li><li><span class='xr-has-index'>longitude</span>: 13</li></ul></div><ul class='xr-sections'><li class='xr-section-item'><div class='xr-array-wrap'><input id='section-a5d15bb9-34f6-4109-a628-36b224615734' class='xr-array-in' type='checkbox' checked><label for='section-a5d15bb9-34f6-4109-a628-36b224615734' title='Show/hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-array-preview xr-preview'><span>0.25 0.375 0.375 0.1875 0.1875 ... 0.0625 0.0625 0.0625 0.2578 0.25</span></div><div class='xr-array-data'><pre>array([[[2.50000000e-01, 3.75000000e-01, 3.75000000e-01, ...,
          8.75000000e-01, 1.37500000e+00, 1.43750000e+00],
         [2.50000000e-01, 3.12500000e-01, 3.12500000e-01, ...,
          8.75000000e-01, 1.37500000e+00, 1.43750000e+00],
@@ -860,37 +863,38 @@ Attributes:
         [6.71875000e-01, 5.85937500e-01, 6.17187500e-01, ...,
          1.48437500e-01, 1.48437500e-01, 1.40625000e-01],
         [8.90625000e-01, 8.75000000e-01, 9.14062500e-01, ...,
-         6.25000000e-02, 2.57812500e-01, 2.50000000e-01]]], dtype=float32)</pre></div></div></li><li class='xr-section-item'><input id='section-5e8d7ebe-f068-43e7-ae2a-0ca7b94eed6d' class='xr-section-summary-in' type='checkbox'  checked><label for='section-5e8d7ebe-f068-43e7-ae2a-0ca7b94eed6d' class='xr-section-summary' >Coordinates: <span>(4)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>time</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>datetime64[ns]</div><div class='xr-var-preview xr-preview'>2018-01-01 ... 2022-01-01</div><input id='attrs-c83fadd4-fab6-444a-96cd-8de700d977dc' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-c83fadd4-fab6-444a-96cd-8de700d977dc' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-fd422dca-095f-4843-8c9e-af8f1a3b9170' class='xr-var-data-in' type='checkbox'><label for='data-fd422dca-095f-4843-8c9e-af8f1a3b9170' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>standard_name :</span></dt><dd>time</dd><dt><span>long_name :</span></dt><dd>time</dd><dt><span>axis :</span></dt><dd>T</dd></dl></div><div class='xr-var-data'><pre>array([&#x27;2018-01-01T00:00:00.000000000&#x27;, &#x27;2018-01-02T00:00:00.000000000&#x27;,
+         6.25000000e-02, 2.57812500e-01, 2.50000000e-01]]], dtype=float32)</pre></div></div></li><li class='xr-section-item'><input id='section-4ac3921c-0dfd-430c-ba1b-89af1926e4c9' class='xr-section-summary-in' type='checkbox'  checked><label for='section-4ac3921c-0dfd-430c-ba1b-89af1926e4c9' class='xr-section-summary' >Coordinates: <span>(4)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>time</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>datetime64[ns]</div><div class='xr-var-preview xr-preview'>2018-01-01 ... 2022-01-01</div><input id='attrs-e051b96c-cc64-4b63-867d-4f585da537cd' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-e051b96c-cc64-4b63-867d-4f585da537cd' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-2737a1e6-5203-42f6-8e81-0a9dc81c4513' class='xr-var-data-in' type='checkbox'><label for='data-2737a1e6-5203-42f6-8e81-0a9dc81c4513' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>standard_name :</span></dt><dd>time</dd><dt><span>long_name :</span></dt><dd>time</dd><dt><span>axis :</span></dt><dd>T</dd></dl></div><div class='xr-var-data'><pre>array([&#x27;2018-01-01T00:00:00.000000000&#x27;, &#x27;2018-01-02T00:00:00.000000000&#x27;,
        &#x27;2018-01-03T00:00:00.000000000&#x27;, ..., &#x27;2021-12-30T00:00:00.000000000&#x27;,
        &#x27;2021-12-31T00:00:00.000000000&#x27;, &#x27;2022-01-01T00:00:00.000000000&#x27;],
-      dtype=&#x27;datetime64[ns]&#x27;)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>longitude</span></div><div class='xr-var-dims'>(longitude)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>30.85 30.95 31.05 ... 31.95 32.05</div><input id='attrs-f037ae3e-b589-4fe2-9d6c-89d9f59d211b' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-f037ae3e-b589-4fe2-9d6c-89d9f59d211b' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-aaedf352-6e27-4c6d-a72a-12e5ca8a14dd' class='xr-var-data-in' type='checkbox'><label for='data-aaedf352-6e27-4c6d-a72a-12e5ca8a14dd' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>standard_name :</span></dt><dd>longitude</dd><dt><span>long_name :</span></dt><dd>longitude</dd><dt><span>units :</span></dt><dd>degrees_east</dd><dt><span>axis :</span></dt><dd>X</dd></dl></div><div class='xr-var-data'><pre>array([30.850002, 30.950008, 31.05    , 31.150005, 31.249996, 31.350002,
+      dtype=&#x27;datetime64[ns]&#x27;)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>longitude</span></div><div class='xr-var-dims'>(longitude)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>30.85 30.95 31.05 ... 31.95 32.05</div><input id='attrs-5d82e1bb-4a6a-454c-89f5-0b1b2e3defb1' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-5d82e1bb-4a6a-454c-89f5-0b1b2e3defb1' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-89ebd13c-78e1-4046-9b46-e42b160408da' class='xr-var-data-in' type='checkbox'><label for='data-89ebd13c-78e1-4046-9b46-e42b160408da' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>standard_name :</span></dt><dd>longitude</dd><dt><span>long_name :</span></dt><dd>longitude</dd><dt><span>units :</span></dt><dd>degrees_east</dd><dt><span>axis :</span></dt><dd>X</dd></dl></div><div class='xr-var-data'><pre>array([30.850002, 30.950008, 31.05    , 31.150005, 31.249996, 31.350002,
        31.450008, 31.55    , 31.650005, 31.749996, 31.850002, 31.950008,
-       32.05    ], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>latitude</span></div><div class='xr-var-dims'>(latitude)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>-24.95 -25.05 ... -25.85 -25.95</div><input id='attrs-d2ba74d2-711d-4e7f-abc1-34784c8bf78a' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d2ba74d2-711d-4e7f-abc1-34784c8bf78a' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-de80efef-bec3-4cda-a889-c6fcbf1a3bb1' class='xr-var-data-in' type='checkbox'><label for='data-de80efef-bec3-4cda-a889-c6fcbf1a3bb1' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>standard_name :</span></dt><dd>latitude</dd><dt><span>long_name :</span></dt><dd>latitude</dd><dt><span>units :</span></dt><dd>degrees_north</dd><dt><span>axis :</span></dt><dd>Y</dd></dl></div><div class='xr-var-data'><pre>array([-24.95    , -25.05    , -25.149998, -25.250004, -25.350002, -25.45    ,
+       32.05    ], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>latitude</span></div><div class='xr-var-dims'>(latitude)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>-24.95 -25.05 ... -25.85 -25.95</div><input id='attrs-38ebc427-9bd6-4b77-92a4-550c375d7a65' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-38ebc427-9bd6-4b77-92a4-550c375d7a65' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-2991ee69-587e-40e5-b35b-e35c2abbf6a2' class='xr-var-data-in' type='checkbox'><label for='data-2991ee69-587e-40e5-b35b-e35c2abbf6a2' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>standard_name :</span></dt><dd>latitude</dd><dt><span>long_name :</span></dt><dd>latitude</dd><dt><span>units :</span></dt><dd>degrees_north</dd><dt><span>axis :</span></dt><dd>Y</dd></dl></div><div class='xr-var-data'><pre>array([-24.95    , -25.05    , -25.149998, -25.250004, -25.350002, -25.45    ,
        -25.55    , -25.649998, -25.750004, -25.850002, -25.95    ],
-      dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>spatial_ref</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>int32</div><div class='xr-var-preview xr-preview'>4326</div><input id='attrs-160cae31-0c76-47fc-9361-089f1a3ea50b' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-160cae31-0c76-47fc-9361-089f1a3ea50b' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-128b83a3-075d-43ea-a8d9-69d0013acf05' class='xr-var-data-in' type='checkbox'><label for='data-128b83a3-075d-43ea-a8d9-69d0013acf05' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>spatial_ref :</span></dt><dd>GEOGCRS[&quot;WGS 84&quot;,ENSEMBLE[&quot;World Geodetic System 1984 ensemble&quot;,MEMBER[&quot;World Geodetic System 1984 (Transit)&quot;],MEMBER[&quot;World Geodetic System 1984 (G730)&quot;],MEMBER[&quot;World Geodetic System 1984 (G873)&quot;],MEMBER[&quot;World Geodetic System 1984 (G1150)&quot;],MEMBER[&quot;World Geodetic System 1984 (G1674)&quot;],MEMBER[&quot;World Geodetic System 1984 (G1762)&quot;],MEMBER[&quot;World Geodetic System 1984 (G2139)&quot;],ELLIPSOID[&quot;WGS 84&quot;,6378137,298.257223563,LENGTHUNIT[&quot;metre&quot;,1]],ENSEMBLEACCURACY[2.0]],PRIMEM[&quot;Greenwich&quot;,0,ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],CS[ellipsoidal,2],AXIS[&quot;geodetic latitude (Lat)&quot;,north,ORDER[1],ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],AXIS[&quot;geodetic longitude (Lon)&quot;,east,ORDER[2],ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],USAGE[SCOPE[&quot;Horizontal component of 3D system.&quot;],AREA[&quot;World.&quot;],BBOX[-90,-180,90,180]],ID[&quot;EPSG&quot;,4326]]</dd><dt><span>crs_wkt :</span></dt><dd>GEOGCRS[&quot;WGS 84&quot;,ENSEMBLE[&quot;World Geodetic System 1984 ensemble&quot;,MEMBER[&quot;World Geodetic System 1984 (Transit)&quot;],MEMBER[&quot;World Geodetic System 1984 (G730)&quot;],MEMBER[&quot;World Geodetic System 1984 (G873)&quot;],MEMBER[&quot;World Geodetic System 1984 (G1150)&quot;],MEMBER[&quot;World Geodetic System 1984 (G1674)&quot;],MEMBER[&quot;World Geodetic System 1984 (G1762)&quot;],MEMBER[&quot;World Geodetic System 1984 (G2139)&quot;],ELLIPSOID[&quot;WGS 84&quot;,6378137,298.257223563,LENGTHUNIT[&quot;metre&quot;,1]],ENSEMBLEACCURACY[2.0]],PRIMEM[&quot;Greenwich&quot;,0,ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],CS[ellipsoidal,2],AXIS[&quot;geodetic latitude (Lat)&quot;,north,ORDER[1],ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],AXIS[&quot;geodetic longitude (Lon)&quot;,east,ORDER[2],ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],USAGE[SCOPE[&quot;Horizontal component of 3D system.&quot;],AREA[&quot;World.&quot;],BBOX[-90,-180,90,180]],ID[&quot;EPSG&quot;,4326]]</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314245179</dd><dt><span>inverse_flattening :</span></dt><dd>298.257223563</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>WGS 84</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>geographic_crs_name :</span></dt><dd>WGS 84</dd><dt><span>horizontal_datum_name :</span></dt><dd>World Geodetic System 1984 ensemble</dd><dt><span>grid_mapping_name :</span></dt><dd>latitude_longitude</dd></dl></div><div class='xr-var-data'><pre>array(4326, dtype=int32)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-799309a4-ac30-4117-b03e-0d69d4004666' class='xr-section-summary-in' type='checkbox'  ><label for='section-799309a4-ac30-4117-b03e-0d69d4004666' class='xr-section-summary' >Indexes: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-index-name'><div>time</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-e1600054-ed7b-4940-8269-a1b78473d7bd' class='xr-index-data-in' type='checkbox'/><label for='index-e1600054-ed7b-4940-8269-a1b78473d7bd' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(DatetimeIndex([&#x27;2018-01-01&#x27;, &#x27;2018-01-02&#x27;, &#x27;2018-01-03&#x27;, &#x27;2018-01-04&#x27;,
+      dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>spatial_ref</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>int32</div><div class='xr-var-preview xr-preview'>4326</div><input id='attrs-205739f5-fdb3-408d-963d-e2a792568e05' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-205739f5-fdb3-408d-963d-e2a792568e05' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-05c0e0f3-cdba-4c08-9610-2015a718bc9c' class='xr-var-data-in' type='checkbox'><label for='data-05c0e0f3-cdba-4c08-9610-2015a718bc9c' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>spatial_ref :</span></dt><dd>GEOGCRS[&quot;WGS 84&quot;,ENSEMBLE[&quot;World Geodetic System 1984 ensemble&quot;,MEMBER[&quot;World Geodetic System 1984 (Transit)&quot;],MEMBER[&quot;World Geodetic System 1984 (G730)&quot;],MEMBER[&quot;World Geodetic System 1984 (G873)&quot;],MEMBER[&quot;World Geodetic System 1984 (G1150)&quot;],MEMBER[&quot;World Geodetic System 1984 (G1674)&quot;],MEMBER[&quot;World Geodetic System 1984 (G1762)&quot;],MEMBER[&quot;World Geodetic System 1984 (G2139)&quot;],ELLIPSOID[&quot;WGS 84&quot;,6378137,298.257223563,LENGTHUNIT[&quot;metre&quot;,1]],ENSEMBLEACCURACY[2.0]],PRIMEM[&quot;Greenwich&quot;,0,ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],CS[ellipsoidal,2],AXIS[&quot;geodetic latitude (Lat)&quot;,north,ORDER[1],ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],AXIS[&quot;geodetic longitude (Lon)&quot;,east,ORDER[2],ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],USAGE[SCOPE[&quot;Horizontal component of 3D system.&quot;],AREA[&quot;World.&quot;],BBOX[-90,-180,90,180]],ID[&quot;EPSG&quot;,4326]]</dd><dt><span>crs_wkt :</span></dt><dd>GEOGCRS[&quot;WGS 84&quot;,ENSEMBLE[&quot;World Geodetic System 1984 ensemble&quot;,MEMBER[&quot;World Geodetic System 1984 (Transit)&quot;],MEMBER[&quot;World Geodetic System 1984 (G730)&quot;],MEMBER[&quot;World Geodetic System 1984 (G873)&quot;],MEMBER[&quot;World Geodetic System 1984 (G1150)&quot;],MEMBER[&quot;World Geodetic System 1984 (G1674)&quot;],MEMBER[&quot;World Geodetic System 1984 (G1762)&quot;],MEMBER[&quot;World Geodetic System 1984 (G2139)&quot;],ELLIPSOID[&quot;WGS 84&quot;,6378137,298.257223563,LENGTHUNIT[&quot;metre&quot;,1]],ENSEMBLEACCURACY[2.0]],PRIMEM[&quot;Greenwich&quot;,0,ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],CS[ellipsoidal,2],AXIS[&quot;geodetic latitude (Lat)&quot;,north,ORDER[1],ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],AXIS[&quot;geodetic longitude (Lon)&quot;,east,ORDER[2],ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],USAGE[SCOPE[&quot;Horizontal component of 3D system.&quot;],AREA[&quot;World.&quot;],BBOX[-90,-180,90,180]],ID[&quot;EPSG&quot;,4326]]</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314245179</dd><dt><span>inverse_flattening :</span></dt><dd>298.257223563</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>WGS 84</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>geographic_crs_name :</span></dt><dd>WGS 84</dd><dt><span>horizontal_datum_name :</span></dt><dd>World Geodetic System 1984 ensemble</dd><dt><span>grid_mapping_name :</span></dt><dd>latitude_longitude</dd></dl></div><div class='xr-var-data'><pre>array(4326, dtype=int32)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-0553523f-b47c-4594-b386-f153b51a9404' class='xr-section-summary-in' type='checkbox'  ><label for='section-0553523f-b47c-4594-b386-f153b51a9404' class='xr-section-summary' >Indexes: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-index-name'><div>time</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-d481e180-c093-4886-b742-945da520320a' class='xr-index-data-in' type='checkbox'/><label for='index-d481e180-c093-4886-b742-945da520320a' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(DatetimeIndex([&#x27;2018-01-01&#x27;, &#x27;2018-01-02&#x27;, &#x27;2018-01-03&#x27;, &#x27;2018-01-04&#x27;,
                &#x27;2018-01-05&#x27;, &#x27;2018-01-06&#x27;, &#x27;2018-01-07&#x27;, &#x27;2018-01-08&#x27;,
                &#x27;2018-01-09&#x27;, &#x27;2018-01-10&#x27;,
                ...
                &#x27;2021-12-23&#x27;, &#x27;2021-12-24&#x27;, &#x27;2021-12-25&#x27;, &#x27;2021-12-26&#x27;,
                &#x27;2021-12-27&#x27;, &#x27;2021-12-28&#x27;, &#x27;2021-12-29&#x27;, &#x27;2021-12-30&#x27;,
                &#x27;2021-12-31&#x27;, &#x27;2022-01-01&#x27;],
-              dtype=&#x27;datetime64[ns]&#x27;, name=&#x27;time&#x27;, length=1461, freq=None))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>longitude</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-e28db25d-14e6-44c8-b767-ccad31f5a000' class='xr-index-data-in' type='checkbox'/><label for='index-e28db25d-14e6-44c8-b767-ccad31f5a000' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([ 30.85000228881836, 30.950008392333984, 31.049999237060547,
+              dtype=&#x27;datetime64[ns]&#x27;, name=&#x27;time&#x27;, length=1461, freq=None))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>longitude</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-63563855-2bce-4835-9e41-90b72bd47467' class='xr-index-data-in' type='checkbox'/><label for='index-63563855-2bce-4835-9e41-90b72bd47467' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([ 30.85000228881836, 30.950008392333984, 31.049999237060547,
        31.150005340576172, 31.249996185302734,  31.35000228881836,
        31.450008392333984, 31.549999237060547, 31.650005340576172,
        31.749996185302734,  31.85000228881836, 31.950008392333984,
         32.04999923706055],
-      dtype=&#x27;float32&#x27;, name=&#x27;longitude&#x27;))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>latitude</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-d82ff497-2f8c-4839-bc9d-a2150c0c7b19' class='xr-index-data-in' type='checkbox'/><label for='index-d82ff497-2f8c-4839-bc9d-a2150c0c7b19' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([-24.950000762939453, -25.049999237060547,  -25.14999771118164,
+      dtype=&#x27;float32&#x27;, name=&#x27;longitude&#x27;))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>latitude</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-770ae87e-74f1-4f7b-b6c5-0d41df744513' class='xr-index-data-in' type='checkbox'/><label for='index-770ae87e-74f1-4f7b-b6c5-0d41df744513' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([-24.950000762939453, -25.049999237060547,  -25.14999771118164,
        -25.250003814697266,  -25.35000228881836, -25.450000762939453,
        -25.549999237060547,  -25.64999771118164, -25.750003814697266,
         -25.85000228881836, -25.950000762939453],
-      dtype=&#x27;float32&#x27;, name=&#x27;latitude&#x27;))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-ee091c85-aa88-4a3b-a28c-cb88462f4053' class='xr-section-summary-in' type='checkbox'  checked><label for='section-ee091c85-aa88-4a3b-a28c-cb88462f4053' class='xr-section-summary' >Attributes: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>units :</span></dt><dd>mm d-1</dd></dl></div></li></ul></div></div></div></div>
+      dtype=&#x27;float32&#x27;, name=&#x27;latitude&#x27;))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-953cb1d6-a403-49d6-8a59-7efaa271ce4c' class='xr-section-summary-in' type='checkbox'  checked><label for='section-953cb1d6-a403-49d6-8a59-7efaa271ce4c' class='xr-section-summary' >Attributes: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>units :</span></dt><dd>mm d-1</dd></dl></div></li></ul></div></div></div></div>
 </div>
-<p>In comparison to other datasets, the MSWEP data is not loaded lazily so you see the
-underlying numpy array when displaying the data. Notice the low spatial resolution
-(0.1° = ~11 km) of the data. The entire SALDi site 06 is covered by only 143 pixels:</p>
+<p>In comparison to other datasets, the MSWEP data is not loaded lazily, so you see
+the underlying numpy array when displaying the data. Notice the low spatial
+resolution (0.1° = ~11 km) of the data. The entire SALDi site 06 is covered by
+only 143 pixels:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mswep</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">mswep</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mswep</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">mswep</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -900,17 +904,18 @@ underlying numpy array when displaying the data. Notice the low spatial resoluti
 </div>
 </div>
 </div>
-<p>As an example, let’s plot the precipitation for a point using a <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.stem.html#matplotlib.axes.Axes.stem">Matplotlib stem plot</a>:</p>
+<p>As an example, let’s plot the precipitation for a point using a
+<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.stem.html#matplotlib.axes.Axes.stem">Matplotlib stem plot</a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mswep_pt</span> <span class="o">=</span> <span class="n">mswep</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">longitude</span><span class="o">=</span><span class="mf">31.5384</span><span class="p">,</span> <span class="n">latitude</span><span class="o">=-</span><span class="mf">25.0226</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mswep_pt</span> <span class="o">=</span> <span class="n">mswep</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">longitude</span><span class="o">=</span><span class="mf">31.5384</span><span class="p">,</span> <span class="n">latitude</span><span class="o">=-</span><span class="mf">25.0226</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">mswep_pt</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">mswep_pt</span><span class="p">,</span> <span class="n">markerfmt</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">)</span>
@@ -923,14 +928,12 @@ underlying numpy array when displaying the data. Notice the low spatial resoluti
 </pre></div>
 </div>
 <img alt="../../_images/cb6f0d23d5918d24c3622db64aa5b1af6a33c2b98ec04518ad4da0d31633488b.png" src="../../_images/cb6f0d23d5918d24c3622db64aa5b1af6a33c2b98ec04518ad4da0d31633488b.png" />
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-11-22 16:07:20,175 - distributed.deploy.adaptive_core - INFO - Adaptive stop
-</pre></div>
-</div>
 </div>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Even Stackoverflow threads that are more than 9 years old can be helpful sometimes 🙂:
+<p>Even Stackoverflow threads that are more than 9 years old can be helpful
+sometimes 🙂:
 <a class="reference external" href="https://stackoverflow.com/questions/26042735/python-matplotlib-stem-plot-with-no-markers">https://stackoverflow.com/questions/26042735/python-matplotlib-stem-plot-with-no-markers</a></p>
 </div>
 </section>
@@ -964,7 +967,7 @@ underlying numpy array when displaying the data. Notice the low spatial resoluti
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="01_03_SANLC.html"
@@ -1022,6 +1025,7 @@ By Marco Wolsza
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2023.
@@ -1048,8 +1052,8 @@ By Marco Wolsza
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
   </footer>

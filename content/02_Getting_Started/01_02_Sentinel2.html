@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -139,6 +139,7 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../../index.html">
@@ -329,6 +330,7 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -338,6 +340,7 @@ document.write(`
   </button>
 `);
 </script>
+
 
 <script>
 document.write(`
@@ -372,9 +375,9 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#product-description">Product description</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-data">Loading data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-shorts-spatial-subset">Xarray Shorts: Spatial subset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#s2-l2a-specific-cloud-mask">S2_L2A specific: Cloud mask</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#s2-l2a-specific-group-acquisition-slices">S2_L2A specific: Group acquisition slices</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#count-valid-pixels">Count valid pixels</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cloud-mask">Cloud mask</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#group-acquisition-slices">Group acquisition slices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-count-valid-pixels">General: Count valid pixels</a></li>
 </ul>
             </nav>
         </div>
@@ -2478,11 +2481,11 @@ Data variables:
                &#x27;2021-12-29 08:07:11&#x27;, &#x27;2021-12-29 08:07:15&#x27;],
               dtype=&#x27;datetime64[ns]&#x27;, name=&#x27;time&#x27;, length=438, freq=None))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-5db77a75-85eb-477e-8e14-3ae3eb043a83' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-5db77a75-85eb-477e-8e14-3ae3eb043a83' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
-<p>Exactly as the example in the <a class="reference internal" href="01_01_Sentinel1.html#sentinel-1"><span class="std std-ref">Sentinel-1 RTC</span></a> notebook, we have now <em>lazily</em> loaded
-Sentinel-2 L2A data. If you are not familiar with the concept of lazy loading, please
-refer to <a class="reference internal" href="01_00_Data_Access.html#xarray-dask-intro"><span class="std std-ref">Xarray, Dask and lazy loading</span></a> and the <a class="reference internal" href="01_01_Sentinel1.html#sentinel-1"><span class="std std-ref">Sentinel-1 RTC</span></a> notebook. The latter also
-covers some Xarray basics (Look for the “Xarray Shorts” sections), so be sure to check
-it out if you haven’t already.</p>
+<p>Exactly as the example in the <a class="reference internal" href="01_01_Sentinel1.html#sentinel-1"><span class="std std-ref">Sentinel-1 RTC</span></a> notebook, we have now <em>lazily</em>
+loaded Sentinel-2 L2A data. If you are not familiar with the concept of lazy
+loading, please refer to <a class="reference internal" href="01_00_Data_Access.html#xarray-dask-intro"><span class="std std-ref">Xarray, Dask and lazy loading</span></a> and the <a class="reference internal" href="01_01_Sentinel1.html#sentinel-1"><span class="std std-ref">Sentinel-1 RTC</span></a>
+notebook. The latter also covers some Xarray basics (Look for the “Xarray S
+horts” sections), so be sure to check it out if you haven’t already.</p>
 <p>Let’s have a closer look at the <code class="docutils literal notranslate"><span class="pre">B08</span></code>-band (Near Infrared):</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -3042,10 +3045,11 @@ Coordinates:
 </div>
 </section>
 <section id="xarray-shorts-spatial-subset">
-<h2>Xarray Shorts: Spatial subset<a class="headerlink" href="#xarray-shorts-spatial-subset" title="Permalink to this heading">#</a></h2>
-<p>In <a class="reference internal" href="01_01_Sentinel1.html#xarray-shorts-1"><span class="std std-ref">Xarray Shorts: Indexing and plotting</span></a> we have indexed our data by time and also selected a point
-coordinate. Using the <code class="docutils literal notranslate"><span class="pre">.sel</span></code>-method we can also select a spatial subset by slicing the
-<code class="docutils literal notranslate"><span class="pre">latitude</span></code> and <code class="docutils literal notranslate"><span class="pre">longitude</span></code> dimensions. This is also described <a class="reference external" href="https://docs.xarray.dev/en/stable/user-guide/indexing.html#nearest-neighbor-lookups">here</a>.</p>
+<span id="xarray-shorts-3"></span><h2>Xarray Shorts: Spatial subset<a class="headerlink" href="#xarray-shorts-spatial-subset" title="Permalink to this heading">#</a></h2>
+<p>In <a class="reference internal" href="01_01_Sentinel1.html#xarray-shorts-1"><span class="std std-ref">Xarray Shorts: Indexing and plotting</span></a> we have indexed our data by time and also selected a
+point coordinate. Using the <code class="docutils literal notranslate"><span class="pre">.sel</span></code>-method we can also select a spatial subset by
+slicing the <code class="docutils literal notranslate"><span class="pre">latitude</span></code> and <code class="docutils literal notranslate"><span class="pre">longitude</span></code> dimensions. This is also described
+<a class="reference external" href="https://docs.xarray.dev/en/stable/user-guide/indexing.html#nearest-neighbor-lookups">here</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_subset</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">longitude</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mf">31.4</span><span class="p">,</span> <span class="mf">31.8</span><span class="p">),</span> 
@@ -3488,7 +3492,8 @@ Coordinates:
                &#x27;2021-12-29 08:07:11&#x27;, &#x27;2021-12-29 08:07:15&#x27;],
               dtype=&#x27;datetime64[ns]&#x27;, name=&#x27;time&#x27;, length=438, freq=None))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-36dbb0b4-ad21-4696-9e35-f9f4cc1ef01c' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-36dbb0b4-ad21-4696-9e35-f9f4cc1ef01c' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
-<p>Wait, why does it say the size array size is 0 Bytes and doesn’t show a data structure?</p>
+<p>Wait, why does it say the size array size is 0 Bytes and doesn’t show a data
+structure?</p>
 <p>Maybe Xarray wants the coordinates in a different order?</p>
 <p>Let’s try again…</p>
 <div class="cell docutils container">
@@ -4012,17 +4017,18 @@ Coordinates:
               dtype=&#x27;datetime64[ns]&#x27;, name=&#x27;time&#x27;, length=438, freq=None))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-f7c07098-c5b9-4cce-b2f7-ed87f76df6bc' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-f7c07098-c5b9-4cce-b2f7-ed87f76df6bc' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
 <p>That’s better! 🙂</p>
-<p>As you can see it is very useful to check the data structure inbewteen steps to make
-sure everything is as expected.</p>
+<p>As you can see it is very useful to check the data structure inbewteen steps to
+make sure everything is as expected.</p>
 </section>
-<section id="s2-l2a-specific-cloud-mask">
-<h2>S2_L2A specific: Cloud mask<a class="headerlink" href="#s2-l2a-specific-cloud-mask" title="Permalink to this heading">#</a></h2>
-<p>Sentinel-2 L2A data loaded via the <code class="docutils literal notranslate"><span class="pre">load_product</span></code> function is by default cloud masked.
-The mask is created from the <code class="docutils literal notranslate"><span class="pre">SCL</span></code> (Scene Classification) band and valid classes defined
-according to Table 4 in <a class="reference external" href="https://doi.org/10.3390/rs11040433">Baetens et al. (2019)</a>.</p>
-<p>Set the <code class="docutils literal notranslate"><span class="pre">s2_apply_mask</span></code>-parameter to <code class="docutils literal notranslate"><span class="pre">False</span></code> to load the data without the cloud mask.</p>
-<p>Let’s have a look at the Near Infrared band again and plot a scene by selecting a time
-index (10th scene in the array) instead of a specific date:</p>
+<section id="cloud-mask">
+<h2>Cloud mask<a class="headerlink" href="#cloud-mask" title="Permalink to this heading">#</a></h2>
+<p>Sentinel-2 L2A data loaded via the <code class="docutils literal notranslate"><span class="pre">load_product</span></code> function is by default cloud
+masked. The mask is created from the <code class="docutils literal notranslate"><span class="pre">SCL</span></code> (Scene Classification) band and valid
+classes defined according to Table 4 in <a class="reference external" href="https://doi.org/10.3390/rs11040433">Baetens et al. (2019)</a>.</p>
+<p>Set the <code class="docutils literal notranslate"><span class="pre">s2_apply_mask</span></code>-parameter to <code class="docutils literal notranslate"><span class="pre">False</span></code> to load the data without the cloud
+mask.</p>
+<p>Let’s have a look at the Near Infrared band again and plot a scene by selecting
+a time index (10th scene in the array) instead of a specific date:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scene_B08</span> <span class="o">=</span> <span class="n">ds_subset</span><span class="o">.</span><span class="n">B08</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -4041,10 +4047,12 @@ index (10th scene in the array) instead of a specific date:</p>
 <img alt="../../_images/3fc8d6e95964cc1a3725e82fef0418ae43d4785318e6b565dc8b5fcacb1c51be.png" src="../../_images/3fc8d6e95964cc1a3725e82fef0418ae43d4785318e6b565dc8b5fcacb1c51be.png" />
 </div>
 </div>
-<p>Notice, that you can see some areas that are not perfectly masked (e.g., cloud shadows).
-Depending on your analysis, further cleaning steps of the data might be necessary.</p>
+<p>Notice, that you can see some areas that are not perfectly masked (e.g., cloud
+shadows). Depending on your analysis, further cleaning steps of the data might
+be necessary.</p>
 <p>Masked areas are <a class="reference external" href="https://numpy.org/doc/stable/reference/constants.html#numpy.nan"><code class="docutils literal notranslate"><span class="pre">numpy.nan</span></code></a>
-values in the data array, which we can plot by selecting them using Xarray’s <a class="reference external" href="https://docs.xarray.dev/en/stable/generated/xarray.Dataset.isnull.html#xarray.Dataset.isnull"><code class="docutils literal notranslate"><span class="pre">isnull</span></code>-method</a>:</p>
+values in the data array, which we can plot by selecting them using Xarray’s
+<a class="reference external" href="https://docs.xarray.dev/en/stable/generated/xarray.Dataset.isnull.html#xarray.Dataset.isnull"><code class="docutils literal notranslate"><span class="pre">isnull</span></code>-method</a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scene_B08</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">add_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;cividis&quot;</span><span class="p">)</span>
@@ -4062,11 +4070,11 @@ values in the data array, which we can plot by selecting them using Xarray’s <
 </div>
 </div>
 </section>
-<section id="s2-l2a-specific-group-acquisition-slices">
-<h2>S2_L2A specific: Group acquisition slices<a class="headerlink" href="#s2-l2a-specific-group-acquisition-slices" title="Permalink to this heading">#</a></h2>
-<p>One issue with the Sentinel-2 L2A product is that the data is split into multiple
-acquisition slices due to the overlapping grid used (which unfortunately is not
-the most efficient, see <a class="reference external" href="https://doi.org/10.1016/j.isprsjprs.2023.07.015">here</a>).</p>
+<section id="group-acquisition-slices">
+<h2>Group acquisition slices<a class="headerlink" href="#group-acquisition-slices" title="Permalink to this heading">#</a></h2>
+<p>One issue with the Sentinel-2 L2A product is that the data is split into
+multiple acquisition slices due to the overlapping grid used (which
+unfortunately is not the most efficient, see <a class="reference external" href="https://doi.org/10.1016/j.isprsjprs.2023.07.015">here</a>).</p>
 <p>You can view the entire grid over continental Africa in the Digital Earth Africa
 <a class="reference external" href="https://explorer.digitalearth.africa/products/s2_l2a">Explorer</a>.</p>
 <p>The following example shows an acquisition that has been sliced into four parts:</p>
@@ -4474,10 +4482,11 @@ Coordinates:
 </div>
 </div>
 <p>To mitigate this issue, we can group these slices by using the
-<code class="docutils literal notranslate"><span class="pre">sdc.utils.groupby_acq_slices</span></code>-function. It returns an <code class="docutils literal notranslate"><span class="pre">xarray.DataSet</span></code> object with
-the same dimensions as the input data, but with groups of acquisition slices aggregated
-by calculating the mean of each group.</p>
-<p>Notice that the number of time steps has decreased from 438 in the original data to 146.</p>
+<code class="docutils literal notranslate"><span class="pre">sdc.utils.groupby_acq_slices</span></code>-function. It returns an <code class="docutils literal notranslate"><span class="pre">xarray.DataSet</span></code> object
+with the same dimensions as the input data, but with groups of acquisition
+slices aggregated by calculating the mean of each group.</p>
+<p>Notice that the number of time steps has decreased from 438 in the original data
+to 146.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sdc.utils</span> <span class="kn">import</span> <span class="n">groupby_acq_slices</span>
@@ -5501,10 +5510,16 @@ Coordinates:
 </div>
 </div>
 </section>
-<section id="count-valid-pixels">
-<h2>Count valid pixels<a class="headerlink" href="#count-valid-pixels" title="Permalink to this heading">#</a></h2>
-<p>In some cases it can be useful to count the number of valid pixels in a dataset and
-visualize the result. This array could also be used as a layer in further analysis.</p>
+<section id="general-count-valid-pixels">
+<span id="general-1"></span><h2>General: Count valid pixels<a class="headerlink" href="#general-count-valid-pixels" title="Permalink to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Sections with the “General”-prefix are not product-specific and can be applied
+to other products as well.</p>
+</div>
+<p>In some cases it can be useful to count the number of valid pixels in a dataset
+and visualize the result. The resulting array could also be used as a layer in
+further analysis.</p>
 <p>The following is an example on how to achieve this using a combination of NumPy’s
 <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.isfinite.html"><code class="docutils literal notranslate"><span class="pre">isfinite</span></code>-method</a>
 and Xarray’s <a class="reference external" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.sum.html"><code class="docutils literal notranslate"><span class="pre">sum</span></code>-method</a>:</p>
@@ -6007,9 +6022,10 @@ Coordinates:
 <img alt="../../_images/ba909500c3c2cd2a81f68f7ec6a4ebe05ae27e4c5b0dad71ead0eab5ce498e7c.png" src="../../_images/ba909500c3c2cd2a81f68f7ec6a4ebe05ae27e4c5b0dad71ead0eab5ce498e7c.png" />
 </div>
 </div>
-<p>Interesting pattern we can observe here… I’ll let you guess why this is the case 😉</p>
-<p>Let’s do this again with the data that we have grouped by acquisition slices in order
-to not count the same pixels multiple times:</p>
+<p>Interesting pattern we can observe here… I’ll let you guess why this is the
+case 😉</p>
+<p>Let’s do this again with the data that we have grouped by acquisition slices in
+order to not count the same pixels multiple times:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">valid_px_count_grouped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">ds_grouped</span><span class="o">.</span><span class="n">B08</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
@@ -6058,7 +6074,7 @@ to not count the same pixels multiple times:</p>
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="01_01_Sentinel1.html"
@@ -6096,9 +6112,9 @@ to not count the same pixels multiple times:</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#product-description">Product description</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-data">Loading data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-shorts-spatial-subset">Xarray Shorts: Spatial subset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#s2-l2a-specific-cloud-mask">S2_L2A specific: Cloud mask</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#s2-l2a-specific-group-acquisition-slices">S2_L2A specific: Group acquisition slices</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#count-valid-pixels">Count valid pixels</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cloud-mask">Cloud mask</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#group-acquisition-slices">Group acquisition slices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-count-valid-pixels">General: Count valid pixels</a></li>
 </ul>
   </nav></div>
 
@@ -6120,6 +6136,7 @@ By Marco Wolsza
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2023.
@@ -6146,8 +6163,8 @@ By Marco Wolsza
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
   </footer>

@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -139,6 +139,7 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../../index.html">
@@ -329,6 +330,7 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -338,6 +340,7 @@ document.write(`
   </button>
 `);
 </script>
+
 
 <script>
 document.write(`
@@ -372,9 +375,8 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#product-description">Product description</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-data">Loading data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-shorts-indexing-and-plotting">Xarray Shorts: Indexing and plotting</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#s1-rtc-specific-converting-to-decibel-scale">S1_RTC specific: Converting to decibel scale</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#converting-to-decibel-scale">Converting to decibel scale</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-shorts-groupby-operations">Xarray Shorts: Groupby-operations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-next">What next?</a></li>
 </ul>
             </nav>
         </div>
@@ -1227,13 +1229,14 @@ Data variables:
                &#x27;2021-12-25 16:30:53.721072&#x27;, &#x27;2021-12-30 16:38:58.097247&#x27;],
               dtype=&#x27;datetime64[ns]&#x27;, name=&#x27;time&#x27;, length=211, freq=None))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-dcdf5d0c-606a-4d6b-b281-59de8bde8b6a' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-dcdf5d0c-606a-4d6b-b281-59de8bde8b6a' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
-<p>We have now <em>lazily</em> loaded Sentinel-1 RTC data, meaning that the underlying data is not
-yet loaded into memory. What is available, however, is an interactive representation of
-the <code class="docutils literal notranslate"><span class="pre">xarray.Dataset</span></code> object, which can be explored to get a better understanding of
-the data. You can click on different elements to expand them and see their content.</p>
-<p>The dimensions of the <code class="docutils literal notranslate"><span class="pre">xarray.Dataset</span></code> are <code class="docutils literal notranslate"><span class="pre">latitude</span></code>, <code class="docutils literal notranslate"><span class="pre">longitude</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code>. The values
-are by default available in memory and the underlying data can be inspected
-directly, e.g. by indexing the first 10 elements:</p>
+<p>We have now <em>lazily</em> loaded Sentinel-1 RTC data, meaning that the underlying
+data is not yet loaded into memory. What is available, however, is an
+interactive representation of the <code class="docutils literal notranslate"><span class="pre">xarray.Dataset</span></code> object, which can be explored
+to get a better understanding of the data. You can click on different elements
+to expand them and see their content.</p>
+<p>The dimensions of the <code class="docutils literal notranslate"><span class="pre">xarray.Dataset</span></code> are <code class="docutils literal notranslate"><span class="pre">latitude</span></code>, <code class="docutils literal notranslate"><span class="pre">longitude</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code>.
+The values are by default available in memory and the underlying data can be
+inspected directly, e.g. by indexing the first 10 elements:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
@@ -1630,11 +1633,12 @@ Coordinates:
                &#x27;2021-01-16 16:38:51.802111&#x27;, &#x27;2021-01-18 03:26:28.680483&#x27;],
               dtype=&#x27;datetime64[ns]&#x27;, name=&#x27;time&#x27;, freq=None))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-b6edbce1-2d8c-4da2-8e1b-cb52ff1e6a73' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-b6edbce1-2d8c-4da2-8e1b-cb52ff1e6a73' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
-<p>Having a closer look at one of the bands (<code class="docutils literal notranslate"><span class="pre">Data</span> <span class="pre">variable</span></code> in Xarray terminology), we get
-an overview of the data structure and how it has been chunked for efficient processing
-using dask. The example below shows the <code class="docutils literal notranslate"><span class="pre">vh</span></code> band (Vertical-transmit, Horizontal-receive
-Polarization), which is available as an <code class="docutils literal notranslate"><span class="pre">xarray.DataArray</span></code> object. By default, <code class="docutils literal notranslate"><span class="pre">sdc-tools</span></code>
-has applied the chunking along the <code class="docutils literal notranslate"><span class="pre">time</span></code> dimension (notice how it is represented below),
+<p>Having a closer look at one of the bands (<code class="docutils literal notranslate"><span class="pre">Data</span> <span class="pre">variable</span></code> in Xarray
+terminology), we get an overview of the data structure and how it has been
+chunked for efficient processing using dask. The example below shows the
+<code class="docutils literal notranslate"><span class="pre">vh</span></code>-band (Vertical-transmit, Horizontal-receive Polarization), which is
+available as an <code class="docutils literal notranslate"><span class="pre">xarray.DataArray</span></code> object. By default, <code class="docutils literal notranslate"><span class="pre">sdc-tools</span></code> has applied
+the chunking along the <code class="docutils literal notranslate"><span class="pre">time</span></code> dimension (notice how it is represented below),
 which is an efficient chunking  strategy for time series analysis.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -2178,9 +2182,9 @@ Coordinates:
                &#x27;2021-12-25 16:30:53.721072&#x27;, &#x27;2021-12-30 16:38:58.097247&#x27;],
               dtype=&#x27;datetime64[ns]&#x27;, name=&#x27;time&#x27;, length=211, freq=None))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-3131a77d-ca98-4efc-9eed-0d0cb45db49c' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-3131a77d-ca98-4efc-9eed-0d0cb45db49c' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
-<p>Sometimes it makes sense to assign data to new Python variables, e.g. to make the code
-more readable. Let’s assign the <code class="docutils literal notranslate"><span class="pre">vh</span></code> band to a new variable of the same name. As you can
-see, the data structure is still the same.</p>
+<p>Sometimes it makes sense to assign data to new Python variables, e.g. to make
+the code more readable. Let’s assign the <code class="docutils literal notranslate"><span class="pre">vh</span></code> band to a new variable of the
+same name. As you can see, the data structure is still the same.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vh</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">vh</span>
@@ -2727,12 +2731,19 @@ Coordinates:
 </section>
 <section id="xarray-shorts-indexing-and-plotting">
 <span id="xarray-shorts-1"></span><h2>Xarray Shorts: Indexing and plotting<a class="headerlink" href="#xarray-shorts-indexing-and-plotting" title="Permalink to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Sections with the “Xarray Shorts”-prefix are meant to be practical introductions
+to various Xarray features. They are not product-specific and can be applied to
+other products as well.</p>
+</div>
 <p>The <a class="reference external" href="https://docs.xarray.dev/en/stable/user-guide/indexing.html#">indexing and selecting</a>
-capabilities of Xarray allow for a lot of flexibility in how to access the data. In the
-following example we select a single time step using the <code class="docutils literal notranslate"><span class="pre">.sel</span></code>-method. Passing a date
-string and the <code class="docutils literal notranslate"><span class="pre">method='nearest'</span></code> argument, the nearest time step is selected. Looking
-at the data structure, we can see that it is now a 2-dimensional <code class="docutils literal notranslate"><span class="pre">xarray.DataArray</span></code>
-object and that the <code class="docutils literal notranslate"><span class="pre">time</span></code>-dimension has been dropped.</p>
+capabilities of Xarray allow for a lot of flexibility in how to access the data.
+In the following example we select a single time step using the <code class="docutils literal notranslate"><span class="pre">.sel</span></code>-method.
+Passing a date string and the <code class="docutils literal notranslate"><span class="pre">method='nearest'</span></code> argument, the nearest time step
+is selected. Looking at the data structure, we can see that it is now a
+2-dimensional <code class="docutils literal notranslate"><span class="pre">xarray.DataArray</span></code> object and that the <code class="docutils literal notranslate"><span class="pre">time</span></code>-dimension has been
+dropped.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vh_scene</span> <span class="o">=</span> <span class="n">vh</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="s2">&quot;2021-06-26&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
@@ -3210,9 +3221,9 @@ Coordinates:
        32.0497, 32.0499],
       dtype=&#x27;float64&#x27;, name=&#x27;longitude&#x27;, length=6500))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-eac4a922-bbd7-46be-b63b-5008c094a01e' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-eac4a922-bbd7-46be-b63b-5008c094a01e' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
-<p>We can index in the same way along the <code class="docutils literal notranslate"><span class="pre">latitude</span></code> and <code class="docutils literal notranslate"><span class="pre">longitude</span></code> dimensions to select
-a single pixel. The result is a 1-dimensional <code class="docutils literal notranslate"><span class="pre">xarray.DataArray</span></code> object with only the
-<code class="docutils literal notranslate"><span class="pre">time</span></code>-dimension left.</p>
+<p>We can index in the same way along the <code class="docutils literal notranslate"><span class="pre">latitude</span></code> and <code class="docutils literal notranslate"><span class="pre">longitude</span></code> dimensions
+to select a single pixel. The result is a 1-dimensional <code class="docutils literal notranslate"><span class="pre">xarray.DataArray</span></code>
+object with only the <code class="docutils literal notranslate"><span class="pre">time</span></code>-dimension left.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pt_water</span> <span class="o">=</span> <span class="p">(</span><span class="mf">31.571</span><span class="p">,</span> <span class="o">-</span><span class="mf">24.981</span><span class="p">)</span>
@@ -3668,12 +3679,13 @@ Coordinates:
                &#x27;2021-12-25 16:30:53.721072&#x27;, &#x27;2021-12-30 16:38:58.097247&#x27;],
               dtype=&#x27;datetime64[ns]&#x27;, name=&#x27;time&#x27;, length=211, freq=None))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-66576379-17d8-44a1-b95e-853f6a9aa6c2' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-66576379-17d8-44a1-b95e-853f6a9aa6c2' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
-<p>Let’s visualize the time series of the selected pixels. We can use the <code class="docutils literal notranslate"><span class="pre">.plot</span></code>-methods
-of the <code class="docutils literal notranslate"><span class="pre">xarray.DataArray</span></code> object to create different plots using the <a class="reference external" href="https://matplotlib.org/">Matplotlib</a>
-backend. An overview of different types can be found <a class="reference external" href="https://docs.xarray.dev/en/stable/api.html#id12">here</a>,
+<p>Let’s visualize the time series of the selected pixels. We can use the
+<code class="docutils literal notranslate"><span class="pre">.plot</span></code>-methods of the <code class="docutils literal notranslate"><span class="pre">xarray.DataArray</span></code> object to create different plots using
+the <a class="reference external" href="https://matplotlib.org/">Matplotlib</a> backend. An overview of different
+types can be found <a class="reference external" href="https://docs.xarray.dev/en/stable/api.html#id12">here</a>,
 where you can also find more information on which arguments can be passed.</p>
-<p>We use the <code class="docutils literal notranslate"><span class="pre">.plot.scatter</span></code>-method to create a scatter plot of the time series. The
-underlying data is automatically loaded into memory to create the plot.</p>
+<p>We use the <code class="docutils literal notranslate"><span class="pre">.plot.scatter</span></code>-method to create a scatter plot of the time series.
+The underlying data is automatically loaded into memory to create the plot.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vh_pt_water</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Water&quot;</span><span class="p">)</span>
@@ -3693,14 +3705,15 @@ underlying data is automatically loaded into memory to create the plot.</p>
 </div>
 </div>
 </section>
-<section id="s1-rtc-specific-converting-to-decibel-scale">
-<h2>S1_RTC specific: Converting to decibel scale<a class="headerlink" href="#s1-rtc-specific-converting-to-decibel-scale" title="Permalink to this heading">#</a></h2>
-<p>With Synthetic Aperture Radar (SAR) data, it is often useful to convert the data to
-decibels (dB) to make it more interpretable, especially for visualization purposes.
-Just be careful if you want to apply further mathematical operations on the data, as
-they are not equivalent to operations on data that is linearly scaled.</p>
-<p>The Sentinel-1 RTC data is stored in linear units (amplitude), but we can use numpy’s
-<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.log10.html#numpy.log10"><code class="docutils literal notranslate"><span class="pre">log10</span></code>-method</a>
+<section id="converting-to-decibel-scale">
+<h2>Converting to decibel scale<a class="headerlink" href="#converting-to-decibel-scale" title="Permalink to this heading">#</a></h2>
+<p>With Synthetic Aperture Radar (SAR) data, it is often useful to convert the data
+to decibels (dB) to make it more interpretable, especially for visualization
+purposes. Just be careful if you want to apply further mathematical operations
+on the data, as they are not equivalent to operations on data that is linearly
+scaled.</p>
+<p>The Sentinel-1 RTC data is stored in linear units (amplitude), but we can use
+numpy’s <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.log10.html#numpy.log10"><code class="docutils literal notranslate"><span class="pre">log10</span></code>-method</a>
 and multiply the result by <code class="docutils literal notranslate"><span class="pre">10</span></code> to convert the data to dB.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -4245,13 +4258,14 @@ Coordinates:
                &#x27;2021-12-25 16:30:53.721072&#x27;, &#x27;2021-12-30 16:38:58.097247&#x27;],
               dtype=&#x27;datetime64[ns]&#x27;, name=&#x27;time&#x27;, length=211, freq=None))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-31a36152-abc7-4863-8314-d6e816fbf2df' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-31a36152-abc7-4863-8314-d6e816fbf2df' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
-<p>Yet again, notice how the data structure above is still the same as for the <code class="docutils literal notranslate"><span class="pre">vh</span></code> band we
-started with and that the data is still lazily loaded. The only difference is the
-increase of graph layers in the row called “Dask graph”. Dask is constructing a graph
-behind the scenes, which is a representation of the computation that will be
-executed once the data is loaded into memory.</p>
-<p>To see the difference between the linear and the dB data, let’s plot the time series
-again. In terms of analysing the data, we will not go any further in this notebook.</p>
+<p>Yet again, notice how the data structure above is still the same as for the
+<code class="docutils literal notranslate"><span class="pre">vh</span></code>-band we started with and that the data is still lazily loaded. The only
+difference is the increase of graph layers in the row called “Dask graph”. Dask
+is constructing a graph behind the scenes, which is a representation of the
+computation that will be executed once the data is loaded into memory.</p>
+<p>To see the difference between the linear and the dB data, let’s plot the time
+series again. In terms of analysing the data, we will not go any further in this
+notebook.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vh_db_pt_water</span> <span class="o">=</span> <span class="n">vh_db</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">longitude</span><span class="o">=</span><span class="n">pt_water</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">latitude</span><span class="o">=</span><span class="n">pt_water</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
@@ -4278,8 +4292,9 @@ again. In terms of analysing the data, we will not go any further in this notebo
 <section id="xarray-shorts-groupby-operations">
 <span id="xarray-shorts-2"></span><h2>Xarray Shorts: Groupby-operations<a class="headerlink" href="#xarray-shorts-groupby-operations" title="Permalink to this heading">#</a></h2>
 <p>Combining <a class="reference external" href="https://docs.xarray.dev/en/stable/user-guide/groupby.html"><code class="docutils literal notranslate"><span class="pre">groupby</span></code>-operations</a>
-with aggregation functions can be very useful to calculate statistics for different time
-periods. In the following example, we calculate the median for each month of the year.</p>
+with aggregation functions can be very useful to calculate statistics for
+different time periods. In the following example, we calculate the median for
+each month of the year.</p>
 <p>Let’s first just apply the groupby-operation. The result is a <code class="docutils literal notranslate"><span class="pre">xarray.core.groupby.DataArrayGroupBy</span></code>
 object, which is a lazy representation of the grouped data.</p>
 <div class="cell docutils container">
@@ -4298,15 +4313,16 @@ object, which is a lazy representation of the grouped data.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Handling Xarray’s datetime components as in the example below can be very useful.
+<p>Handling Xarray’s datetime components as in the example above can be very useful.
 You can find an overview on this topic <a class="reference external" href="https://docs.xarray.dev/en/stable/user-guide/time-series.html#datetime-components">here</a>.</p>
 </div>
-<p>We can now apply an aggregation function to the grouped data. In this case, we calculate
-the median for each month of the year. The result is a <code class="docutils literal notranslate"><span class="pre">xarray.DataArray</span></code> object with a
-new <code class="docutils literal notranslate"><span class="pre">month</span></code>-dimension.</p>
-<p>Notice that the size of the array is now much smaller than the original <code class="docutils literal notranslate"><span class="pre">vh</span></code> data we
-started with because we have reduced the number of time steps from 211 (acquisitions) to
-12 (months). The size is an estimate of the potential memory footprint of the data.</p>
+<p>We can now apply an aggregation function to the grouped data. In this case, we
+calculate the median for each month of the year. The result is a
+<code class="docutils literal notranslate"><span class="pre">xarray.DataArray</span></code> object with a new <code class="docutils literal notranslate"><span class="pre">month</span></code>-dimension.</p>
+<p>Notice that the size of the array is now much smaller than the original <code class="docutils literal notranslate"><span class="pre">vh</span></code>
+data we started with because we have reduced the number of time steps from 211
+(acquisitions) to 12 (months). The size is an estimate of the potential memory
+footprint of the data.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vh_db_monthly_median</span> <span class="o">=</span> <span class="n">vh_db_monthly</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
@@ -4858,16 +4874,16 @@ Coordinates:
        32.0497, 32.0499],
       dtype=&#x27;float64&#x27;, name=&#x27;longitude&#x27;, length=6500))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>month</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-af78c6bd-037f-45ff-82c7-f4ecc18af4e7' class='xr-index-data-in' type='checkbox'/><label for='index-af78c6bd-037f-45ff-82c7-f4ecc18af4e7' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], dtype=&#x27;int64&#x27;, name=&#x27;month&#x27;))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-f854d35a-1bb4-4355-97a3-760f3c23b40d' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-f854d35a-1bb4-4355-97a3-760f3c23b40d' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
-<p>We could have also chained both operations together, which would have resulted in the
-same output:</p>
+<p>We could have also chained both operations together, which would have resulted
+in the same output:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vh_db_monthly_median</span> <span class="o">=</span> <span class="n">vh_db</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;time.month&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>You can find an overview of which methods are available for grouped <code class="docutils literal notranslate"><span class="pre">DataArrayGroupBy</span></code>
-objects <a class="reference external" href="https://docs.xarray.dev/en/stable/api.html#id14">here</a>.</p>
-<p>As you can probably imagine, these operations can be very useful to handle and analyse
-large time series data. Instead of going further at this point, let’s just select the
-month of June and plot it.</p>
+<p>You can find an overview of which methods are available for grouped
+<code class="docutils literal notranslate"><span class="pre">DataArrayGroupBy</span></code> objects <a class="reference external" href="https://docs.xarray.dev/en/stable/api.html#id14">here</a>.</p>
+<p>As you can probably imagine, these operations can be very useful to handle and
+analyse large time series data. Instead of going further at this point, let’s
+just select the month of June and plot it.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vh_db_monthly_median</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">robust</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">add_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
@@ -4886,15 +4902,9 @@ month of June and plot it.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">robust=True</span></code> argument clips the color scale to the 2nd and 98th percentiles.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">robust=True</span></code> argument clips the color scale to the 2nd and 98th
+percentiles.</p>
 </div>
-</section>
-<section id="what-next">
-<h2>What next?<a class="headerlink" href="#what-next" title="Permalink to this heading">#</a></h2>
-<p>Xarray offers <strong>a lot</strong> more ways to interact with the data. As a next step you could
-get some inspiration from examples in the <a class="reference external" href="https://docs.xarray.dev/en/stable/gallery.html">Xarray Gallery</a>.</p>
-<p>If you want to explore different ways to visualize the data (interactive!), you can have
-a look at the <a class="reference external" href="https://hvplot.holoviz.org/">hvPlot</a> library, which works well with Xarray.</p>
 </section>
 </section>
 
@@ -4926,7 +4936,7 @@ a look at the <a class="reference external" href="https://hvplot.holoviz.org/">h
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="01_00_Data_Access.html"
@@ -4964,9 +4974,8 @@ a look at the <a class="reference external" href="https://hvplot.holoviz.org/">h
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#product-description">Product description</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-data">Loading data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-shorts-indexing-and-plotting">Xarray Shorts: Indexing and plotting</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#s1-rtc-specific-converting-to-decibel-scale">S1_RTC specific: Converting to decibel scale</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#converting-to-decibel-scale">Converting to decibel scale</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-shorts-groupby-operations">Xarray Shorts: Groupby-operations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-next">What next?</a></li>
 </ul>
   </nav></div>
 
@@ -4988,6 +4997,7 @@ By Marco Wolsza
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2023.
@@ -5014,8 +5024,8 @@ By Marco Wolsza
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
   </footer>
