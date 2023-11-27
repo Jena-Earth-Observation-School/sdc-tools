@@ -2,6 +2,9 @@ import numpy as np
 
 from typing import Tuple, Optional
 from xarray import DataArray, Dataset
+from numpy import ndarray
+
+from sdc.load import load_product
 
 
 def groupby_acq_slices(ds: Dataset) -> Dataset:
@@ -185,3 +188,51 @@ def da_nanquantiles(da: DataArray,
     
     result.attrs = da.attrs.copy()
     return result
+
+
+def mask_from_multipolygon(vec: str,
+                           da: Optional[DataArray] = None
+                           ) -> ndarray:
+    """
+    Create a boolean mask from a vector file containing a single MultiPolygon feature.
+    
+    Parameters
+    ----------
+    vec : str
+        Path to a vector file readable by geopandas (e.g. shapefile, GeoJSON, etc.).
+    da : DataArray, optional
+        DataArray to use as a template for the mask, which will be created with the same
+        shape and transform as the DataArray. If None (default), the `sanlc` product
+        will be loaded with the bounding box of the vector file and used as the
+        template.
+    
+    Returns
+    -------
+    mask : ndarray
+        The output mask as a boolean NumPy array.
+    
+    Examples
+    --------
+    >>> import sdc.utils as utils
+    >>> from sdc.load import load_product
+    >>> import xarray as xr
+    >>> import numpy as np
+    
+    >>> vec = 'path/to/vector/file.geojson'
+    >>> ds = load_product(product='s2_l2a', vec=vec)
+    >>> mask = utils.mask_from_multipolygon(vec=vec)
+    >>> ds_masked = xr.where(mask, ds, np.nan)
+    """
+    import geopandas as gpd
+    from rasterio.features import rasterize
+    
+    if da is None:
+        da = load_product(product="sanlc", vec=vec)
+    if 'time' in da.dims:
+        da = da.isel(time=0)
+    
+    vec_data = gpd.read_file(vec)
+    mask = rasterize([(geom, 1) for geom in vec_data.geometry],
+                     out_shape=da.shape,
+                     transform=da.odc.transform)
+    return mask.astype('bool')
