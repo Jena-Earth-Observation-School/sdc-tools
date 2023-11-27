@@ -11,7 +11,7 @@ from pystac import Catalog, Collection, Item
 def filter_stac_catalog(catalog: Catalog,
                         bbox: Optional[Tuple[float, float, float, float]] = None,
                         time_range: Optional[Tuple[str, str]] = None,
-                        time_pattern: str = '%Y-%m-%d'
+                        time_pattern: Optional[str] = None
                         ) -> Tuple[List[Collection], List[Item]]:
     """
     The STAC Catalog is first filtered based on a provided bounding box, returning a
@@ -22,17 +22,22 @@ def filter_stac_catalog(catalog: Catalog,
     ----------
     catalog : Catalog
         The STAC Catalog to filter.
-    bbox : tuple of float or None, optional
-        The bounding box in the format (minx, miny, maxx, maxy).
-    time_range : tuple of str or None, optional
-        The time range in the format (start_time, end_time).
+    bbox : tuple of float, optional
+        The bounding box of the area of interest in the format (minx, miny, maxx, maxy).
+    time_range : tuple of str, optional
+        Time range to load as a tuple of (start_time, stop_time), where start_time and
+        stop_time are strings in the format specified by `time_pattern`. Default is
+        None, which loads all available data.
     time_pattern : str, optional
-        The pattern used to parse the time strings. Defaults to '%Y-%m-%d'.
+        Time pattern to parse the time range. Only needed if it deviates from the
+        default: '%Y-%m-%d'.
     
     Returns
     -------
-    Tuple[List[Collection], List[Item]]
-        A tuple containing the filtered STAC Collections and Items.
+    filtered_collections : list of Collection
+        A list of filtered collections.
+    filtered_items : list of Item
+        A list of filtered items.
     """
     filtered_collections = filter_collections(catalog, bbox)
     filtered_items = filter_items(filtered_collections, time_range, time_pattern)
@@ -50,11 +55,11 @@ def filter_collections(catalog: Catalog,
     catalog : Catalog
         The STAC Catalog to filter.
     bbox : tuple of float, optional
-        The bounding box in the format (minx, miny, maxx, maxy).
+        The bounding box of the area of interest in the format (minx, miny, maxx, maxy).
     
     Returns
     -------
-    List[Collection]
+    list of Collection
         A list of filtered collections.
     """
     if bbox is None:
@@ -69,7 +74,8 @@ def filter_collections(catalog: Catalog,
 
 
 def _bbox_intersection(bbox1: List[float],
-                       bbox2: List[float]) -> List[float] | None:
+                       bbox2: List[float]
+                       ) -> List[float] | None:
     """
     Computes the intersection of two bounding boxes.
     
@@ -82,7 +88,7 @@ def _bbox_intersection(bbox1: List[float],
     
     Returns
     -------
-    intersection : list or None
+    intersection : list of float or None
         The intersection of the two bounding boxes as a list of float.
         Returns None if there is no intersection.
     """
@@ -97,23 +103,26 @@ def _bbox_intersection(bbox1: List[float],
 
 def filter_items(collections: List[Collection],
                  time_range: Optional[Tuple[str, str]] = None,
-                 time_pattern: str = '%Y-%m-%d'
+                 time_pattern: Optional[str] = None
                  ) -> List[Item]:
     """
     Filters the items in a list of collections based on a time range.
     
     Parameters
     ----------
-    collections : List[Collection]
+    collections : list of Collection
         The list of collections to filter.
     time_range : tuple of str, optional
-        The time range in the format (start_time, end_time).
+        Time range to load as a tuple of (start_time, stop_time), where start_time and
+        stop_time are strings in the format specified by `time_pattern`. Default is
+        None, which loads all available data.
     time_pattern : str, optional
-        The pattern used to parse the time strings.
+        Time pattern to parse the time range. Only needed if it deviates from the
+        default: '%Y-%m-%d'.
     
     Returns
     -------
-    List[Item]
+    items : list of Item
         A list of filtered items.
     """
     items = []
@@ -130,9 +139,10 @@ def filter_items(collections: List[Collection],
     return items
 
 
-def filter_mswep_nc(directory: Path, 
+def filter_mswep_nc(directory: Path,
                     time_range: Optional[Tuple[str, str]] = None,
-                    time_pattern: str = '%Y-%m-%d') -> List[str]:
+                    time_pattern: Optional[str] = None
+                    ) -> List[str]:
     """
     Find and filter MSWEP NetCDF files based on a time range.
     
@@ -141,27 +151,31 @@ def filter_mswep_nc(directory: Path,
     directory : Path
         The directory to search for MSWEP NetCDF files.
     time_range : tuple of str, optional
-        The time range in the format (start_time, end_time).
+        Time range to load as a tuple of (start_time, stop_time), where start_time and
+        stop_time are strings in the format specified by `time_pattern`. Default is
+        None, which loads all available data.
     time_pattern : str, optional
-        The pattern used to parse the time strings. Defaults to '%Y-%m-%d'.
+        Time pattern to parse the time range. Only needed if it deviates from the
+        default: '%Y-%m-%d'.
     
     Returns
     -------
-    List[str]
+    files : list of str
         A list of paths to MSWEP NetCDF files.
     """
     files = glob.glob(str(directory.joinpath('*.nc')))
-    
     if time_range is not None:
         start_time = _timestring_to_utc_datetime(time_range[0], time_pattern)
         end_time = _timestring_to_utc_datetime(time_range[1], time_pattern)
-        years = [start_time.year + i for i in range(end_time.year - start_time.year + 1)]    
+        years = [start_time.year + i for i in range(end_time.year -
+                                                    start_time.year + 1)]
         files = [f for f in files if any(str(y) in f for y in years)]
     return files
 
 
 def _timestring_to_utc_datetime(time: str,
-                                pattern: str) -> datetime:
+                                pattern: Optional[str] = None
+                                ) -> datetime:
     """
     Convert time string to UTC datetime object.
     
@@ -170,11 +184,13 @@ def _timestring_to_utc_datetime(time: str,
     time : str
         The time string to convert.
     pattern : str
-        The format of the time string.
+        The format of the time string. Default is '%Y-%m-%d'.
     
     Returns
     -------
     datetime : datetime
         The converted datetime object.
     """
+    if pattern is None:
+        pattern = '%Y-%m-%d'
     return datetime.strptime(time, pattern).replace(tzinfo=pytz.UTC)

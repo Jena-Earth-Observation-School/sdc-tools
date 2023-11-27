@@ -4,13 +4,13 @@ from odc.stac import load as odc_stac_load
 from typing import Optional, Tuple
 from xarray import Dataset
 
-import sdc.utils as utils
-import sdc.query as query
+from sdc.products import _ancillary as anc
+from sdc.products import _query as query
 
 
 def load_s1_rtc(bounds: Tuple[float, float, float, float],
                 time_range: Optional[Tuple[str, str]] = None,
-                time_pattern: str = '%Y-%m-%d'
+                time_pattern: Optional[str] = None
                 ) -> Dataset:
     """
     Loads the Sentinel-1 RTC data product for an area of interest.
@@ -25,8 +25,8 @@ def load_s1_rtc(bounds: Tuple[float, float, float, float],
         Defaults to None, which will load all STAC Items in the filtered STAC
         Collections.
     time_pattern : str, optional
-        The pattern used to parse the time strings of `time_range`. Defaults to
-        '%Y-%m-%d'.
+        Time pattern to parse the time range. Only needed if it deviates from the
+        default: '%Y-%m-%d'.
     
     Returns
     -------
@@ -43,14 +43,14 @@ def load_s1_rtc(bounds: Tuple[float, float, float, float],
     bands = ['vv', 'vh', 'area']
     
     # Load and filter STAC Items
-    catalog = Catalog.from_file(utils.get_catalog_path(product=product))
+    catalog = Catalog.from_file(anc.get_catalog_path(product=product))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds,
                                          time_range=time_range,
                                          time_pattern=time_pattern)
     
     # Turn into dask-based xarray.Dataset
     ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='float32',
-                       **utils.common_params())
+                       **anc.common_params())
     
     return ds
 

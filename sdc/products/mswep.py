@@ -4,13 +4,13 @@ from odc.geo.xr import assign_crs
 from typing import Optional, Tuple
 from xarray import DataArray
 
-import sdc.utils as utils
-import sdc.query as query
+from sdc.products import _ancillary as anc
+from sdc.products import _query as query
 
 
 def load_mswep(bounds: Tuple[float, float, float, float],
                time_range: Optional[Tuple[str, str]] = None,
-               time_pattern: str = '%Y-%m-%d'
+               time_pattern: Optional[str] = None
                ) -> DataArray:
     """
     Loads the MSWEP (Multi-Source Weighted-Ensemble Precipitation) data product for an 
@@ -26,8 +26,8 @@ def load_mswep(bounds: Tuple[float, float, float, float],
         Defaults to None, which will load all STAC Items in the filtered STAC
         Collections.
     time_pattern : str, optional
-        The pattern used to parse the time strings of `time_range`. Defaults to
-        '%Y-%m-%d'.
+        Time pattern to parse the time range. Only needed if it deviates from the
+        default: '%Y-%m-%d'.
     
     Returns
     -------
@@ -39,7 +39,7 @@ def load_mswep(bounds: Tuple[float, float, float, float],
     The MSWEP data is available as daily precipitation estimates at 0.1° resolution.
     For more product details, see: https://www.gloh2o.org/mswep
     """
-    nc_files = query.filter_mswep_nc(directory=utils.get_catalog_path(product='mswep'),
+    nc_files = query.filter_mswep_nc(directory=anc.get_catalog_path(product='mswep'),
                                      time_range=time_range,
                                      time_pattern=time_pattern)
     ds_list = []

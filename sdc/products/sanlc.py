@@ -2,14 +2,14 @@ from pystac import Catalog
 from odc.stac import load as odc_stac_load
 
 from typing import Tuple
-from xarray import Dataset
+from xarray import DataArray
 
-import sdc.utils as utils
-import sdc.query as query
+from sdc.products import _ancillary as anc
+from sdc.products import _query as query
 
 
-def load_sanlc(bounds: Tuple[float, float, float, float],
-                ) -> Dataset:
+def load_sanlc(bounds: Tuple[float, float, float, float]
+               ) -> DataArray:
     """
     Loads the South African National Land Cover (SANLC) data product for an area of 
     interest.
@@ -22,17 +22,17 @@ def load_sanlc(bounds: Tuple[float, float, float, float],
     
     Returns
     -------
-    Dataset
-        An xarray Dataset containing the SANLC data.
+    DataArray
+        An xarray DataArray containing the SANLC data.
     """
     product = 'sanlc'
     bands = ['nlc']
     
     # Load and filter STAC Items
-    catalog = Catalog.from_file(utils.get_catalog_path(product=product))
+    catalog = Catalog.from_file(anc.get_catalog_path(product=product))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds)
     
-    common_params = utils.common_params()
+    common_params = anc.common_params()
     common_params['resampling'] = 'nearest'
     
     # Turn into dask-based xarray.Dataset

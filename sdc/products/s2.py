@@ -3,17 +3,17 @@ import xarray as xr
 from pystac import Catalog
 from odc.stac import load as odc_stac_load
 
-from typing import Optional, Tuple, List
+from typing import Optional, Any, Tuple, List, Dict
 from xarray import Dataset, DataArray
 from pystac import Item
 
-import sdc.utils as utils
-import sdc.query as query
+from sdc.products import _ancillary as anc
+from sdc.products import _query as query
 
 
 def load_s2_l2a(bounds: Tuple[float, float, float, float],
                 time_range: Optional[Tuple[str, str]] = None,
-                time_pattern: str = '%Y-%m-%d',
+                time_pattern: Optional[str] = None,
                 apply_mask: bool = True
                 ) -> Dataset:
     """
@@ -29,8 +29,8 @@ def load_s2_l2a(bounds: Tuple[float, float, float, float],
         Defaults to None, which will load all STAC Items in the filtered STAC
         Collections.
     time_pattern : str, optional
-        The pattern used to parse the time strings of `time_range`. Defaults to
-        '%Y-%m-%d'.
+        Time pattern to parse the time range. Only needed if it deviates from the
+        default: '%Y-%m-%d'.
     apply_mask : bool, optional
         Whether to apply a valid-data mask to the data. Defaults to True.
         The mask is created from the `SCL` (Scene Classification Layer) band of the
@@ -56,12 +56,12 @@ def load_s2_l2a(bounds: Tuple[float, float, float, float],
              'B11', 'B12']         # SWIR 1, SWIR 2 (20 m)
     
     # Load and filter STAC Items
-    catalog = Catalog.from_file(utils.get_catalog_path(product=product))
+    catalog = Catalog.from_file(anc.get_catalog_path(product=product))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds,
                                          time_range=time_range,
                                          time_pattern=time_pattern)
     
-    common_params = utils.common_params()
+    common_params = anc.common_params()
     if apply_mask:
         common_params['chunks']['time'] = 1
     
@@ -87,7 +87,7 @@ def load_s2_l2a(bounds: Tuple[float, float, float, float],
 
 def _mask(items: List[Item],
           bounds: Tuple[float, float, float, float],
-          common_params: dict
+          common_params: Dict[str, Any]
           ) -> DataArray:
     """
     Creates a valid-data mask from the `SCL` (Scene Classification Layer) band of

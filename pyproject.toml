@@ -9,15 +9,12 @@ readme = "README.md"
 license = {text = "MIT License"}
 requires-python = ">=3.10"
 dependencies = [
-    "dask",
     "dask-jobqueue",
-    "pytz",
-    "shapely",
-    "pystac",
     "odc-stac>=0.3.7",
-    "fiona",
     "numbagg>=0.6.1",
-    "flox"
+    "fiona",
+    "flox",
+    "pytz"
 ]
 
 [project.urls]

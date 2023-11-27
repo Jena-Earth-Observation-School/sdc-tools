@@ -4,33 +4,25 @@ channels:
   - conda-forge
 dependencies:
   - python>=3.10
-  - dask
   - dask-jobqueue
-  - pytz
-  - shapely
-  - pystac
   - odc-stac>=0.3.7
-  - fiona
   - numbagg>=0.6.1
+  - fiona
   - flox
-############# Extras #############
+  - pytz
+###### Extras - Geo / ML ######
   - spyndex
   - geopandas
   - rioxarray
   - scikit-learn
+###### Extras - Visualization ######
   - leafmap
   - matplotlib
   - hvplot
   - geoviews
   - datashader
-  - autopep8
-  - black
-  - isort
-  - ipympl
+###### Extras - Jupyter ######
   - nodejs
-  - jupyterlab=3.6.5
+  - jupyterlab
   - dask-labextension
   - jupyter-archive
-  - jupyterlab-spellchecker
-  - jupyterlab_code_formatter
-  - jupyter-resource-usage<1.0.0
