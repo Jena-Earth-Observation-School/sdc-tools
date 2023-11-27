@@ -21,6 +21,14 @@ def groupby_acq_slices(ds: Dataset) -> Dataset:
     -------
     ds_copy : Dataset
         The grouped Dataset.
+    
+    Examples
+    --------
+    >>> import sdc.utils as utils
+    >>> from sdc.load import load_product
+    
+    >>> ds = load_product(product='s2_l2a', vec='path/to/vector/file.geojson')
+    >>> ds_grouped = utils.groupby_acq_slices(ds)
     """
     ds_copy = ds.copy(deep=True)
     ds_copy.coords['time'] = ds_copy.time.dt.round('1H')
@@ -60,6 +68,16 @@ def ds_nanquantiles(ds: Dataset,
     -------
     ds_copy : Dataset
         The new Dataset with the quantiles as new variables.
+    
+    Examples
+    --------
+    >>> import sdc.utils as utils
+    >>> from sdc.load import load_product
+    
+    >>> ds = load_product(product='s1_rtc', vec='path/to/vector/file.geojson')
+    >>> q = (0.05, 0.95)
+    >>> v = ('vv', 'vh')
+    >>> ds_quantiles = utils.ds_nanquantiles(ds=ds, variables=v, quantiles=q)
     """
     ds_copy = ds.copy(deep=True)
     if dim is None:
@@ -135,6 +153,16 @@ def da_nanquantiles(da: DataArray,
         the result corresponds to the quantile and a quantile dimension
         is added to the return array. The other dimensions are the
         dimensions that remain after the reduction of the array.
+    
+    Examples
+    --------
+    >>> import sdc.utils as utils
+    >>> from sdc.load import load_product
+    
+    >>> ds = load_product(product='s1_rtc', vec='path/to/vector/file.geojson')
+    >>> da = ds.vv
+    >>> da_quantiles = utils.da_nanquantiles(ds=ds, quantiles=(0.05, 0.95))
+    >>> da_quantiles.sel(quantile=0.05)
     
     Notes
     -----
