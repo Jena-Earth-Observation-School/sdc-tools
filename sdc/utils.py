@@ -220,11 +220,13 @@ def da_nanquantiles(da: DataArray,
     return result
 
 
-def mask_from_multipolygon(vec: str,
-                           da: Optional[DataArray] = None
-                           ) -> ndarray:
+def mask_from_vec(vec: str,
+                  da: Optional[DataArray] = None
+                  ) -> DataArray:
     """
-    Create a boolean mask from a vector file containing a single MultiPolygon feature.
+    Create a boolean mask from a vector file. The mask will have the same shape and
+    transform as the provided DataArray. If no DataArray is given, the `sanlc` product 
+    will be loaded with the bounding box of the vector file and used as the template.
     
     Parameters
     ----------
@@ -245,13 +247,11 @@ def mask_from_multipolygon(vec: str,
     --------
     >>> import sdc.utils as utils
     >>> from sdc.load import load_product
-    >>> import xarray as xr
-    >>> import numpy as np
     
     >>> vec = 'path/to/vector/file.geojson'
     >>> ds = load_product(product='s2_l2a', vec=vec)
-    >>> mask = utils.mask_from_multipolygon(vec=vec)
-    >>> ds_masked = xr.where(mask, ds, np.nan)
+    >>> mask = utils.mask_from_vec(vec=vec, da=ds.B04)
+    >>> ds_masked = ds.where(mask)
     """
     import geopandas as gpd
     from rasterio.features import rasterize
