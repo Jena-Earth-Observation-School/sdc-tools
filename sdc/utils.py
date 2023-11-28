@@ -2,6 +2,9 @@ import numpy as np
 
 from typing import Tuple, Optional
 from xarray import DataArray, Dataset
+from numpy import ndarray
+
+from sdc.load import load_product
 
 
 def groupby_acq_slices(ds: Dataset) -> Dataset:
@@ -18,6 +21,14 @@ def groupby_acq_slices(ds: Dataset) -> Dataset:
     -------
     ds_copy : Dataset
         The grouped Dataset.
+    
+    Examples
+    --------
+    >>> import sdc.utils as utils
+    >>> from sdc.load import load_product
+    
+    >>> ds = load_product(product='s2_l2a', vec='path/to/vector/file.geojson')
+    >>> ds_grouped = utils.groupby_acq_slices(ds)
     """
     ds_copy = ds.copy(deep=True)
     ds_copy.coords['time'] = ds_copy.time.dt.round('1H')
@@ -57,6 +68,16 @@ def ds_nanquantiles(ds: Dataset,
     -------
     ds_copy : Dataset
         The new Dataset with the quantiles as new variables.
+    
+    Examples
+    --------
+    >>> import sdc.utils as utils
+    >>> from sdc.load import load_product
+    
+    >>> ds = load_product(product='s1_rtc', vec='path/to/vector/file.geojson')
+    >>> q = (0.05, 0.95)
+    >>> v = ('vv', 'vh')
+    >>> ds_quantiles = utils.ds_nanquantiles(ds=ds, variables=v, quantiles=q)
     """
     ds_copy = ds.copy(deep=True)
     if dim is None:
@@ -111,8 +132,10 @@ def da_nanquantiles(da: DataArray,
                     quantiles: float | Tuple[float] = None
                     ) -> DataArray:
     """
-    Simple workaround for https://github.com/pydata/xarray/issues/7377
-    See notes for more information.
+    Calculate quantiles along a given dimension of a DataArray, ignoring NaN values.
+    If multiple quantiles are given, the returned DataArray will have a new dimension
+    'quantile' with the quantile values as coordinates. If only a single quantile is
+    given, the quantile dimension will be dropped.
     
     Parameters
     ----------
@@ -122,19 +145,29 @@ def da_nanquantiles(da: DataArray,
         Dimension(s) to reduce. If None (default), the 'time' dimension will be reduced.
     quantiles : float or tuple of float, optional
         The quantiles to calculate. If None (default), the quantiles (0.05, 0.95) will
-        be calculated.
+        be returned.
     
     Returns
     -------
     result: DataArray
-        If `q` is a single quantile, then the result
-        is a scalar. If multiple percentiles are given, first axis of
-        the result corresponds to the quantile and a quantile dimension
-        is added to the return array. The other dimensions are the
+        If `q` is a single quantile, then the result is a scalar. If multiple
+        quantiles are given, first axis of the result corresponds to the quantile and a
+        quantile dimension is added to the return array. The other dimensions are the
         dimensions that remain after the reduction of the array.
+    
+    Examples
+    --------
+    >>> import sdc.utils as utils
+    >>> from sdc.load import load_product
+    
+    >>> ds = load_product(product='s1_rtc', vec='path/to/vector/file.geojson')
+    >>> da = ds.vv
+    >>> da_quantiles = utils.da_nanquantiles(ds=ds, quantiles=(0.05, 0.95))
+    >>> da_quantiles.sel(quantile=0.05)
     
     Notes
     -----
+    This is a simple workaround for https://github.com/pydata/xarray/issues/7377.
     The structure of this function is based on:
     https://github.com/pydata/xarray/blob/6c5840e1198707cdcf7dc459f27ea9510eb76388/xarray/core/variable.py#L2128-L2271
     Instead of `numpy.nanquantile`, the following `nanquantile` method of the numbagg
@@ -151,6 +184,8 @@ def da_nanquantiles(da: DataArray,
         dim = [dim]
     else:
         dim = list(dim)
+    
+    scalar = is_scalar(quantiles)
     if quantiles is None:
         quantiles = (0.05, 0.95)
     else:
@@ -158,7 +193,6 @@ def da_nanquantiles(da: DataArray,
             quantiles = (quantiles,)
         else:
             quantiles = tuple(quantiles)
-    scalar = is_scalar(quantiles)
     quantiles = np.atleast_1d(np.asarray(quantiles, dtype=np.float64))
     
     def _wrapper(x, **kwargs):
@@ -184,3 +218,51 @@ def da_nanquantiles(da: DataArray,
     
     result.attrs = da.attrs.copy()
     return result
+
+
+def mask_from_vec(vec: str,
+                  da: Optional[DataArray] = None
+                  ) -> DataArray:
+    """
+    Create a boolean mask from a vector file. The mask will have the same shape and
+    transform as the provided DataArray. If no DataArray is given, the `sanlc` product 
+    will be loaded with the bounding box of the vector file and used as the template.
+    
+    Parameters
+    ----------
+    vec : str
+        Path to a vector file readable by geopandas (e.g. shapefile, GeoJSON, etc.).
+    da : DataArray, optional
+        DataArray to use as a template for the mask, which will be created with the same
+        shape and transform as the DataArray. If None (default), the `sanlc` product
+        will be loaded with the bounding box of the vector file and used as the
+        template.
+    
+    Returns
+    -------
+    mask : ndarray
+        The output mask as a boolean NumPy array.
+    
+    Examples
+    --------
+    >>> import sdc.utils as utils
+    >>> from sdc.load import load_product
+    
+    >>> vec = 'path/to/vector/file.geojson'
+    >>> ds = load_product(product='s2_l2a', vec=vec)
+    >>> mask = utils.mask_from_vec(vec=vec, da=ds.B04)
+    >>> ds_masked = ds.where(mask)
+    """
+    import geopandas as gpd
+    from rasterio.features import rasterize
+    
+    if da is None:
+        da = load_product(product="sanlc", vec=vec)
+    if 'time' in da.dims:
+        da = da.isel(time=0)
+    
+    vec_data = gpd.read_file(vec)
+    mask = rasterize([(geom, 1) for geom in vec_data.geometry],
+                     out_shape=da.shape,
+                     transform=da.odc.transform)
+    return mask.astype('bool')
