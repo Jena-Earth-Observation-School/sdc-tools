@@ -11,6 +11,8 @@ dependencies:
   - flox
   - pytz
   - jupyter-book
+  - rio-cogeo
+  - rio-stac
 ###### Extras - Geo / ML ######
   - stackstac
   - spyndex
