@@ -11,7 +11,8 @@ def load_product(product: str,
                  vec: str,
                  time_range: Optional[Tuple[str, str]] = None,
                  time_pattern: Optional[str] = None,
-                 s2_apply_mask: bool = True
+                 s2_apply_mask: bool = True,
+                 sanlc_year: Optional[int] = None
                  ) -> Dataset | DataArray:
     """
     Load data products available in the SALDi Data Cube (SDC).
@@ -39,6 +40,12 @@ def load_product(product: str,
         Whether to apply a valid-data mask to the Sentinel-2 L2A product based on its
         `SCL` (Scene Classification Layer) band. Default is True. This parameter will
         be ignored if `product` is not `s2_l2a`.
+    sanlc_year : int, optional
+        The year of the SANLC product to load. Default is None, which loads all
+        available years. This parameter will be ignored if `product` is not `sanlc`.
+        Currently supported years are:
+        - 2018
+        - 2020
     
     Returns
     -------
@@ -65,7 +72,7 @@ def load_product(product: str,
     elif product == 's2_l2a':
         ds = prod.load_s2_l2a(apply_mask=s2_apply_mask, **kwargs)
     elif product == 'sanlc':
-        ds = prod.load_sanlc(bounds=bounds)
+        ds = prod.load_sanlc(bounds=bounds, year=sanlc_year)
     elif product == 'mswep':
         ds = prod.load_mswep(**kwargs)
     else:

@@ -58,6 +58,9 @@ available data.
 - `s2_apply_mask`: Apply a quality mask to the Sentinel-2 L2A product by using 
 its `SCL`-band. The default value is `True`. As the name already suggests, this 
 is only relevant for Sentinel-2 L2A data.
+- `sanlc_year`: Select a specific year of the SANLC product by providing an
+integer in the format `YYYY`. The default value is `None`, which will return the
+product for all available years: 2018 & 2020.
 
 ```{warning}
 While it is possible to load data for an entire SALDi site by providing the site 
