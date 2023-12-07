@@ -4,7 +4,7 @@ import subprocess as sp
 from dask_jobqueue import SLURMCluster
 from distributed import Client
 
-from typing import Optional, Dict
+from typing import Optional
 
 
 def start_slurm_cluster(cores: int = 20,
@@ -12,7 +12,7 @@ def start_slurm_cluster(cores: int = 20,
                         memory: str = '40 GiB',
                         walltime: str = '00:30:00',
                         log_directory: Optional[str] = None,
-                        scheduler_options: Optional[Dict[str, str]] = None
+                        scheduler_options: Optional[dict[str, str]] = None
                         ) -> (Client, SLURMCluster):
     """
     Start a dask_jobqueue.SLURMCluster and a distributed.Client. The cluster will

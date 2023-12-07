@@ -1,6 +1,6 @@
 import numpy as np
 
-from typing import Tuple, Optional
+from typing import Optional
 from xarray import DataArray, Dataset
 from numpy import ndarray
 
@@ -39,9 +39,9 @@ def groupby_acq_slices(ds: Dataset) -> Dataset:
 
 
 def ds_nanquantiles(ds: Dataset,
-                    dim: Optional[str | Tuple[str]] = None,
-                    variables: Optional[str | Tuple[str]] = None,
-                    quantiles: Optional[float | Tuple[float]] = None,
+                    dim: Optional[str | tuple[str, ...]] = None,
+                    variables: Optional[str | tuple[str, ...]] = None,
+                    quantiles: Optional[float | tuple[float, ...]] = None,
                     compute: bool = False
                     ) -> Dataset:
     """
@@ -128,8 +128,8 @@ def ds_nanquantiles(ds: Dataset,
 
 
 def da_nanquantiles(da: DataArray,
-                    dim: Optional[str | Tuple[str]] = None,
-                    quantiles: float | Tuple[float] = None
+                    dim: Optional[str | tuple[str, ...]] = None,
+                    quantiles: Optional[float | tuple[float, ...]] = None
                     ) -> DataArray:
     """
     Calculate quantiles along a given dimension of a DataArray, ignoring NaN values.
@@ -222,7 +222,7 @@ def da_nanquantiles(da: DataArray,
 
 def mask_from_vec(vec: str,
                   da: Optional[DataArray] = None
-                  ) -> DataArray:
+                  ) -> ndarray:
     """
     Create a boolean mask from a vector file. The mask will have the same shape and
     transform as the provided DataArray. If no DataArray is given, the `sanlc` product 

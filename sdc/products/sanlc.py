@@ -1,14 +1,14 @@
 from pystac import Catalog
 from odc.stac import load as odc_stac_load
 
-from typing import Tuple, Optional
+from typing import Optional
 from xarray import DataArray
 
 from sdc.products import _ancillary as anc
 from sdc.products import _query as query
 
 
-def load_sanlc(bounds: Tuple[float, float, float, float],
+def load_sanlc(bounds: tuple[float, float, float, float],
                year: Optional[int] = None
                ) -> DataArray:
     """

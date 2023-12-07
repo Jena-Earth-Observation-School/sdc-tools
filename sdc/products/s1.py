@@ -1,15 +1,15 @@
 from pystac import Catalog
 from odc.stac import load as odc_stac_load
 
-from typing import Optional, Tuple
+from typing import Optional
 from xarray import Dataset
 
 from sdc.products import _ancillary as anc
 from sdc.products import _query as query
 
 
-def load_s1_rtc(bounds: Tuple[float, float, float, float],
-                time_range: Optional[Tuple[str, str]] = None,
+def load_s1_rtc(bounds: tuple[float, float, float, float],
+                time_range: Optional[tuple[str, str]] = None,
                 time_pattern: Optional[str] = None
                 ) -> Dataset:
     """
