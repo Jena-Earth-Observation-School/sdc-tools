@@ -87,8 +87,7 @@ def start_slurm_cluster(cores: int = 20,
 
 
 def _dashboard_port(port: int = 8787) -> int:
-    """Finding a free port for the dask dashboard based on the user id.
-    """
+    """Finding a free port for the dask dashboard based on the user id."""
     uid = sp.check_output('id -u', shell=True).decode('utf-8').replace('\n', '')
     for i in uid:
         port += int(i)

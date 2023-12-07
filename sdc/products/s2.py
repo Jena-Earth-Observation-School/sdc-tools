@@ -3,7 +3,7 @@ import xarray as xr
 from pystac import Catalog
 from odc.stac import load as odc_stac_load
 
-from typing import Optional, Any
+from typing import Optional, Any, Iterable
 from xarray import Dataset, DataArray
 from pystac import Item
 
@@ -85,7 +85,7 @@ def load_s2_l2a(bounds: tuple[float, float, float, float],
     return ds
 
 
-def _mask(items: list[Item],
+def _mask(items: Iterable[Item],
           bounds: tuple[float, float, float, float],
           common_params: dict[str, Any]
           ) -> DataArray:
