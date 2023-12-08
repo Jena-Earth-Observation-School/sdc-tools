@@ -94,6 +94,8 @@ def load_s1_surfmi(bounds: tuple[float, float, float, float],
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds)
     ds_ref = odc_stac_load(items=items, bbox=bounds, dtype='float32', 
                            **common_params)
+    meta_dry = items[0].assets['vv_q05'].href.removeprefix('./')
+    meta_wet = items[0].assets['vv_q95'].href.removeprefix('./')
     
     catalog = Catalog.from_file(anc.get_catalog_path(product='s1_rtc'))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds,
@@ -114,4 +116,5 @@ def load_s1_surfmi(bounds: tuple[float, float, float, float],
         smi = xr.where(smi < 0, 0, smi)
         smi = xr.where(smi > 100, 100, smi)
     
+    smi = smi.assign_attrs(dry_reference=meta_dry, wet_reference=meta_wet)
     return smi
