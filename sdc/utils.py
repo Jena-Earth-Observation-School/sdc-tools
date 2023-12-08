@@ -1,6 +1,6 @@
 import numpy as np
 
-from typing import Tuple, Optional
+from typing import Optional
 from xarray import DataArray, Dataset
 from numpy import ndarray
 
@@ -39,9 +39,9 @@ def groupby_acq_slices(ds: Dataset) -> Dataset:
 
 
 def ds_nanquantiles(ds: Dataset,
-                    dim: Optional[str | Tuple[str]] = None,
-                    variables: Optional[str | Tuple[str]] = None,
-                    quantiles: Optional[float | Tuple[float]] = None,
+                    dim: Optional[str | tuple[str, ...]] = None,
+                    variables: Optional[str | tuple[str, ...]] = None,
+                    quantiles: Optional[float | tuple[float, ...]] = None,
                     compute: bool = False
                     ) -> Dataset:
     """
@@ -128,8 +128,8 @@ def ds_nanquantiles(ds: Dataset,
 
 
 def da_nanquantiles(da: DataArray,
-                    dim: Optional[str | Tuple[str]] = None,
-                    quantiles: float | Tuple[float] = None
+                    dim: Optional[str | tuple[str, ...]] = None,
+                    quantiles: Optional[float | tuple[float, ...]] = None
                     ) -> DataArray:
     """
     Calculate quantiles along a given dimension of a DataArray, ignoring NaN values.
@@ -222,7 +222,7 @@ def da_nanquantiles(da: DataArray,
 
 def mask_from_vec(vec: str,
                   da: Optional[DataArray] = None
-                  ) -> DataArray:
+                  ) -> ndarray:
     """
     Create a boolean mask from a vector file. The mask will have the same shape and
     transform as the provided DataArray. If no DataArray is given, the `sanlc` product 
@@ -266,3 +266,40 @@ def mask_from_vec(vec: str,
                      out_shape=da.shape,
                      transform=da.odc.transform)
     return mask.astype('bool')
+
+
+def separate_asc_desc(ds: Dataset) -> tuple[Dataset, Dataset]:
+    """
+    Separates a Dataset into ascending and descending orbits.
+    
+    Parameters
+    ----------
+    ds: Dataset
+        An xarray Dataset containing data that can be separated into ascending and
+        descending orbits. E.g. Sentinel-1 RTC.
+    
+    Returns
+    -------
+    tuple of Dataset
+        Two xarray Datasets containing the ascending and descending orbit data,
+        respectively.
+    """
+    ds_copy = ds.copy(deep=True)
+    
+    if not any([x in ds_copy.data_vars for x in ['vv', 'vh']]):
+        raise ValueError("Dataset doesn't contain Sentinel-1 data.")
+    
+    try:
+        ds_copy_asc = ds_copy.where(ds_copy['sat:orbit_state'] == 'ascending',
+                                    drop=True)
+        ds_copy_desc = ds_copy.where(ds_copy['sat:orbit_state'] == 'descending',
+                                     drop=True)
+    except KeyError:
+        _vars = list(ds_copy.data_vars)
+        ds_copy_asc = ds_copy.copy(deep=True)
+        ds_copy_asc = ds_copy_asc.drop_vars(_vars)
+        ds_copy_desc = ds_copy_asc.copy(deep=True)
+        for v in _vars:
+            ds_copy_asc[v] = ds_copy[v].where(ds_copy[v].time.dt.hour > 12, drop=True)
+            ds_copy_desc[v] = ds_copy[v].where(ds_copy[v].time.dt.hour < 12, drop=True)
+    return ds_copy_asc, ds_copy_desc

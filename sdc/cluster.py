@@ -4,7 +4,7 @@ import subprocess as sp
 from dask_jobqueue import SLURMCluster
 from distributed import Client
 
-from typing import Optional, Dict
+from typing import Optional
 
 
 def start_slurm_cluster(cores: int = 20,
@@ -12,7 +12,7 @@ def start_slurm_cluster(cores: int = 20,
                         memory: str = '40 GiB',
                         walltime: str = '00:30:00',
                         log_directory: Optional[str] = None,
-                        scheduler_options: Optional[Dict[str, str]] = None
+                        scheduler_options: Optional[dict[str, str]] = None
                         ) -> (Client, SLURMCluster):
     """
     Start a dask_jobqueue.SLURMCluster and a distributed.Client. The cluster will
@@ -71,8 +71,8 @@ def start_slurm_cluster(cores: int = 20,
                            walltime=walltime,
                            interface='ib0',
                            job_script_prologue=['mkdir -p /scratch/$USER'],
-                           worker_extra_args=['--lifetime', '25m',
-                                              '--lifetime-stagger', '2m'],
+                           worker_extra_args=['--lifetime', '26m',
+                                              '--lifetime-stagger', '4m'],
                            local_directory=local_directory,
                            log_directory=log_directory,
                            scheduler_options=scheduler_options)
@@ -87,8 +87,7 @@ def start_slurm_cluster(cores: int = 20,
 
 
 def _dashboard_port(port: int = 8787) -> int:
-    """Finding a free port for the dask dashboard based on the user id.
-    """
+    """Finding a free port for the dask dashboard based on the user id."""
     uid = sp.check_output('id -u', shell=True).decode('utf-8').replace('\n', '')
     for i in uid:
         port += int(i)

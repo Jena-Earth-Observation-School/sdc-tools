@@ -1,7 +1,7 @@
 from copy import deepcopy
 from pathlib import Path
 
-from typing import List, Dict, Any
+from typing import Any
 from pystac import Catalog, Collection, Item
 
 
@@ -35,7 +35,7 @@ def get_catalog_path(product: str) -> str | Path:
         return str(_file)
 
 
-def common_params() -> Dict[str, Any]:
+def common_params() -> dict[str, Any]:
     """
     Returns parameters common to all products.
 
@@ -50,24 +50,25 @@ def common_params() -> Dict[str, Any]:
             "chunks": {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}}
 
 
-def convert_asset_hrefs(list_stac_obj: List[Catalog | Collection | Item],
+def convert_asset_hrefs(list_stac_obj: list[Catalog | Collection | Item],
                         href_type: str
-                        ) -> List[Catalog | Collection | Item] | List[None]:
+                        ) -> list[Catalog | Collection | Item] | list[None]:
     """
     Converts the asset hrefs of a list of STAC Objects (Catalogs, Collections or Items)
     to either absolute or relative.
-
+    
     Parameters
     ----------
     list_stac_obj : list of Catalog or Collection or Item
-        List of STAC Objects.
+        List of STAC objects to convert asset hrefs of.
     href_type : str
         Type of href to convert to. Can be either 'absolute' or 'relative'.
-
+    
     Returns
     -------
-    List[Catalog | Collection | Item] | List[None]
-        A list of STAC Objects with converted asset hrefs.
+    list of Catalog or Collection or Item or None
+        A list of STAC Objects with converted asset hrefs or an empty list if the input
+        list is empty.
     """
     list_stac_obj_copy = deepcopy(list_stac_obj)
     if len(list_stac_obj_copy) == 0:

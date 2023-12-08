@@ -3,7 +3,7 @@ import xarray as xr
 from pystac import Catalog
 from odc.stac import load as odc_stac_load
 
-from typing import Optional, Any, Tuple, List, Dict
+from typing import Optional, Any, Iterable
 from xarray import Dataset, DataArray
 from pystac import Item
 
@@ -11,8 +11,8 @@ from sdc.products import _ancillary as anc
 from sdc.products import _query as query
 
 
-def load_s2_l2a(bounds: Tuple[float, float, float, float],
-                time_range: Optional[Tuple[str, str]] = None,
+def load_s2_l2a(bounds: tuple[float, float, float, float],
+                time_range: Optional[tuple[str, str]] = None,
                 time_pattern: Optional[str] = None,
                 apply_mask: bool = True
                 ) -> Dataset:
@@ -85,9 +85,9 @@ def load_s2_l2a(bounds: Tuple[float, float, float, float],
     return ds
 
 
-def _mask(items: List[Item],
-          bounds: Tuple[float, float, float, float],
-          common_params: Dict[str, Any]
+def _mask(items: Iterable[Item],
+          bounds: tuple[float, float, float, float],
+          common_params: dict[str, Any]
           ) -> DataArray:
     """
     Creates a valid-data mask from the `SCL` (Scene Classification Layer) band of

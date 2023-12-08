@@ -4,15 +4,15 @@ import pytz
 from shapely.geometry import box
 
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Optional, Iterable
 from pystac import Catalog, Collection, Item
 
 
 def filter_stac_catalog(catalog: Catalog,
-                        bbox: Optional[Tuple[float, float, float, float]] = None,
-                        time_range: Optional[Tuple[str, str]] = None,
+                        bbox: Optional[tuple[float, float, float, float]] = None,
+                        time_range: Optional[tuple[str, str]] = None,
                         time_pattern: Optional[str] = None
-                        ) -> Tuple[List[Collection], List[Item]]:
+                        ) -> tuple[list[Collection], Iterable[Item]]:
     """
     The STAC Catalog is first filtered based on a provided bounding box, returning a
     list of STAC Collections. These Collections are then filtered based on a provided
@@ -45,8 +45,8 @@ def filter_stac_catalog(catalog: Catalog,
 
 
 def filter_collections(catalog: Catalog,
-                       bbox: Optional[Tuple[float, float, float, float]] = None
-                       ) -> List[Collection]:
+                       bbox: Optional[tuple[float, float, float, float]] = None
+                       ) -> list[Collection]:
     """
     Filters the collections in a STAC Catalog based on a bounding box.
     
@@ -73,9 +73,9 @@ def filter_collections(catalog: Catalog,
                     for b in collection.extent.spatial.bboxes)]
 
 
-def _bbox_intersection(bbox1: List[float],
-                       bbox2: List[float]
-                       ) -> List[float] | None:
+def _bbox_intersection(bbox1: list[float, float, float, float],
+                       bbox2: list[float, float, float, float]
+                       ) -> list[float, float, float, float] | None:
     """
     Computes the intersection of two bounding boxes.
     
@@ -101,10 +101,10 @@ def _bbox_intersection(bbox1: List[float],
         return list(intersection.bounds)
 
 
-def filter_items(collections: List[Collection],
-                 time_range: Optional[Tuple[str, str]] = None,
+def filter_items(collections: list[Collection],
+                 time_range: Optional[tuple[str, str]] = None,
                  time_pattern: Optional[str] = None
-                 ) -> List[Item]:
+                 ) -> list[Item]:
     """
     Filters the items in a list of collections based on a time range.
     
@@ -140,9 +140,9 @@ def filter_items(collections: List[Collection],
 
 
 def filter_mswep_nc(directory: Path,
-                    time_range: Optional[Tuple[str, str]] = None,
+                    time_range: Optional[tuple[str, str]] = None,
                     time_pattern: Optional[str] = None
-                    ) -> List[str]:
+                    ) -> list[str]:
     """
     Find and filter MSWEP NetCDF files based on a time range.
     

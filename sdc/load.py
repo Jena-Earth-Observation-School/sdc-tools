@@ -1,6 +1,6 @@
 import fiona
 
-from typing import Optional, Tuple
+from typing import Optional
 from xarray import Dataset, DataArray
 
 from sdc.vec import get_site_bounds
@@ -9,7 +9,7 @@ import sdc.products as prod
 
 def load_product(product: str,
                  vec: str,
-                 time_range: Optional[Tuple[str, str]] = None,
+                 time_range: Optional[tuple[str, str]] = None,
                  time_pattern: Optional[str] = None,
                  s2_apply_mask: bool = True,
                  sanlc_year: Optional[int] = None
