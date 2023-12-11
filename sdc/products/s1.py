@@ -110,11 +110,10 @@ def load_s1_surfmi(bounds: tuple[float, float, float, float],
     wet_ref = ds_ref.vv_q95.persist()
     
     # Calculate SurfMI
-    with dask.config.set({"array.rechunk.method": "p2p"}):
-        smi = ((ds_s1.vv - dry_ref)/(wet_ref - dry_ref))*100
-        smi = smi.chunk({'time': -1, 'latitude': 'auto', 'longitude': 'auto'})
-        smi = xr.where(smi < 0, 0, smi)
-        smi = xr.where(smi > 100, 100, smi)
+    smi = ((ds_s1.vv - dry_ref)/(wet_ref - dry_ref))*100
+    smi = smi.chunk({'time': -1, 'latitude': 'auto', 'longitude': 'auto'})
+    smi = xr.where(smi < 0, 0, smi)
+    smi = xr.where(smi > 100, 100, smi)
     
     smi = smi.assign_attrs(dry_reference=meta_dry, wet_reference=meta_wet)
     return smi
