@@ -45,6 +45,7 @@ supported at the moment:
     - `"s2_l2a"`: Sentinel-2 Level 2A (L2A)
     - `"sanlc"`: South African National Land Cover (SANLC) 2020
     - `"mswep"`: Multi-Source Weighted-Ensemble Precipitation (MSWEP) daily
+    - `"s1_surfmi"`: Sentinel-1 Surface Moisture Index (SurfMI)
 - `vec`: Filter the returned data spatially by either providing the name of a 
 SALDi site in the format `"siteXX"`, where XX is the site number (e.g. 
 `"site06"`), or a path to a vector file (any format [fiona](https://github.com/Toblerity/Fiona) 
