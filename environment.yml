@@ -7,7 +7,6 @@ dependencies:
   - dask-jobqueue
   - odc-stac>=0.3.7
   - numbagg>=0.6.1
-  - bottleneck
   - fiona
   - flox
   - pytz
