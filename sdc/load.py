@@ -22,6 +22,7 @@ def load_product(product: str,
     product : str
         Product to load. Currently supported products are:
         - s1_rtc
+        - s1_surfmi
         - s2_l2a
         - sanlc
         - mswep
@@ -53,7 +54,7 @@ def load_product(product: str,
         Xarray Dataset or DataArray containing the loaded data.
     """
     if vec.lower() in ['site01', 'site02', 'site03', 'site04', 'site05', 'site06']:
-        if product in ['s1_rtc', 's2_l2a']:
+        if product in ['s1_rtc', 's1_surfmi', 's2_l2a']:
             print("WARNING: Loading data for an entire SALDi site will likely result "
                   "in performance issues as it will load data from multiple tiles. "
                   "Only do so if you know what you are doing and have optimized your "
@@ -69,6 +70,8 @@ def load_product(product: str,
     
     if product == 's1_rtc':
         ds = prod.load_s1_rtc(**kwargs)
+    elif product == 's1_surfmi':
+        ds = prod.load_s1_surfmi(**kwargs)
     elif product == 's2_l2a':
         ds = prod.load_s2_l2a(apply_mask=s2_apply_mask, **kwargs)
     elif product == 'sanlc':
