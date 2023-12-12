@@ -15,4 +15,5 @@ parts:
       - file: content/02_Getting_Started/01_04_MSWEP
       - file: content/02_Getting_Started/01_05_S1_SurfMI
       - file: content/02_Getting_Started/01_06_S1_Coherence
+      - file: content/02_Getting_Started/01_07_Copernicus_DEM
     - file: content/02_Getting_Started/02_00_How_to
