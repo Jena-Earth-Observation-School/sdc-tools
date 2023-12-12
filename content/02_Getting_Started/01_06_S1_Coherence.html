@@ -393,7 +393,8 @@ document.write(`
 <section id="product-description">
 <h2>Product description<a class="headerlink" href="#product-description" title="Permalink to this heading">#</a></h2>
 <p>The Sentinel-1 Coherence product available in the SALDi Data Cube (SDC) has been sourced
-from the Alaska Satellite Facility (ASF) using their On Demand InSAR products.</p>
+from the Alaska Satellite Facility (ASF) using their On Demand InSAR products.
+The product was generated for VV-polarization and ascending orbits only.</p>
 <p>Detailed information can be found <a class="reference external" href="https://hyp3-docs.asf.alaska.edu/guides/insar_product_guide">here</a>.</p>
 <p>The product abbreviation used in this package is <code class="docutils literal notranslate"><span class="pre">s1_coh</span></code></p>
 </section>
@@ -401,7 +402,7 @@ from the Alaska Satellite Facility (ASF) using their On Demand InSAR products.</
 <h2>Loading data<a class="headerlink" href="#loading-data" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sdc.load</span> <span class="kn">import</span> <span class="n">load_product</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sdc.load</span> <span class="kn">import</span> <span class="n">load_product</span>
 
 <span class="n">vec</span> <span class="o">=</span> <span class="s2">&quot;../../_assets/vec_01_06_01.geojson&quot;</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;s1_coh&quot;</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="n">vec</span><span class="p">)</span>
@@ -991,16 +992,17 @@ Attributes:
                &#x27;2023-10-12 17:03:01&#x27;, &#x27;2023-10-24 17:03:02&#x27;],
               dtype=&#x27;datetime64[ns]&#x27;, name=&#x27;time&#x27;, length=175, freq=None))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-cf8853b3-c5bf-40d3-a183-fb0b12724109' class='xr-section-summary-in' type='checkbox'  checked><label for='section-cf8853b3-c5bf-40d3-a183-fb0b12724109' class='xr-section-summary' >Attributes: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>nodata :</span></dt><dd>0.0</dd></dl></div></li></ul></div></div></div></div>
 </div>
+<p>Let’s visualize the standard deviation for the whole time series:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">coh_std</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">coh_std</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">coh_std</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">coh_std</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
