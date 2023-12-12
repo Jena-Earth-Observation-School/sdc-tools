@@ -42,10 +42,12 @@ The basic usage is to specify the following parameters:
 - `product`: The name of the data product to load. The following strings are 
 supported at the moment:
     - `"s1_rtc"`: Sentinel-1 Radiometric Terrain Corrected (RTC)
+    - `"s1_surfmi"`: Sentinel-1 Surface Moisture Index (SurfMI)
+    - `"s1_coh"`: Sentinel-1 Coherence VV-pol, ascending
     - `"s2_l2a"`: Sentinel-2 Level 2A (L2A)
     - `"sanlc"`: South African National Land Cover (SANLC) 2020
     - `"mswep"`: Multi-Source Weighted-Ensemble Precipitation (MSWEP) daily
-    - `"s1_surfmi"`: Sentinel-1 Surface Moisture Index (SurfMI)
+    - `"cop_dem"`: Copernicus Digital Elevation Model GLO-30
 - `vec`: Filter the returned data spatially by either providing the name of a 
 SALDi site in the format `"siteXX"`, where XX is the site number (e.g. 
 `"site06"`), or a path to a vector file (any format [fiona](https://github.com/Toblerity/Fiona) 
