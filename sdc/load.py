@@ -23,6 +23,7 @@ def load_product(product: str,
         Product to load. Currently supported products are:
         - s1_rtc
         - s1_surfmi
+        - s1_coh
         - s2_l2a
         - sanlc
         - mswep
@@ -72,6 +73,8 @@ def load_product(product: str,
         ds = prod.load_s1_rtc(**kwargs)
     elif product == 's1_surfmi':
         ds = prod.load_s1_surfmi(**kwargs)
+    elif product == 's1_coh':
+        ds = prod.load_s1_coherence(**kwargs)
     elif product == 's2_l2a':
         ds = prod.load_s2_l2a(apply_mask=s2_apply_mask, **kwargs)
     elif product == 'sanlc':

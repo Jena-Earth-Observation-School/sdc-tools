@@ -1,7 +1,6 @@
 from pystac import Catalog
 from odc.stac import load as odc_stac_load
 import xarray as xr
-import dask
 
 from typing import Optional
 from xarray import Dataset, DataArray
@@ -117,3 +116,50 @@ def load_s1_surfmi(bounds: tuple[float, float, float, float],
     
     smi = smi.assign_attrs(dry_reference=meta_dry, wet_reference=meta_wet)
     return smi
+
+
+def load_s1_coherence(bounds: tuple[float, float, float, float],
+                      time_range: Optional[tuple[str, str]] = None,
+                      time_pattern: Optional[str] = None
+                      ) -> DataArray:
+    """
+    Loads the Sentinel-1 Coherence data product for an area of interest.
+    
+    Parameters
+    ----------
+    bounds: tuple of float
+        The bounding box of the area of interest in the format (minx, miny, maxx, maxy).
+        Will be used to filter the STAC Catalog for intersecting STAC Collections.
+    time_range : tuple of str, optional
+        The time range in the format (start_time, end_time) to filter STAC Items by.
+        Defaults to None, which will load all STAC Items in the filtered STAC
+        Collections.
+    time_pattern : str, optional
+        Time pattern to parse the time range. Only needed if it deviates from the
+        default: '%Y-%m-%d'.
+    
+    Returns
+    -------
+    DataArray
+        An xarray DataArray containing the Sentinel-1 Coherence data.
+    
+    Notes
+    -----
+    The Sentinel-1 Coherence data has been sourced from the Alaska Satellite Facility 
+    (ASF). For more product details, see: 
+    https://hyp3-docs.asf.alaska.edu/guides/insar_product_guide
+    """
+    product = 's1_coh_2'
+    bands = ['coh_vv']
+    
+    # Load and filter STAC Items
+    catalog = Catalog.from_file(anc.get_catalog_path(product=product))
+    _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds,
+                                         time_range=time_range,
+                                         time_pattern=time_pattern)
+    
+    # Turn into dask-based xarray.Dataset
+    ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='float32',
+                       **anc.common_params())
+    
+    return ds.coh_vv
