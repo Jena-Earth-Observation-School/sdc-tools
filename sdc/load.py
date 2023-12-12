@@ -27,6 +27,7 @@ def load_product(product: str,
         - s2_l2a
         - sanlc
         - mswep
+        - cop_dem
     vec : str
         Path to a vector file readable by fiona (e.g. shapefile, GeoJSON, etc.) or
         SALDi site name in the format 'siteXX', where XX is the site number. If a
@@ -81,6 +82,8 @@ def load_product(product: str,
         ds = prod.load_sanlc(bounds=bounds, year=sanlc_year)
     elif product == 'mswep':
         ds = prod.load_mswep(**kwargs)
+    elif product == 'cop_dem':
+        ds = prod.load_copdem(bounds=bounds)
     else:
         raise ValueError(f'Product {product} not supported')
     
