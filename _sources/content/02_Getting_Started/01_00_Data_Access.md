@@ -20,12 +20,6 @@ all data products are loaded with the coordinate reference system (CRS)
 [EPSG:4326](https://epsg.io/4326) and resolution set to 0.0002°, which
 corresponds to approximately 20 x 20 m at the equator.
 
-```{note}
-In the future, it will be possible to specify additional parameters to customize the data
-loading process. This is currently being tracked in 
-[this issue](https://github.com/Jena-Earth-Observation-School/sdc-tools/issues/7).
-```
-
 The following basic example shows how to load Sentinel-2 L2A data for the year 
 2020 of an area of interest, which has been saved locally as a vector file:
 
@@ -43,7 +37,7 @@ The basic usage is to specify the following parameters:
 - `product`: The name of the data product to load. The following strings are 
 supported at the moment:
     - _"s1_rtc"_: Sentinel-1 Radiometric Terrain Corrected (RTC)
-    - _"s1_surfmi_: Sentinel-1 Surface Moisture Index (SurfMI)
+    - _"s1_surfmi"_: Sentinel-1 Surface Moisture Index (SurfMI)
     - _"s1_coh"_: Sentinel-1 Coherence VV-pol, ascending
     - _"s2_l2a"_: Sentinel-2 Level 2A (L2A)
     - _"sanlc"_: South African National Land Cover (SANLC) 2020

@@ -417,12 +417,6 @@ values, so that the function can be used with minimal effort. Most importantly,
 all data products are loaded with the coordinate reference system (CRS)
 <a class="reference external" href="https://epsg.io/4326">EPSG:4326</a> and resolution set to 0.0002°, which
 corresponds to approximately 20 x 20 m at the equator.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>In the future, it will be possible to specify additional parameters to customize the data
-loading process. This is currently being tracked in
-<a class="reference external" href="https://github.com/Jena-Earth-Observation-School/sdc-tools/issues/7">this issue</a>.</p>
-</div>
 <p>The following basic example shows how to load Sentinel-2 L2A data for the year
 2020 of an area of interest, which has been saved locally as a vector file:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sdc.load</span> <span class="kn">import</span> <span class="n">load_product</span>
@@ -439,7 +433,7 @@ loading process. This is currently being tracked in
 supported at the moment:</p>
 <ul>
 <li><p><em>“s1_rtc”</em>: Sentinel-1 Radiometric Terrain Corrected (RTC)</p></li>
-<li><p><em>“s1_surfmi</em>: Sentinel-1 Surface Moisture Index (SurfMI)</p></li>
+<li><p><em>“s1_surfmi”</em>: Sentinel-1 Surface Moisture Index (SurfMI)</p></li>
 <li><p><em>“s1_coh”</em>: Sentinel-1 Coherence VV-pol, ascending</p></li>
 <li><p><em>“s2_l2a”</em>: Sentinel-2 Level 2A (L2A)</p></li>
 <li><p><em>“sanlc”</em>: South African National Land Cover (SANLC) 2020</p></li>
