@@ -408,7 +408,7 @@ information that might be useful for working with them.</p>
 </ul>
 </div>
 <section id="using-the-load-product-function">
-<h2>Using the <code class="docutils literal notranslate"><span class="pre">load_product</span></code>-function<a class="headerlink" href="#using-the-load-product-function" title="Permalink to this heading">#</a></h2>
+<span id="load-product-intro"></span><h2>Using the <code class="docutils literal notranslate"><span class="pre">load_product</span></code>-function<a class="headerlink" href="#using-the-load-product-function" title="Permalink to this heading">#</a></h2>
 <p>This function is the recommended main entry point for loading data from the SDC.
 It is a wrapper around various other, product-specific functions and its goal is
 to provide a unified and easy-to-use interface for loading data from the SDC.</p>
@@ -438,36 +438,41 @@ loading process. This is currently being tracked in
 <li><p><code class="docutils literal notranslate"><span class="pre">product</span></code>: The name of the data product to load. The following strings are
 supported at the moment:</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;s1_rtc&quot;</span></code>: Sentinel-1 Radiometric Terrain Corrected (RTC)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;s1_surfmi&quot;</span></code>: Sentinel-1 Surface Moisture Index (SurfMI)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;s1_coh&quot;</span></code>: Sentinel-1 Coherence VV-pol, ascending</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;s2_l2a&quot;</span></code>: Sentinel-2 Level 2A (L2A)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;sanlc&quot;</span></code>: South African National Land Cover (SANLC) 2020</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;mswep&quot;</span></code>: Multi-Source Weighted-Ensemble Precipitation (MSWEP) daily</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;cop_dem&quot;</span></code>: Copernicus Digital Elevation Model GLO-30</p></li>
+<li><p><em>“s1_rtc”</em>: Sentinel-1 Radiometric Terrain Corrected (RTC)</p></li>
+<li><p><em>“s1_surfmi</em>: Sentinel-1 Surface Moisture Index (SurfMI)</p></li>
+<li><p><em>“s1_coh”</em>: Sentinel-1 Coherence VV-pol, ascending</p></li>
+<li><p><em>“s2_l2a”</em>: Sentinel-2 Level 2A (L2A)</p></li>
+<li><p><em>“sanlc”</em>: South African National Land Cover (SANLC) 2020</p></li>
+<li><p><em>“mswep”</em>: Multi-Source Weighted-Ensemble Precipitation (MSWEP) daily</p></li>
+<li><p><em>“cop_dem”</em>: Copernicus Digital Elevation Model GLO-30</p></li>
 </ul>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">vec</span></code>: Filter the returned data spatially by either providing the name of a
-SALDi site in the format <code class="docutils literal notranslate"><span class="pre">&quot;siteXX&quot;</span></code>, where XX is the site number (e.g.
-<code class="docutils literal notranslate"><span class="pre">&quot;site06&quot;</span></code>), or a path to a vector file (any format <a class="reference external" href="https://github.com/Toblerity/Fiona">fiona</a>
-can handle, e.g. <code class="docutils literal notranslate"><span class="pre">.geojson</span></code>, <code class="docutils literal notranslate"><span class="pre">.shp</span></code>, <code class="docutils literal notranslate"><span class="pre">.gpkg</span></code>) that defines an area of interest
-as a subset of a SALDi site. Providing a vector file outside the spatial extent
-of the SALDi sites will result in an empty dataset. Please note, that always the
-bounding box of the provided geometry will be used to load the data.</p></li>
+SALDi site in the format <em>“siteXX”</em>, where XX is the site number (e.g.
+<em>“site06”</em>), or a path to a vector file (any format <a class="reference external" href="https://github.com/Toblerity/Fiona">fiona</a>
+can handle, e.g. GeoJSON, Shapefile or GeoPackage) that defines an area of
+interest as a subset of a SALDi site. Providing a vector file outside the
+spatial extent of the SALDi sites will result in an empty dataset. Please note,
+that always the bounding box of the provided geometry will be used to load the
+data.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">time_range</span></code>: Filter the returned data temporally by providing a tuple of
-strings in the format <code class="docutils literal notranslate"><span class="pre">(&quot;YY-MM-dd&quot;,</span> <span class="pre">&quot;YY-MM-dd&quot;)</span></code>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> to return all
-available data.</p></li>
+strings in the format <em>(“YY-MM-dd”, “YY-MM-dd”)</em>, or <em>None</em> to return all
+available data. If you want to use a different date format, you can also provide
+the parameter <code class="docutils literal notranslate"><span class="pre">time_pattern</span></code> with a string that specifies the format of the
+provided time strings.</p></li>
+</ul>
+<p>The following additional parameters are product-specific:</p>
+<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">s2_apply_mask</span></code>: Apply a quality mask to the Sentinel-2 L2A product by using
-its <code class="docutils literal notranslate"><span class="pre">SCL</span></code>-band. The default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>. As the name already suggests, this
-is only relevant for Sentinel-2 L2A data.</p></li>
+its SCL-band. The default value is <em>True</em>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">sanlc_year</span></code>: Select a specific year of the SANLC product by providing an
-integer in the format <code class="docutils literal notranslate"><span class="pre">YYYY</span></code>. The default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>, which will return the
+integer in the format <em>YYYY</em>. The default value is <em>None</em>, which will return the
 product for all available years: 2018 &amp; 2020.</p></li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>While it is possible to load data for an entire SALDi site by providing the site
-name (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;site06&quot;</span></code>), please be aware that this will result in a large dataset
+name (e.g. <em>“site06”</em>), please be aware that this will result in a large dataset
 and will very likely result in performance issues if your workflow is not
 optimized.</p>
 <p>It is therefore recommended to load only a subset by providing a vector file
@@ -487,11 +492,13 @@ get in contact with me to discuss your use case.</p>
 <a class="reference external" href="https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load"><code class="docutils literal notranslate"><span class="pre">odc.stac.load</span></code></a>
 -function. As mentioned above, some loading parameters are set to default values
 to make this package beginner-friendly and easier to use. To be more precise,
-the following defaults are used:
-- <code class="docutils literal notranslate"><span class="pre">crs='EPSG:4326'</span></code>
-- <code class="docutils literal notranslate"><span class="pre">resolution=0.0002</span></code>
-- <code class="docutils literal notranslate"><span class="pre">resampling='bilinear'</span></code>
-- <code class="docutils literal notranslate"><span class="pre">chunks={'time':</span> <span class="pre">-1,</span> <span class="pre">'latitude':</span> <span class="pre">'auto',</span> <span class="pre">'longitude':</span> <span class="pre">'auto'}</span></code></p>
+the following defaults are used:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">crs='EPSG:4326'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">resolution=0.0002</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">resampling='bilinear'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">chunks={'time':</span> <span class="pre">-1,</span> <span class="pre">'latitude':</span> <span class="pre">'auto',</span> <span class="pre">'longitude':</span> <span class="pre">'auto'}</span></code></p></li>
+</ul>
 <p>The default values for <code class="docutils literal notranslate"><span class="pre">crs</span></code> and <code class="docutils literal notranslate"><span class="pre">resolution</span></code>, for example, are the native CRS
 and resolution of the Sentinel-1 RTC and the Sentinel-2 L2A products (most bands
 of the latter at least). The <code class="docutils literal notranslate"><span class="pre">resampling</span></code>-parameter is only relevant if a data
@@ -505,9 +512,9 @@ default values have been chosen to work well for time series analysis
 Dask’s default).</p>
 <p>If you want to override these defaults or add additional parameters that
 influence the loading process, you can do so by providing the
-<code class="docutils literal notranslate"><span class="pre">override_defaults</span></code>-parameter to the <code class="docutils literal notranslate"><span class="pre">load_product</span></code>-function. This parameter
-should be a dictionary with keys corresponding to parameter names of the
-<a class="reference external" href="https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load"><code class="docutils literal notranslate"><span class="pre">odc.stac.load</span></code></a>
+<code class="docutils literal notranslate"><span class="pre">override_defaults</span></code>-parameter to the <a class="reference internal" href="#load-product-intro"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">load_product</span></code></span></a>
+-function. This parameter should be a dictionary with keys corresponding to
+parameter names of the <a class="reference external" href="https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load"><code class="docutils literal notranslate"><span class="pre">odc.stac.load</span></code></a>
 -function and values corresponding to the desired values. It is also possible to
 partially override the defaults while keeping the rest unchanged. The following
 is a simple example of how to override only the default <code class="docutils literal notranslate"><span class="pre">resolution</span></code>-parameter
@@ -520,6 +527,16 @@ when loading the Sentinel-1 RTC product:</p>
                        <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2020-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2021-01-01),</span>
                        <span class="n">override_defaults</span><span class="o">=</span><span class="n">override_defaults</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The above example might be a bit misleading, especially for beginners, as we
+can’t magically increase the spatial resolution of Earth Observation data by
+simply changing a parameter called <code class="docutils literal notranslate"><span class="pre">resolution</span></code>. What we do here instead is
+changing the pixel spacing of the loaded data. Both terms are often used
+interchangeably, but they are not the same. Please keep this in mind! In the
+example we need to use the term <code class="docutils literal notranslate"><span class="pre">resolution</span></code> as this is the name of the
+corresponding parameter of the <code class="docutils literal notranslate"><span class="pre">odc.stac.load</span></code>-function.</p>
 </div>
 </section>
 </section>
