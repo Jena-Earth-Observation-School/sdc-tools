@@ -375,7 +375,10 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-load-product-function">Using the <code class="docutils literal notranslate"><span class="pre">load_product</span></code>-function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-load-product-function">Using the <code class="docutils literal notranslate"><span class="pre">load_product</span></code>-function</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-overriding-the-default-loading-parameters">Advanced: Overriding the default loading parameters</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-dask-and-lazy-loading">Xarray, Dask and lazy loading</a></li>
 </ul>
             </nav>
@@ -471,6 +474,54 @@ optimized.</p>
 defining an area of interest (e.g., using <a class="reference external" href="https://geojson.io/">https://geojson.io/</a>). Develop your
 workflow on a small subset of the data before scaling up.</p>
 </div>
+<section id="advanced-overriding-the-default-loading-parameters">
+<h3>Advanced: Overriding the default loading parameters<a class="headerlink" href="#advanced-overriding-the-default-loading-parameters" title="Permalink to this heading">#</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The following section is only relevant if you deliberately want to override the
+default loading parameters and if you know what you are doing. If you are not
+sure, please skip this section and just be happy with the default values 🙂 or
+get in contact with me to discuss your use case.</p>
+</div>
+<p>All data products except for the MSWEP product are loaded internally using the
+<a class="reference external" href="https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load"><code class="docutils literal notranslate"><span class="pre">odc.stac.load</span></code></a>
+-function. As mentioned above, some loading parameters are set to default values
+to make this package beginner-friendly and easier to use. To be more precise,
+the following defaults are used:
+- <code class="docutils literal notranslate"><span class="pre">crs='EPSG:4326'</span></code>
+- <code class="docutils literal notranslate"><span class="pre">resolution=0.0002</span></code>
+- <code class="docutils literal notranslate"><span class="pre">resampling='bilinear'</span></code>
+- <code class="docutils literal notranslate"><span class="pre">chunks={'time':</span> <span class="pre">-1,</span> <span class="pre">'latitude':</span> <span class="pre">'auto',</span> <span class="pre">'longitude':</span> <span class="pre">'auto'}</span></code></p>
+<p>The default values for <code class="docutils literal notranslate"><span class="pre">crs</span></code> and <code class="docutils literal notranslate"><span class="pre">resolution</span></code>, for example, are the native CRS
+and resolution of the Sentinel-1 RTC and the Sentinel-2 L2A products (most bands
+of the latter at least). The <code class="docutils literal notranslate"><span class="pre">resampling</span></code>-parameter is only relevant if a data
+product needs to be reprojected (note that this is overriden by default for the
+SANLC product to use <code class="docutils literal notranslate"><span class="pre">resampling='nearest'</span></code>, which is a better choice for
+categorical data). The <code class="docutils literal notranslate"><span class="pre">chunks</span></code>-parameter is important for loading the data
+lazily using Dask (see <a class="reference internal" href="#xarray-dask-intro"><span class="std std-ref">Xarray, Dask and lazy loading</span></a> for more information). The
+default values have been chosen to work well for time series analysis
+(alignment of chunks along the time dimension) and to be memory efficient
+(automatically choose the chunk size along the spatial dimensions based on
+Dask’s default).</p>
+<p>If you want to override these defaults or add additional parameters that
+influence the loading process, you can do so by providing the
+<code class="docutils literal notranslate"><span class="pre">override_defaults</span></code>-parameter to the <code class="docutils literal notranslate"><span class="pre">load_product</span></code>-function. This parameter
+should be a dictionary with keys corresponding to parameter names of the
+<a class="reference external" href="https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load"><code class="docutils literal notranslate"><span class="pre">odc.stac.load</span></code></a>
+-function and values corresponding to the desired values. It is also possible to
+partially override the defaults while keeping the rest unchanged. The following
+is a simple example of how to override only the default <code class="docutils literal notranslate"><span class="pre">resolution</span></code>-parameter
+when loading the Sentinel-1 RTC product:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sdc.load</span> <span class="kn">import</span> <span class="n">load_product</span>
+
+<span class="n">override_defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;resolution&quot;</span><span class="p">:</span> <span class="mf">0.0001</span><span class="p">}</span>
+<span class="n">s1_data</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;s1_rtc&quot;</span><span class="p">,</span> 
+                       <span class="n">vec</span><span class="o">=</span><span class="s2">&quot;/path/to/my_area_of_interest.geojson&quot;</span><span class="p">,</span> 
+                       <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2020-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2021-01-01),</span>
+                       <span class="n">override_defaults</span><span class="o">=</span><span class="n">override_defaults</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="xarray-dask-and-lazy-loading">
 <span id="xarray-dask-intro"></span><h2>Xarray, Dask and lazy loading<a class="headerlink" href="#xarray-dask-and-lazy-loading" title="Permalink to this heading">#</a></h2>
@@ -579,7 +630,10 @@ and you will also get more experienced over time.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-load-product-function">Using the <code class="docutils literal notranslate"><span class="pre">load_product</span></code>-function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-load-product-function">Using the <code class="docutils literal notranslate"><span class="pre">load_product</span></code>-function</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-overriding-the-default-loading-parameters">Advanced: Overriding the default loading parameters</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-dask-and-lazy-loading">Xarray, Dask and lazy loading</a></li>
 </ul>
   </nav></div>
