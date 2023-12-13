@@ -7,6 +7,7 @@ information that might be useful for working with them.
 ```{tableofcontents}
 ```
 
+(load_product-intro)=
 ## Using the `load_product`-function
 
 This function is the recommended main entry point for loading data from the SDC. 
@@ -41,22 +42,23 @@ The basic usage is to specify the following parameters:
 
 - `product`: The name of the data product to load. The following strings are 
 supported at the moment:
-    - `"s1_rtc"`: Sentinel-1 Radiometric Terrain Corrected (RTC)
-    - `"s1_surfmi"`: Sentinel-1 Surface Moisture Index (SurfMI)
-    - `"s1_coh"`: Sentinel-1 Coherence VV-pol, ascending
-    - `"s2_l2a"`: Sentinel-2 Level 2A (L2A)
-    - `"sanlc"`: South African National Land Cover (SANLC) 2020
-    - `"mswep"`: Multi-Source Weighted-Ensemble Precipitation (MSWEP) daily
-    - `"cop_dem"`: Copernicus Digital Elevation Model GLO-30
+    - _"s1_rtc"_: Sentinel-1 Radiometric Terrain Corrected (RTC)
+    - _"s1_surfmi_: Sentinel-1 Surface Moisture Index (SurfMI)
+    - _"s1_coh"_: Sentinel-1 Coherence VV-pol, ascending
+    - _"s2_l2a"_: Sentinel-2 Level 2A (L2A)
+    - _"sanlc"_: South African National Land Cover (SANLC) 2020
+    - _"mswep"_: Multi-Source Weighted-Ensemble Precipitation (MSWEP) daily
+    - _"cop_dem"_: Copernicus Digital Elevation Model GLO-30
 - `vec`: Filter the returned data spatially by either providing the name of a 
-SALDi site in the format `"siteXX"`, where XX is the site number (e.g. 
-`"site06"`), or a path to a vector file (any format [fiona](https://github.com/Toblerity/Fiona) 
-can handle, e.g. `.geojson`, `.shp`, `.gpkg`) that defines an area of interest 
-as a subset of a SALDi site. Providing a vector file outside the spatial extent 
-of the SALDi sites will result in an empty dataset. Please note, that always the
-bounding box of the provided geometry will be used to load the data.
+SALDi site in the format _"siteXX"_, where XX is the site number (e.g. 
+_"site06"_), or a path to a vector file (any format [fiona](https://github.com/Toblerity/Fiona) 
+can handle, e.g. GeoJSON, Shapefile or GeoPackage) that defines an area of 
+interest as a subset of a SALDi site. Providing a vector file outside the 
+spatial extent of the SALDi sites will result in an empty dataset. Please note, 
+that always the bounding box of the provided geometry will be used to load the 
+data.
 - `time_range`: Filter the returned data temporally by providing a tuple of 
-strings in the format `("YY-MM-dd", "YY-MM-dd")`, or `None` to return all 
+strings in the format _("YY-MM-dd", "YY-MM-dd")_, or _None_ to return all 
 available data. If you want to use a different date format, you can also provide
 the parameter `time_pattern` with a string that specifies the format of the
 provided time strings.
@@ -64,14 +66,14 @@ provided time strings.
 The following additional parameters are product-specific:
 
 - `s2_apply_mask`: Apply a quality mask to the Sentinel-2 L2A product by using 
-its `SCL`-band. The default value is `True`.
+its SCL-band. The default value is _True_.
 - `sanlc_year`: Select a specific year of the SANLC product by providing an
-integer in the format `YYYY`. The default value is `None`, which will return the
+integer in the format _YYYY_. The default value is _None_, which will return the
 product for all available years: 2018 & 2020.
 
 ```{warning}
 While it is possible to load data for an entire SALDi site by providing the site 
-name (e.g. `"site06"`), please be aware that this will result in a large dataset 
+name (e.g. _"site06"_), please be aware that this will result in a large dataset 
 and will very likely result in performance issues if your workflow is not 
 optimized.
 
@@ -113,9 +115,9 @@ Dask's default).
 
 If you want to override these defaults or add additional parameters that 
 influence the loading process, you can do so by providing the 
-`override_defaults`-parameter to the `load_product`-function. This parameter 
-should be a dictionary with keys corresponding to parameter names of the 
-[`odc.stac.load`](https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load)
+`override_defaults`-parameter to the [`load_product`](load_product-intro)
+-function. This parameter should be a dictionary with keys corresponding to 
+parameter names of the [`odc.stac.load`](https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load)
 -function and values corresponding to the desired values. It is also possible to 
 partially override the defaults while keeping the rest unchanged. The following 
 is a simple example of how to override only the default `resolution`-parameter 
