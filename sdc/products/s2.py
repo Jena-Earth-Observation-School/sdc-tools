@@ -14,7 +14,8 @@ from sdc.products import _query as query
 def load_s2_l2a(bounds: tuple[float, float, float, float],
                 time_range: Optional[tuple[str, str]] = None,
                 time_pattern: Optional[str] = None,
-                apply_mask: bool = True
+                apply_mask: bool = True,
+                override_defaults: Optional[dict] = None
                 ) -> Dataset:
     """
     Loads the Sentinel-2 L2A data product for an area of interest.
@@ -35,6 +36,17 @@ def load_s2_l2a(bounds: tuple[float, float, float, float],
         Whether to apply a valid-data mask to the data. Defaults to True.
         The mask is created from the `SCL` (Scene Classification Layer) band of the
         product.
+    override_defaults : dict, optional
+        Dictionary of loading parameters to override the default parameters with. 
+        Partial overriding is possible, i.e. only override a specific parameter while 
+        keeping the others at their default values. For an overview of allowed 
+        parameters, see documentation of `odc.stac.load`:
+        https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
+        If `None` (default), the default parameters will be used: 
+        - crs: 'EPSG:4326'
+        - resolution: 0.0002
+        - resampling: 'bilinear'
+        - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
     
     Returns
     -------
@@ -61,16 +73,23 @@ def load_s2_l2a(bounds: tuple[float, float, float, float],
                                          time_range=time_range,
                                          time_pattern=time_pattern)
     
-    common_params = anc.common_params()
+    params = anc.common_params()
+    if override_defaults is not None:
+        params = anc.override_common_params(params=params, **override_defaults)
+    chunks = params.pop('chunks')
+    rechunk = None
     if apply_mask:
-        common_params['chunks']['time'] = 1
+        rechunk = chunks.copy()
+        # make sure we use default chunks with time=1
+        chunks = anc.common_params()['chunks']
+        chunks['time'] = 1
     
     # Turn into dask-based xarray.Dataset
     ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='uint16',
-                       **common_params)
+                       chunks=chunks, **params)
     
     if apply_mask:
-        valid = _mask(items=items, bounds=bounds, common_params=common_params)
+        valid = _mask(items=items, bounds=bounds, chunks=chunks, params=params)
         ds = xr.where(valid, ds, 0)
     
     # Normalize the values to range [0, 1] and convert to float32
@@ -79,15 +98,14 @@ def load_s2_l2a(bounds: tuple[float, float, float, float],
     ds = xr.where(cond, ds, np.nan).astype("float32")
     
     if apply_mask:
-        ds = ds.chunk({'time': -1,
-                       'latitude': common_params['chunks']['latitude'],
-                       'longitude': common_params['chunks']['longitude']})
+        ds = ds.chunk(rechunk)
     return ds
 
 
 def _mask(items: Iterable[Item],
           bounds: tuple[float, float, float, float],
-          common_params: dict[str, Any]
+          chunks: dict[str, Any],
+          params: dict[str, Any]
           ) -> DataArray:
     """
     Creates a valid-data mask from the `SCL` (Scene Classification Layer) band of
@@ -102,7 +120,7 @@ def _mask(items: Iterable[Item],
     Baetens et al. (2019): https://doi.org/10.3390/rs11040433 (Table 4).
     """
     ds = odc_stac_load(items=items, bands='SCL', bbox=bounds, dtype='uint8',
-                       **common_params)
+                       chunks=chunks, **params)
     mask = ((ds.SCL == 2) |  # dark area pixels
             (ds.SCL > 3) &   # vegetation, bare soils, water, unclassified
             (ds.SCL <= 7) |

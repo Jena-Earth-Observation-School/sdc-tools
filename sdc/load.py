@@ -12,7 +12,8 @@ def load_product(product: str,
                  time_range: Optional[tuple[str, str]] = None,
                  time_pattern: Optional[str] = None,
                  s2_apply_mask: bool = True,
-                 sanlc_year: Optional[int] = None
+                 sanlc_year: Optional[int] = None,
+                 override_defaults: Optional[dict] = None
                  ) -> Dataset | DataArray:
     """
     Load data products available in the SALDi Data Cube (SDC).
@@ -49,6 +50,17 @@ def load_product(product: str,
         Currently supported years are:
         - 2018
         - 2020
+    override_defaults : dict, optional
+        Dictionary of loading parameters to override the default parameters with. 
+        Partial overriding is possible, i.e. only override a specific parameter while 
+        keeping the others at their default values. For an overview of allowed 
+        parameters, see documentation of `odc.stac.load`:
+        https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
+        If `None` (default), the default parameters will be used: 
+        - crs: 'EPSG:4326'
+        - resolution: 0.0002
+        - resampling: 'bilinear'
+        - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
     
     Returns
     -------
@@ -57,7 +69,7 @@ def load_product(product: str,
     """
     if vec.lower() in ['site01', 'site02', 'site03', 'site04', 'site05', 'site06']:
         if product in ['s1_rtc', 's1_surfmi', 's2_l2a']:
-            print("WARNING: Loading data for an entire SALDi site will likely result "
+            print("[WARNING] Loading data for an entire SALDi site will likely result "
                   "in performance issues as it will load data from multiple tiles. "
                   "Only do so if you know what you are doing and have optimized your "
                   "workflow! It is recommended to start with a small subset to test "
@@ -66,24 +78,41 @@ def load_product(product: str,
     else:
         bounds = fiona.open(vec, 'r').bounds
     
+    if override_defaults is not None:
+        print("[WARNING] Overriding default loading parameters is only recommended for "
+              "advanced users. Start with the default parameters and only override "
+              "them if you know what you are doing.")
+        if product == 'mswep':
+            print("[INFO] Overriding default loading parameters is currently not "
+                  "supported for the MSWEP product. Default parameters will be used "
+                  "instead.")
+    
     kwargs = {'bounds': bounds,
               'time_range': time_range,
               'time_pattern': time_pattern}
     
     if product == 's1_rtc':
-        ds = prod.load_s1_rtc(**kwargs)
+        ds = prod.load_s1_rtc(override_defaults=override_defaults, 
+                              **kwargs)
     elif product == 's1_surfmi':
-        ds = prod.load_s1_surfmi(**kwargs)
+        ds = prod.load_s1_surfmi(override_defaults=override_defaults, 
+                                 **kwargs)
     elif product == 's1_coh':
-        ds = prod.load_s1_coherence(**kwargs)
+        ds = prod.load_s1_coherence(override_defaults=override_defaults, 
+                                    **kwargs)
     elif product == 's2_l2a':
-        ds = prod.load_s2_l2a(apply_mask=s2_apply_mask, **kwargs)
+        ds = prod.load_s2_l2a(apply_mask=s2_apply_mask, 
+                              override_defaults=override_defaults, 
+                              **kwargs)
     elif product == 'sanlc':
-        ds = prod.load_sanlc(bounds=bounds, year=sanlc_year)
+        ds = prod.load_sanlc(bounds=bounds, 
+                             year=sanlc_year, 
+                             override_defaults=override_defaults)
     elif product == 'mswep':
         ds = prod.load_mswep(**kwargs)
     elif product == 'cop_dem':
-        ds = prod.load_copdem(bounds=bounds)
+        ds = prod.load_copdem(bounds=bounds, 
+                              override_defaults=override_defaults)
     else:
         raise ValueError(f'Product {product} not supported')
     

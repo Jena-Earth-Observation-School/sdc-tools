@@ -1,5 +1,6 @@
 from copy import deepcopy
 from pathlib import Path
+import inspect
 
 from typing import Any
 from pystac import Catalog, Collection, Item
@@ -48,6 +49,39 @@ def common_params() -> dict[str, Any]:
             "resolution": 0.0002,
             "resampling": 'bilinear',
             "chunks": {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}}
+
+
+def override_common_params(params: dict[str, Any],
+                           verbose: bool = True,
+                           **kwargs: Any
+                           ) -> dict[str, Any]:
+    """
+    Overrides the common parameters with the provided keyword arguments.
+    
+    Parameters
+    ----------
+    params : dict
+        Dictionary of parameters to override.
+    verbose : bool
+        Whether to print the parameters after overriding.
+    **kwargs : Any
+        Keyword arguments to override the parameters with.
+    
+    Returns
+    -------
+    dict
+        A dictionary of the overridden parameters.
+    """
+    from odc.stac import load as odc_stac_load
+    allowed = inspect.getfullargspec(odc_stac_load).kwonlyargs
+    
+    for key in kwargs:
+        if key not in allowed:
+            raise ValueError(f"Parameter '{key}' is not allowed.")
+    params.update(kwargs)
+    if verbose:
+        print(f"[INFO] odc.stac.load parameters: {params}")
+    return params
 
 
 def convert_asset_hrefs(list_stac_obj: list[Catalog | Collection | Item],

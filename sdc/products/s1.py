@@ -11,7 +11,8 @@ from sdc.products import _query as query
 
 def load_s1_rtc(bounds: tuple[float, float, float, float],
                 time_range: Optional[tuple[str, str]] = None,
-                time_pattern: Optional[str] = None
+                time_pattern: Optional[str] = None,
+                override_defaults: Optional[dict] = None
                 ) -> Dataset:
     """
     Loads the Sentinel-1 RTC data product for an area of interest.
@@ -28,6 +29,17 @@ def load_s1_rtc(bounds: tuple[float, float, float, float],
     time_pattern : str, optional
         Time pattern to parse the time range. Only needed if it deviates from the
         default: '%Y-%m-%d'.
+    override_defaults : dict, optional
+        Dictionary of loading parameters to override the default parameters with. 
+        Partial overriding is possible, i.e. only override a specific parameter while 
+        keeping the others at their default values. For an overview of allowed 
+        parameters, see documentation of `odc.stac.load`:
+        https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
+        If `None` (default), the default parameters will be used: 
+        - crs: 'EPSG:4326'
+        - resolution: 0.0002
+        - resampling: 'bilinear'
+        - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
     
     Returns
     -------
@@ -49,16 +61,21 @@ def load_s1_rtc(bounds: tuple[float, float, float, float],
                                          time_range=time_range,
                                          time_pattern=time_pattern)
     
+    params = anc.common_params()
+    if override_defaults is not None:
+        params = anc.override_common_params(params=params, **override_defaults)
+    
     # Turn into dask-based xarray.Dataset
     ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='float32',
-                       **anc.common_params())
+                       **params)
     
     return ds
 
 
 def load_s1_surfmi(bounds: tuple[float, float, float, float],
                    time_range: Optional[tuple[str, str]] = None,
-                   time_pattern: Optional[str] = None
+                   time_pattern: Optional[str] = None,
+                   override_defaults: Optional[dict] = None
                    ) -> DataArray:
     """
     Loads the Sentinel-1 Surface Moisture Index (SurfMI) product for an area of interest.
@@ -75,6 +92,17 @@ def load_s1_surfmi(bounds: tuple[float, float, float, float],
     time_pattern : str, optional
         Time pattern to parse the time range. Only needed if it deviates from the
         default: '%Y-%m-%d'.
+    override_defaults : dict, optional
+        Dictionary of loading parameters to override the default parameters with. 
+        Partial overriding is possible, i.e. only override a specific parameter while 
+        keeping the others at their default values. For an overview of allowed 
+        parameters, see documentation of `odc.stac.load`:
+        https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
+        If `None` (default), the default parameters will be used: 
+        - crs: 'EPSG:4326'
+        - resolution: 0.0002
+        - resampling: 'bilinear'
+        - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
     
     Returns
     -------
@@ -85,14 +113,21 @@ def load_s1_surfmi(bounds: tuple[float, float, float, float],
     -----
     See https://doi.org/10.3390/rs10091482 for more information on the SurfMI.
     """
-    # Load dry and wet reference as well as s1_rtc data chunked per time step
-    common_params = anc.common_params()
-    common_params['chunks']['time'] = 1
+    params = anc.common_params()
+    if override_defaults is not None:
+        params = anc.override_common_params(params=params, **override_defaults)
+    chunks = params.pop('chunks')
+    rechunk = chunks.copy()
     
+    # make sure we use default chunks with time=1
+    chunks = anc.common_params()['chunks']
+    chunks['time'] = 1
+    
+    # Load dry and wet reference as well as s1_rtc data chunked per time step
     catalog = Catalog.from_file(anc.get_catalog_path(product='s1_smi_2'))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds)
-    ds_ref = odc_stac_load(items=items, bbox=bounds, dtype='float32', 
-                           **common_params)
+    ds_ref = odc_stac_load(items=items, bbox=bounds, dtype='float32',
+                           chunks=chunks, **params)
     meta_dry = items[0].assets['vv_q05'].href.removeprefix('./')
     meta_wet = items[0].assets['vv_q95'].href.removeprefix('./')
     
@@ -101,16 +136,16 @@ def load_s1_surfmi(bounds: tuple[float, float, float, float],
                                          time_range=time_range,
                                          time_pattern=time_pattern)
     ds_s1 = odc_stac_load(items=items, bands=['vv'], bbox=bounds, dtype='float32',
-                          **common_params)
+                          chunks=chunks, **params)
     
     # Squeeze time dimension from reference data and persist in cluster memory
     ds_ref = ds_ref.squeeze()
     dry_ref = ds_ref.vv_q05.persist()
     wet_ref = ds_ref.vv_q95.persist()
     
-    # Calculate SurfMI
+    # Calculate SurfMI and rechunk to wanted chunk size
     smi = ((ds_s1.vv - dry_ref)/(wet_ref - dry_ref))*100
-    smi = smi.chunk({'time': -1, 'latitude': 'auto', 'longitude': 'auto'})
+    smi = smi.chunk(rechunk)
     smi = xr.where(smi < 0, 0, smi)
     smi = xr.where(smi > 100, 100, smi)
     
@@ -120,7 +155,8 @@ def load_s1_surfmi(bounds: tuple[float, float, float, float],
 
 def load_s1_coherence(bounds: tuple[float, float, float, float],
                       time_range: Optional[tuple[str, str]] = None,
-                      time_pattern: Optional[str] = None
+                      time_pattern: Optional[str] = None,
+                      override_defaults: Optional[dict] = None
                       ) -> DataArray:
     """
     Loads the Sentinel-1 Coherence data product for an area of interest.
@@ -137,6 +173,17 @@ def load_s1_coherence(bounds: tuple[float, float, float, float],
     time_pattern : str, optional
         Time pattern to parse the time range. Only needed if it deviates from the
         default: '%Y-%m-%d'.
+    override_defaults : dict, optional
+        Dictionary of loading parameters to override the default parameters with. 
+        Partial overriding is possible, i.e. only override a specific parameter while 
+        keeping the others at their default values. For an overview of allowed 
+        parameters, see documentation of `odc.stac.load`:
+        https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
+        If `None` (default), the default parameters will be used: 
+        - crs: 'EPSG:4326'
+        - resolution: 0.0002
+        - resampling: 'bilinear'
+        - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
     
     Returns
     -------
@@ -152,6 +199,10 @@ def load_s1_coherence(bounds: tuple[float, float, float, float],
     product = 's1_coh_2'
     bands = ['coh_vv']
     
+    params = anc.common_params()
+    if override_defaults is not None:
+        params = anc.override_common_params(params=params, **override_defaults)
+    
     # Load and filter STAC Items
     catalog = Catalog.from_file(anc.get_catalog_path(product=product))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds,
@@ -160,6 +211,6 @@ def load_s1_coherence(bounds: tuple[float, float, float, float],
     
     # Turn into dask-based xarray.Dataset
     ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='float32',
-                       **anc.common_params())
+                       **params)
     
     return ds.coh_vv
