@@ -10,6 +10,7 @@ dependencies:
   - fiona
   - flox
   - pytz
+  - xarray-spatial
 ###### Extras - Geo / ML ######
   - spyndex
   - geopandas

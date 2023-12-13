@@ -14,7 +14,8 @@ dependencies = [
     "numbagg>=0.6.1",
     "fiona",
     "flox",
-    "pytz"
+    "pytz",
+    "xarray-spatial"
 ]
 
 [project.urls]

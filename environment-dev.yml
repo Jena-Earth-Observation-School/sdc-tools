@@ -10,6 +10,7 @@ dependencies:
   - fiona
   - flox
   - pytz
+  - xarray-spatial
   - jupyter-book
   - rio-cogeo
   - rio-stac
