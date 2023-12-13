@@ -57,10 +57,14 @@ of the SALDi sites will result in an empty dataset. Please note, that always the
 bounding box of the provided geometry will be used to load the data.
 - `time_range`: Filter the returned data temporally by providing a tuple of 
 strings in the format `("YY-MM-dd", "YY-MM-dd")`, or `None` to return all 
-available data.
+available data. If you want to use a different date format, you can also provide
+the parameter `time_pattern` with a string that specifies the format of the
+provided time strings.
+
+The following additional parameters are product-specific:
+
 - `s2_apply_mask`: Apply a quality mask to the Sentinel-2 L2A product by using 
-its `SCL`-band. The default value is `True`. As the name already suggests, this 
-is only relevant for Sentinel-2 L2A data.
+its `SCL`-band. The default value is `True`.
 - `sanlc_year`: Select a specific year of the SANLC product by providing an
 integer in the format `YYYY`. The default value is `None`, which will return the
 product for all available years: 2018 & 2020.
