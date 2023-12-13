@@ -90,10 +90,10 @@ All data products except for the MSWEP product are loaded internally using the
 -function. As mentioned above, some loading parameters are set to default values 
 to make this package beginner-friendly and easier to use. To be more precise, 
 the following defaults are used:
-    - `crs='EPSG:4326'`
-    - `resolution=0.0002`
-    - `resampling='bilinear'`
-    - `chunks={'time': -1, 'latitude': 'auto', 'longitude': 'auto'}`
+- `crs='EPSG:4326'`
+- `resolution=0.0002`
+- `resampling='bilinear'`
+- `chunks={'time': -1, 'latitude': 'auto', 'longitude': 'auto'}`
 
 The default values for `crs` and `resolution`, for example, are the native CRS 
 and resolution of the Sentinel-1 RTC and the Sentinel-2 L2A products (most bands 
