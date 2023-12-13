@@ -9,7 +9,8 @@ from sdc.products import _query as query
 
 
 def load_sanlc(bounds: tuple[float, float, float, float],
-               year: Optional[int] = None
+               year: Optional[int] = None,
+               override_defaults: Optional[dict] = None
                ) -> DataArray:
     """
     Loads the South African National Land Cover (SANLC) data product for an area of 
@@ -25,6 +26,17 @@ def load_sanlc(bounds: tuple[float, float, float, float],
         available years, which currently are:
         - 2018
         - 2020
+    override_defaults : dict, optional
+        Dictionary of loading parameters to override the default parameters with. 
+        Partial overriding is possible, i.e. only override a specific parameter while 
+        keeping the others at their default values. For an overview of allowed 
+        parameters, see documentation of `odc.stac.load`:
+        https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
+        If `None` (default), the default parameters will be used: 
+        - crs: 'EPSG:4326'
+        - resolution: 0.0002
+        - resampling: 'bilinear'
+        - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
     
     Returns
     -------
@@ -38,12 +50,14 @@ def load_sanlc(bounds: tuple[float, float, float, float],
     catalog = Catalog.from_file(anc.get_catalog_path(product=product))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds)
     
-    common_params = anc.common_params()
-    common_params['resampling'] = 'nearest'
+    params = anc.common_params()
+    if override_defaults is not None:
+        params = anc.override_common_params(params=params, **override_defaults)
+    params['resampling'] = 'nearest'
     
     # Turn into dask-based xarray.Dataset
     ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='uint8',
-                       **common_params)
+                       **params)
     
     if year is not None:
         if year not in [2018, 2020]:

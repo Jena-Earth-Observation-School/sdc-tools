@@ -4,14 +4,16 @@ import rioxarray
 from rasterio.enums import Resampling
 from xrspatial import slope, aspect
 
+from typing import Optional
 from xarray import DataArray
 
 from sdc.products import _ancillary as anc
 from sdc.products import _query as query
 
 
-def load_copdem(bounds: tuple[float, float, float, float]
-               ) -> DataArray:
+def load_copdem(bounds: tuple[float, float, float, float],
+                override_defaults: Optional[dict] = None
+                ) -> DataArray:
     """
     Loads the Copernicus 30m GLO DEM (COP-DEM) data product for an area of interest.
     
@@ -20,6 +22,17 @@ def load_copdem(bounds: tuple[float, float, float, float]
     bounds: tuple of float
         The bounding box of the area of interest in the format (minx, miny, maxx, maxy).
         Will be used to filter the STAC Catalog for intersecting STAC Collections.
+    override_defaults : dict, optional
+        Dictionary of loading parameters to override the default parameters with. 
+        Partial overriding is possible, i.e. only override a specific parameter while 
+        keeping the others at their default values. For an overview of allowed 
+        parameters, see documentation of `odc.stac.load`:
+        https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
+        If `None` (default), the default parameters will be used: 
+        - crs: 'EPSG:4326'
+        - resolution: 0.0002
+        - resampling: 'bilinear'
+        - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
     
     Returns
     -------
@@ -31,9 +44,12 @@ def load_copdem(bounds: tuple[float, float, float, float]
     
     catalog = Catalog.from_file(anc.get_catalog_path(product=product))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds)
-        
+    
+    params = anc.common_params()
+    if override_defaults is not None:
+        params = anc.override_common_params(params=params, **override_defaults)
     da = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='float32',
-                       **anc.common_params())
+                       **params)
     da = da.height.squeeze()
     
     # Calculate slope and aspect
