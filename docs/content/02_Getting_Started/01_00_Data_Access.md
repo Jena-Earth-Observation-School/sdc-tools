@@ -127,6 +127,16 @@ s1_data = load_product(product="s1_rtc",
                        override_defaults=override_defaults)
 ```
 
+```{note}
+The above example might be a bit misleading, especially for beginners, as we 
+can't magically increase the spatial resolution of Earth Observation data by
+simply changing a parameter called `resolution`. What we do here instead is
+changing the pixel spacing of the loaded data. Both terms are often used
+interchangeably, but they are not the same. Please keep this in mind! In the 
+example we need to use the term `resolution` as this is the name of the
+corresponding parameter of the `odc.stac.load`-function.
+```
+
 (xarray-dask-intro)=
 ## Xarray, Dask and lazy loading
 
