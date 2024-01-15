@@ -2,8 +2,9 @@ from pystac import Catalog
 from odc.stac import load as odc_stac_load
 import xarray as xr
 
-from typing import Optional
+from typing import Optional, Any, Iterable
 from xarray import Dataset, DataArray
+from pystac import Item
 
 from sdc.products import _ancillary as anc
 from sdc.products import _query as query
@@ -68,8 +69,19 @@ def load_s1_rtc(bounds: tuple[float, float, float, float],
     # Turn into dask-based xarray.Dataset
     ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='float32',
                        **params)
-    
+    ds['angle'] = _angle(items=items, bounds=bounds, params=params)
     return ds
+
+
+def _angle(items: Iterable[Item],
+           bounds: tuple[float, float, float, float],
+           params: dict[str, Any]
+           ) -> DataArray:
+    """Loads the angle band from Sentinel-1 RTC product"""
+    params['resampling'] = 'nearest'
+    ds = odc_stac_load(items=items, bands='angle', bbox=bounds, dtype='uint8',
+                       **params)
+    return ds.angle
 
 
 def load_s1_surfmi(bounds: tuple[float, float, float, float],
