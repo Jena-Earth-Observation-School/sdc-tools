@@ -162,7 +162,7 @@ def da_nanquantiles(da: DataArray,
     
     >>> ds = load_product(product='s1_rtc', vec='path/to/vector/file.geojson')
     >>> da = ds.vv
-    >>> da_quantiles = utils.da_nanquantiles(ds=ds, quantiles=(0.05, 0.95))
+    >>> da_quantiles = utils.da_nanquantiles(da=da, quantiles=(0.05, 0.95))
     >>> da_quantiles.sel(quantile=0.05)
     
     Notes
