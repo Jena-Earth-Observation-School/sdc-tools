@@ -10,6 +10,7 @@ from pystac import Catalog, Collection, Item
 
 def filter_stac_catalog(catalog: Catalog,
                         bbox: Optional[tuple[float, float, float, float]] = None,
+                        collection_ids: Optional[list[str]] = None,
                         time_range: Optional[tuple[str, str]] = None,
                         time_pattern: Optional[str] = None
                         ) -> tuple[list[Collection], Iterable[Item]]:
@@ -24,6 +25,9 @@ def filter_stac_catalog(catalog: Catalog,
         The STAC Catalog to filter.
     bbox : tuple of float, optional
         The bounding box of the area of interest in the format (minx, miny, maxx, maxy).
+    collection_ids : list of str, optional
+        A list of collection IDs to filter. If not None, this will override the `bbox`
+        option.
     time_range : tuple of str, optional
         Time range to load as a tuple of (start_time, stop_time), where start_time and
         stop_time are strings in the format specified by `time_pattern`. Default is
@@ -39,13 +43,14 @@ def filter_stac_catalog(catalog: Catalog,
     filtered_items : list of Item
         A list of filtered items.
     """
-    filtered_collections = filter_collections(catalog, bbox)
+    filtered_collections = filter_collections(catalog, bbox, collection_ids)
     filtered_items = filter_items(filtered_collections, time_range, time_pattern)
     return filtered_collections, filtered_items
 
 
 def filter_collections(catalog: Catalog,
-                       bbox: Optional[tuple[float, float, float, float]] = None
+                       bbox: Optional[tuple[float, float, float, float]] = None,
+                       collection_ids: Optional[list[str]] = None
                        ) -> list[Collection]:
     """
     Filters the collections in a STAC Catalog based on a bounding box.
@@ -56,21 +61,28 @@ def filter_collections(catalog: Catalog,
         The STAC Catalog to filter.
     bbox : tuple of float, optional
         The bounding box of the area of interest in the format (minx, miny, maxx, maxy).
+    collection_ids : list of str, optional
+        A list of collection IDs to filter. If not None, this will override the `bbox`
+        option.
     
     Returns
     -------
     list of Collection
         A list of filtered collections.
     """
-    if bbox is None:
+    if collection_ids is not None:
         return [collection for collection in catalog.get_children()
-                if isinstance(collection, Collection)]
-    else:
+                if isinstance(collection, Collection) and
+                collection.id in collection_ids]
+    elif bbox is not None:
         return [collection for collection in catalog.get_children() if
                 isinstance(collection, Collection) and
                 collection.extent.spatial.bboxes is not None and
                 any(_bbox_intersection(list(bbox), b) is not None
                     for b in collection.extent.spatial.bboxes)]
+    else:
+        return [collection for collection in catalog.get_children()
+                if isinstance(collection, Collection)]
 
 
 def _bbox_intersection(bbox1: list[float, float, float, float],
