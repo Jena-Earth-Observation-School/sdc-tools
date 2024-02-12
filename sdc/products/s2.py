@@ -11,7 +11,8 @@ from sdc.products import _ancillary as anc
 from sdc.products import _query as query
 
 
-def load_s2_l2a(bounds: tuple[float, float, float, float],
+def load_s2_l2a(bounds: tuple[float, float, float, float] = None,
+                collection_ids: Optional[list[str]] = None,
                 time_range: Optional[tuple[str, str]] = None,
                 time_pattern: Optional[str] = None,
                 apply_mask: bool = True,
@@ -25,6 +26,9 @@ def load_s2_l2a(bounds: tuple[float, float, float, float],
     bounds: tuple of float
         The bounding box of the area of interest in the format (minx, miny, maxx, maxy).
         Will be used to filter the STAC Catalog for intersecting STAC Collections.
+    collection_ids : list of str, optional
+        A list of collection IDs to filter. If not None, this will override the `bbox`
+        option.
     time_range : tuple of str, optional
         The time range in the format (start_time, end_time) to filter STAC Items by.
         Defaults to None, which will load all STAC Items in the filtered STAC
@@ -67,9 +71,14 @@ def load_s2_l2a(bounds: tuple[float, float, float, float],
              'B09',                # Water Vapour (60 m)
              'B11', 'B12']         # SWIR 1, SWIR 2 (20 m)
     
+    if bounds is None and collection_ids is None:
+        raise ValueError("Either `bounds` or `collection_ids` must be provided.")
+
     # Load and filter STAC Items
     catalog = Catalog.from_file(anc.get_catalog_path(product=product))
-    _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds,
+    _, items = query.filter_stac_catalog(catalog=catalog, 
+                                         bbox=bounds,
+                                         collection_ids=collection_ids,
                                          time_range=time_range,
                                          time_pattern=time_pattern)
     
