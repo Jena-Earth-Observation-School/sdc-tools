@@ -1,6 +1,7 @@
 from pystac import Catalog
 from odc.stac import load as odc_stac_load
 import xarray as xr
+import numpy as np
 
 from typing import Optional, Any, Iterable
 from xarray import Dataset, DataArray
@@ -224,5 +225,6 @@ def load_s1_coherence(bounds: tuple[float, float, float, float],
     # Turn into dask-based xarray.Dataset
     ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='float32',
                        **params)
+    ds = xr.where(ds > 0, ds, np.nan)
     
     return ds.coh_vv
