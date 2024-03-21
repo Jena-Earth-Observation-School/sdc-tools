@@ -40,7 +40,7 @@ def load_copdem(bounds: tuple[float, float, float, float],
         An xarray DataArray containing the COP-DEM data.
     """
     product = 'cop_dem'
-    bands = ['height']
+    bands = ['elevation']
     
     catalog = Catalog.from_file(anc.get_catalog_path(product=product))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds)
@@ -50,14 +50,16 @@ def load_copdem(bounds: tuple[float, float, float, float],
         params = anc.override_common_params(params=params, **override_defaults)
     da = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='float32',
                        **params)
-    da = da.height.squeeze()
+    da = da.elevation.squeeze()
+    
+    # Write nodata value
+    da.rio.write_nodata(-32767, inplace=True)
     
     # Calculate slope and aspect
     da_slope, da_aspect = _calc_slope_aspect(da=da)
     
     # Create Dataset
     ds = da.to_dataset(name=bands[0])
-    ds = ds.rename_vars({"height": "elevation"})
     ds['slope'] = da_slope
     ds['aspect'] = da_aspect
     
