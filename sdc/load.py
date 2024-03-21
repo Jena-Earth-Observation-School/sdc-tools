@@ -1,3 +1,4 @@
+from pathlib import Path
 import fiona
 
 from typing import Optional
@@ -8,7 +9,7 @@ import sdc.products as prod
 
 
 def load_product(product: str,
-                 vec: str,
+                 vec: str | Path,
                  time_range: Optional[tuple[str, str]] = None,
                  time_pattern: Optional[str] = None,
                  s2_apply_mask: bool = True,
@@ -29,7 +30,7 @@ def load_product(product: str,
         - sanlc
         - mswep
         - cop_dem
-    vec : str
+    vec : str or Path
         Path to a vector file readable by fiona (e.g. shapefile, GeoJSON, etc.) or
         SALDi site name in the format 'siteXX', where XX is the site number. If a
         vector file is provided, its bounding box will be used to load the data.
@@ -67,6 +68,8 @@ def load_product(product: str,
     ds : Dataset or DataArray
         Xarray Dataset or DataArray containing the loaded data.
     """
+    if isinstance(vec, Path):
+        vec = str(vec)
     if vec.lower() in ['site01', 'site02', 'site03', 'site04', 'site05', 'site06']:
         if product in ['s1_rtc', 's1_surfmi', 's2_l2a']:
             print("[WARNING] Loading data for an entire SALDi site will likely result "
