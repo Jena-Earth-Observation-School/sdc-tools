@@ -1,33 +1,24 @@
 name: dev_sdc_env
 channels:
-  - pyviz
   - conda-forge
 dependencies:
-  - python>=3.10
-  - dask-jobqueue
-  - odc-stac>=0.3.7
-  - numbagg>=0.6.1
+  - python>=3.11
+  - dask-jobqueue>=0.8.5
+  - dask-labextension
+  - datashader
   - fiona
   - flox
-  - pytz
-  - xarray-spatial
+  - geopandas
+  - hvplot
+  - ipycytoscape
+  - jupyterlab>=4.1.0
   - jupyter-book
+  - matplotlib
+  - numbagg>=0.8.0
+  - odc-stac>=0.3.9
+  - rioxarray
   - rio-cogeo
   - rio-stac
-###### Extras - Geo / ML ######
-  - stackstac
   - spyndex
-  - geopandas
-  - rioxarray
-  - scikit-learn
-###### Extras - Visualization ######
-  - leafmap
-  - matplotlib
-  - hvplot
-  - geoviews
-  - datashader
-###### Extras - Jupyter ######
-  - nodejs
-  - jupyterlab
-  - dask-labextension
-  - jupyter-archive
+  - xarray>=2024.2.0
+  - xarray-spatial
