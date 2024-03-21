@@ -31,7 +31,7 @@ def groupby_acq_slices(ds: Dataset) -> Dataset:
     >>> ds_grouped = utils.groupby_acq_slices(ds)
     """
     ds_copy = ds.copy(deep=True)
-    ds_copy.coords['time'] = ds_copy.time.dt.round('1H')
+    ds_copy.coords['time'] = ds_copy.time.dt.round('1h')
     ds_copy = ds_copy.groupby('time').mean(skipna=True)
     if len(np.unique(ds.time.dt.date)) < len(ds_copy.time):
         print("Warning: Might have missed to group some acquisition slices!")
