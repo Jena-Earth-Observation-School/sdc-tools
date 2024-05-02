@@ -75,10 +75,12 @@ def override_common_params(params: dict[str, Any],
     from odc.stac import load as odc_stac_load
     allowed = inspect.getfullargspec(odc_stac_load).kwonlyargs
     
-    for key in kwargs:
+    for key, val in kwargs.items():
         if key not in allowed:
             raise ValueError(f"Parameter '{key}' is not allowed.")
-    params.update(kwargs)
+        if val is not None:
+            params[key] = val
+    
     if verbose:
         print(f"[INFO] odc.stac.load parameters: {params}")
     return params
