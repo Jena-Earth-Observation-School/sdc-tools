@@ -277,7 +277,8 @@ SITE06 = '''{
 }'''
 
 
-def get_site_bounds(site: str) -> tuple[float, float, float, float]:
+def get_site_bounds(site: str,
+                    crs: str) -> tuple[float]:
     """
     Get the bounds as a tuple of (min_x, min_y, max_x, max_y) of a SALDi site.
     
@@ -285,10 +286,12 @@ def get_site_bounds(site: str) -> tuple[float, float, float, float]:
     ----------
     site : str
         The SALDi site name in the format 'siteXX', where XX is the site number.
+    crs : str
+        The CRS of the bounds to return.
     
     Returns
     -------
-    bounds : tuple of float
+    tuple of float
         The bounds as a tuple of (min_x, min_y, max_x, max_y).    
     """
     driver = "GeoJSON"
@@ -307,9 +310,5 @@ def get_site_bounds(site: str) -> tuple[float, float, float, float]:
     else:
         raise ValueError(f'Site {site} not supported')
     
-    bounds = (gdf.bounds.minx.values[0],
-              gdf.bounds.miny.values[0],
-              gdf.bounds.maxx.values[0],
-              gdf.bounds.maxy.values[0])
-    
-    return bounds
+    gdf = gdf.to_crs(crs)
+    return tuple(gdf.total_bounds)

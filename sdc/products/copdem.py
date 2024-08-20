@@ -11,7 +11,7 @@ from sdc.products import _ancillary as anc
 from sdc.products import _query as query
 
 
-def load_copdem(bounds: tuple[float, float, float, float],
+def load_copdem(bounds: tuple[float],
                 override_defaults: Optional[dict] = None
                 ) -> DataArray:
     """

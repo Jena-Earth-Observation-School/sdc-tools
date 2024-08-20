@@ -8,7 +8,7 @@ from sdc.products import _ancillary as anc
 from sdc.products import _query as query
 
 
-def load_sanlc(bounds: tuple[float, float, float, float],
+def load_sanlc(bounds: tuple[float],
                year: Optional[int] = None,
                override_defaults: Optional[dict] = None
                ) -> DataArray:
