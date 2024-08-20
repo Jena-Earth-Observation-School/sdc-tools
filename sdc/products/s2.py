@@ -7,6 +7,7 @@ from typing import Optional, Any, Iterable
 from xarray import Dataset, DataArray
 from pystac import Item
 
+from sdc.utils import groupby_acq_slices
 from sdc.products import _ancillary as anc
 from sdc.products import _query as query
 
@@ -16,6 +17,7 @@ def load_s2_l2a(bounds: tuple[float, float, float, float] = None,
                 time_range: Optional[tuple[str, str]] = None,
                 time_pattern: Optional[str] = None,
                 apply_mask: bool = True,
+                group_acq_slices: bool = False,
                 override_defaults: Optional[dict] = None,
                 bands: Optional[list[str]] = None
                 ) -> Dataset:
@@ -41,6 +43,8 @@ def load_s2_l2a(bounds: tuple[float, float, float, float] = None,
         Whether to apply a valid-data mask to the data. Defaults to True.
         The mask is created from the `SCL` (Scene Classification Layer) band of the
         product.
+    group_acq_slices : bool, optional
+        Whether to group the data by acquisition slices. Defaults to False.
     override_defaults : dict, optional
         Dictionary of loading parameters to override the default parameters with. 
         Partial overriding is possible, i.e. only override a specific parameter while 
@@ -109,6 +113,9 @@ def load_s2_l2a(bounds: tuple[float, float, float, float] = None,
     cond = (ds > 0) & (ds <= 1)
     ds = xr.where(cond, ds, np.nan).astype("float32")
     
+    # Optional processing steps
+    if group_acq_slices:
+        ds = groupby_acq_slices(ds)
     if apply_mask:
         ds = ds.chunk(rechunk)
     return ds
