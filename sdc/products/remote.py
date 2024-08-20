@@ -11,7 +11,7 @@ from xarray import Dataset
 def load_from_dea_stac(bounds: tuple[float, float, float, float],
                        collection: str,
                        time_range: tuple[str, str],
-                       stac_filter: Optional[str] = None,
+                       stac_filter: Optional[dict] = None,
                        bands: Optional[list[str]] = None,
                        override_defaults: Optional[dict] = None,
                        verbose: Optional[bool] = False
@@ -74,6 +74,6 @@ def load_from_dea_stac(bounds: tuple[float, float, float, float],
     if verbose:
         print(f"Loading {len(items)} STAC Items with the following parameters: "
               f"{params}")
-        
-        ds = stac_load(items=items, bands=bands, bbox=bounds, **params)
+    
+    ds = stac_load(items=items, bands=bands, bbox=bounds, **params)
     return ds
