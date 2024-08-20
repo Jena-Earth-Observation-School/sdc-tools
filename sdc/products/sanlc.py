@@ -8,7 +8,7 @@ from sdc.products import _ancillary as anc
 from sdc.products import _query as query
 
 
-def load_sanlc(bounds: tuple[float, float, float, float],
+def load_sanlc(bounds: tuple[float],
                year: Optional[int] = None,
                override_defaults: Optional[dict] = None
                ) -> DataArray:
@@ -33,10 +33,12 @@ def load_sanlc(bounds: tuple[float, float, float, float],
         parameters, see documentation of `odc.stac.load`:
         https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
         If `None` (default), the default parameters will be used: 
-        - crs: 'EPSG:4326'
-        - resolution: 0.0002
-        - resampling: 'bilinear'
+        - crs: 'EPSG:6933'
+        - resolution: 20
+        - resampling: 'nearest' (*)
         - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
+        (*) This parameter is fixed for this specific product and cannot be
+        overridden.
     
     Returns
     -------

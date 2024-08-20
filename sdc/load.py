@@ -1,10 +1,11 @@
 from pathlib import Path
-import fiona
+import geopandas as gpd
 
 from typing import Optional
 from xarray import Dataset, DataArray
 
 from sdc.vec import get_site_bounds
+from sdc.products._ancillary import common_params
 import sdc.products as prod
 
 
@@ -58,8 +59,8 @@ def load_product(product: str,
         parameters, see documentation of `odc.stac.load`:
         https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
         If `None` (default), the default parameters will be used: 
-        - crs: 'EPSG:4326'
-        - resolution: 0.0002
+        - crs: 'EPSG:6933'
+        - resolution: 20
         - resampling: 'bilinear'
         - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
     
@@ -68,6 +69,17 @@ def load_product(product: str,
     ds : Dataset or DataArray
         Xarray Dataset or DataArray containing the loaded data.
     """
+    crs = common_params().get('crs')
+    if override_defaults is not None:
+        print("[WARNING] Overriding default loading parameters is only recommended for "
+              "advanced users. Start with the default parameters and only override "
+              "them if you know what you are doing.")
+        if product == 'mswep':
+            print("[INFO] Overriding default loading parameters is currently not "
+                  "supported for the MSWEP product. Default parameters will be used "
+                  "instead.")
+        crs = override_defaults.get('crs')
+    
     if isinstance(vec, Path):
         vec = str(vec)
     if vec.lower() in ['site01', 'site02', 'site03', 'site04', 'site05', 'site06']:
@@ -77,18 +89,11 @@ def load_product(product: str,
                   "Only do so if you know what you are doing and have optimized your "
                   "workflow! It is recommended to start with a small subset to test "
                   "your workflow before scaling up.")
-        bounds = get_site_bounds(site=vec.lower())
+        bounds = get_site_bounds(site=vec.lower(), crs=crs)
     else:
-        bounds = fiona.open(vec, 'r').bounds
-    
-    if override_defaults is not None:
-        print("[WARNING] Overriding default loading parameters is only recommended for "
-              "advanced users. Start with the default parameters and only override "
-              "them if you know what you are doing.")
-        if product == 'mswep':
-            print("[INFO] Overriding default loading parameters is currently not "
-                  "supported for the MSWEP product. Default parameters will be used "
-                  "instead.")
+        vec_gdf = gpd.read_file(vec)
+        vec_gdf = vec_gdf.to_crs(crs)
+        bounds = tuple(vec_gdf.total_bounds)
     
     kwargs = {'bounds': bounds,
               'time_range': time_range,

@@ -9,7 +9,7 @@ from pystac import Catalog, Collection, Item
 
 
 def filter_stac_catalog(catalog: Catalog,
-                        bbox: Optional[tuple[float, float, float, float]] = None,
+                        bbox: Optional[tuple[float]] = None,
                         collection_ids: Optional[list[str]] = None,
                         time_range: Optional[tuple[str, str]] = None,
                         time_pattern: Optional[str] = None

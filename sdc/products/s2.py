@@ -7,6 +7,7 @@ from typing import Optional, Any, Iterable
 from xarray import Dataset, DataArray
 from pystac import Item
 
+from sdc.utils import groupby_acq_slices
 from sdc.products import _ancillary as anc
 from sdc.products import _query as query
 
@@ -16,7 +17,9 @@ def load_s2_l2a(bounds: tuple[float, float, float, float] = None,
                 time_range: Optional[tuple[str, str]] = None,
                 time_pattern: Optional[str] = None,
                 apply_mask: bool = True,
-                override_defaults: Optional[dict] = None
+                group_acq_slices: bool = False,
+                override_defaults: Optional[dict] = None,
+                bands: Optional[list[str]] = None
                 ) -> Dataset:
     """
     Loads the Sentinel-2 L2A data product for an area of interest.
@@ -40,6 +43,8 @@ def load_s2_l2a(bounds: tuple[float, float, float, float] = None,
         Whether to apply a valid-data mask to the data. Defaults to True.
         The mask is created from the `SCL` (Scene Classification Layer) band of the
         product.
+    group_acq_slices : bool, optional
+        Whether to group the data by acquisition slices. Defaults to False.
     override_defaults : dict, optional
         Dictionary of loading parameters to override the default parameters with. 
         Partial overriding is possible, i.e. only override a specific parameter while 
@@ -47,11 +52,12 @@ def load_s2_l2a(bounds: tuple[float, float, float, float] = None,
         parameters, see documentation of `odc.stac.load`:
         https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
         If `None` (default), the default parameters will be used: 
-        - crs: 'EPSG:4326'
-        - resolution: 0.0002
+        - crs: 'EPSG:6933'
+        - resolution: 20
         - resampling: 'bilinear'
         - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
-    
+    bands : list of str, optional
+        A list of band names to load. Defaults to None, which will load all bands.
     Returns
     -------
     Dataset
@@ -64,12 +70,13 @@ def load_s2_l2a(bounds: tuple[float, float, float, float] = None,
     https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-2_Level-2A_specs.html
     """
     product = 's2_l2a'
-    bands = ['B02', 'B03', 'B04',  # Blue, Green, Red (10 m)
-             'B05', 'B06', 'B07',  # Red Edge 1, 2, 3 (20 m)
-             'B08',                # NIR (10 m)
-             'B8A',                # NIR 2 (20 m)
-             'B09',                # Water Vapour (60 m)
-             'B11', 'B12']         # SWIR 1, SWIR 2 (20 m)
+    if bands is None:
+        bands = ['B02', 'B03', 'B04',  # Blue, Green, Red (10 m)
+                 'B05', 'B06', 'B07',  # Red Edge 1, 2, 3 (20 m)
+                 'B08',                # NIR (10 m)
+                 'B8A',                # NIR 2 (20 m)
+                 'B09',                # Water Vapour (60 m)
+                 'B11', 'B12']         # SWIR 1, SWIR 2 (20 m)
     
     if bounds is None and collection_ids is None:
         raise ValueError("Either `bounds` or `collection_ids` must be provided.")
@@ -106,6 +113,9 @@ def load_s2_l2a(bounds: tuple[float, float, float, float] = None,
     cond = (ds > 0) & (ds <= 1)
     ds = xr.where(cond, ds, np.nan).astype("float32")
     
+    # Optional processing steps
+    if group_acq_slices:
+        ds = groupby_acq_slices(ds)
     if apply_mask:
         ds = ds.chunk(rechunk)
     return ds

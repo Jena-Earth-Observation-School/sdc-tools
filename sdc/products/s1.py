@@ -14,7 +14,8 @@ from sdc.products import _query as query
 def load_s1_rtc(bounds: tuple[float, float, float, float],
                 time_range: Optional[tuple[str, str]] = None,
                 time_pattern: Optional[str] = None,
-                override_defaults: Optional[dict] = None
+                override_defaults: Optional[dict] = None,
+                bands: Optional[list[str]] = None
                 ) -> Dataset:
     """
     Loads the Sentinel-1 RTC data product for an area of interest.
@@ -38,10 +39,12 @@ def load_s1_rtc(bounds: tuple[float, float, float, float],
         parameters, see documentation of `odc.stac.load`:
         https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
         If `None` (default), the default parameters will be used: 
-        - crs: 'EPSG:4326'
-        - resolution: 0.0002
+        - crs: 'EPSG:6933'
+        - resolution: 20
         - resampling: 'bilinear'
         - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
+    bands : list of str, optional
+        A list of band names to load. Defaults to None, which will load all bands.
     
     Returns
     -------
@@ -55,7 +58,8 @@ def load_s1_rtc(bounds: tuple[float, float, float, float],
     https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-1_specs.html
     """
     product = 's1_rtc'
-    bands = ['vv', 'vh', 'area']
+    if bands is None:
+        bands = ['vv', 'vh', 'area', 'angle']
     
     # Load and filter STAC Items
     catalog = Catalog.from_file(anc.get_catalog_path(product=product))
@@ -70,7 +74,8 @@ def load_s1_rtc(bounds: tuple[float, float, float, float],
     # Turn into dask-based xarray.Dataset
     ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='float32',
                        **params)
-    ds['angle'] = _angle(items=items, bounds=bounds, params=params)
+    if 'angle' in bands:
+        ds['angle'] = _angle(items=items, bounds=bounds, params=params)
     return ds
 
 
@@ -112,8 +117,8 @@ def load_s1_surfmi(bounds: tuple[float, float, float, float],
         parameters, see documentation of `odc.stac.load`:
         https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
         If `None` (default), the default parameters will be used: 
-        - crs: 'EPSG:4326'
-        - resolution: 0.0002
+        - crs: 'EPSG:6933'
+        - resolution: 20
         - resampling: 'bilinear'
         - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
     
@@ -193,8 +198,8 @@ def load_s1_coherence(bounds: tuple[float, float, float, float],
         parameters, see documentation of `odc.stac.load`:
         https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
         If `None` (default), the default parameters will be used: 
-        - crs: 'EPSG:4326'
-        - resolution: 0.0002
+        - crs: 'EPSG:6933'
+        - resolution: 20
         - resampling: 'bilinear'
         - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
     

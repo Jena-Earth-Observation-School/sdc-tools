@@ -2,12 +2,13 @@ import numpy as np
 
 from typing import Optional
 from xarray import DataArray, Dataset
+import xarray as xr
 from numpy import ndarray
 
 from sdc.load import load_product
 
 
-def groupby_acq_slices(ds: Dataset) -> Dataset:
+def groupby_acq_slices(ds: Dataset, use_flox=True) -> Dataset:
     """
     Groups acquisition slices of all data variables in a Dataset by calculating the mean
     for each rounded 1-hour time interval.
@@ -16,23 +17,18 @@ def groupby_acq_slices(ds: Dataset) -> Dataset:
     ----------
     ds : Dataset
         The Dataset to be grouped.
+    use_flox : bool, optional
+        Whether to use the `flox` backend for the operation. Defaults to True.
     
     Returns
     -------
     ds_copy : Dataset
         The grouped Dataset.
-    
-    Examples
-    --------
-    >>> import sdc.utils as utils
-    >>> from sdc.load import load_product
-    
-    >>> ds = load_product(product='s2_l2a', vec='path/to/vector/file.geojson')
-    >>> ds_grouped = utils.groupby_acq_slices(ds)
     """
     ds_copy = ds.copy(deep=True)
     ds_copy.coords['time'] = ds_copy.time.dt.round('1h')
-    ds_copy = ds_copy.groupby('time').mean(skipna=True)
+    with xr.set_options(use_flox=use_flox):
+        ds_copy = ds_copy.groupby('time').mean(skipna=True)
     if len(np.unique(ds.time.dt.date)) < len(ds_copy.time):
         print("Warning: Might have missed to group some acquisition slices!")
     return ds_copy
