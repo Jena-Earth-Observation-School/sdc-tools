@@ -4,10 +4,6 @@ import geopandas as gpd
 from typing import Optional
 from xarray import Dataset, DataArray
 
-from sdc.vec import get_site_bounds
-from sdc.products._ancillary import common_params
-import sdc.products as prod
-
 
 def load_product(product: str,
                  vec: str | Path,
@@ -69,6 +65,10 @@ def load_product(product: str,
     ds : Dataset or DataArray
         Xarray Dataset or DataArray containing the loaded data.
     """
+    from sdc.vec import get_site_bounds
+    from sdc.products._ancillary import common_params
+    import sdc.products as prod
+    
     crs = common_params().get('crs')
     if override_defaults is not None:
         print("[WARNING] Overriding default loading parameters is only recommended for "
