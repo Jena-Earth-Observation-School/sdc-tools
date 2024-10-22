@@ -7,9 +7,9 @@ from distributed import Client
 from typing import Optional
 
 
-def start_slurm_cluster(cores: int = 20,
-                        processes: int = 4,
-                        memory: str = '40 GiB',
+def start_slurm_cluster(cores: int = 16,
+                        processes: int = 2,
+                        memory: str = '16 GiB',
                         walltime: str = '00:30:00',
                         log_directory: Optional[str] = None,
                         scheduler_options: Optional[dict[str, str]] = None
@@ -21,11 +21,11 @@ def start_slurm_cluster(cores: int = 20,
     Parameters
     ----------
     cores : int, optional
-        Total number of cores per job. Default is 20.
+        Total number of cores per job. Default is 16.
     processes : int, optional
-        Number of processes per job. Default is 4.
+        Number of processes per job. Default is 2.
     memory : str, optional
-        Total amount of memory per job. Default is '40 GiB'.
+        Total amount of memory per job. Default is '16 GiB'.
     walltime : str, optional
         The walltime for the job in the format HH:MM:SS. Default is '00:30:00'.
     log_directory : str, optional
@@ -53,12 +53,15 @@ def start_slurm_cluster(cores: int = 20,
     values are defined per job and that the cluster will automatically be scaled up and
     down as needed.
     """
-    local_directory = os.path.join('/', 'scratch', os.getenv('USER'))
+    user_name = os.getenv('USER')
+    home_directory = os.getenv('HOME')
+    if any(x is None for x in [user_name, home_directory]):
+        raise RuntimeError("Cannot determine user name or home directory")
     
     if log_directory is None:
-        if os.path.exists(os.getenv('HOME')):
+        if os.path.exists(home_directory):
             now = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')
-            log_directory = os.path.join(os.getenv('HOME'), '.sdc_logs', now)
+            log_directory = os.path.join(home_directory, '.sdc_logs', now)
     
     if scheduler_options is None:
         port = _dashboard_port()
@@ -71,14 +74,14 @@ def start_slurm_cluster(cores: int = 20,
                            walltime=walltime,
                            interface='ib0',
                            job_script_prologue=['mkdir -p /scratch/$USER'],
-                           worker_extra_args=['--lifetime', '26m',
+                           worker_extra_args=['--lifetime', '25m',
                                               '--lifetime-stagger', '4m'],
-                           local_directory=local_directory,
+                           local_directory=os.path.join('/', 'scratch', user_name),
                            log_directory=log_directory,
                            scheduler_options=scheduler_options)
     
     dask_client = Client(cluster)
-    cluster.adapt(minimum=1, maximum=8,
+    cluster.adapt(minimum_jobs=1, maximum_jobs=3,
                   # https://github.com/dask/dask-jobqueue/issues/498#issuecomment-1233716189
                   worker_key=lambda state: state.address.split(':')[0],
                   interval='10s')
