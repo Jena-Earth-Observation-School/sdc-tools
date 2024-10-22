@@ -1,8 +1,10 @@
 import os
 import datetime
+import time
 import subprocess as sp
 from dask_jobqueue import SLURMCluster
 from distributed import Client
+from distributed.utils import TimeoutError
 
 from typing import Optional
 
@@ -12,8 +14,8 @@ def start_slurm_cluster(cores: int = 16,
                         memory: str = '16 GiB',
                         walltime: str = '00:30:00',
                         log_directory: Optional[str] = None,
-                        scheduler_options: Optional[dict[str, str]] = None
-                        ) -> (Client, SLURMCluster):
+                        wait_timeout: int = 300
+                        ) -> tuple[Client, SLURMCluster]:
     """
     Start a dask_jobqueue.SLURMCluster and a distributed.Client. The cluster will
     automatically scale up and down as needed.
@@ -31,9 +33,9 @@ def start_slurm_cluster(cores: int = 16,
     log_directory : str, optional
         The directory to write the log files to. Default is None, which writes the log
         files to ~/.sdc_logs/<YYYY-mm-ddTHH:MM>.
-    scheduler_options : dict, optional
-        Additional scheduler options. Default is None, which sets the dashboard address
-        to a free port based on the user id.
+    wait_timeout : int, optional
+        Timeout in seconds to wait for the cluster to start. Default is 300 seconds
+        (5 minutes).
     
     Returns
     -------
@@ -46,12 +48,6 @@ def start_slurm_cluster(cores: int = 16,
     --------
     >>> from sdc.cluster import start_slurm_cluster
     >>> dask_client, cluster = start_slurm_cluster()
-    
-    Notes
-    -----
-    The default values seem low, however, it is important to keep in mind that these
-    values are defined per job and that the cluster will automatically be scaled up and
-    down as needed.
     """
     user_name = os.getenv('USER')
     home_directory = os.getenv('HOME')
@@ -63,9 +59,8 @@ def start_slurm_cluster(cores: int = 16,
             now = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')
             log_directory = os.path.join(home_directory, '.sdc_logs', now)
     
-    if scheduler_options is None:
-        port = _dashboard_port()
-        scheduler_options = {'dashboard_address': f':{port}'}
+    port = _dashboard_port()
+    scheduler_options = {'dashboard_address': f':{port}'}
     
     cluster = SLURMCluster(queue='short',
                            cores=cores,
@@ -86,6 +81,16 @@ def start_slurm_cluster(cores: int = 16,
                   worker_key=lambda state: state.address.split(':')[0],
                   interval='10s')
     
+    start_time = time.time()
+    time.sleep(10)
+    print("[INFO] Trying to allocate requested resources on the cluster (timeout after 5 minutes)...")
+    
+    while not is_cluster_ready(dask_client):
+        if time.time() - start_time > wait_timeout:
+            raise TimeoutError("[INFO] Cluster failed to start within timeout period of 5 minutes. This could be due to high demand on the cluster.")
+        time.sleep(10)
+    
+    print(f"[INFO] Cluster is ready for computation! :) Dask dashboard available via 'localhost:{port}'")
     return dask_client, cluster
 
 
@@ -100,3 +105,106 @@ def _dashboard_port(port: int = 8787) -> int:
                    if x != '']:
         port += 1
     return port
+
+
+def is_cluster_ready(client: Client,
+                     min_workers: int = 1,
+                     recent_job_time: int = 120
+                     ) -> bool:
+    """
+    Check if the cluster is ready for computation by checking the status of recent SLURM 
+    jobs for dask workers.
+    
+    Parameters
+    ----------
+    client : Client
+        The dask distributed Client object
+    min_workers : int
+        Minimum number of workers required
+    recent_job_time : int
+        Time in seconds to consider a job as recent. Default is 120 seconds.
+    
+    Returns
+    -------
+    bool
+        True if cluster is ready for computation, False otherwise.
+    """
+    try:
+        current_time = datetime.datetime.now()
+        
+        # Get all Slurm job IDs for current user and name "dask-worker"
+        cmd = f"squeue -u {os.getenv('USER')} -n dask-worker -h -o '%i %S'"
+        output = sp.check_output(cmd, shell=True).decode('utf-8').strip().split('\n')
+        
+        # Filter jobs that are N/A or started recently
+        recent_job_ids = []
+        for line in output:
+            if not line:
+                continue
+            job_id, start_time = line.split()
+            if start_time == 'N/A':
+                recent_job_ids.append(job_id)
+            else:
+                try:
+                    start_dt = datetime.datetime.strptime(start_time, '%Y-%m-%dT%H:%M:%S')
+                    if (current_time - start_dt).total_seconds() <= recent_job_time:
+                        recent_job_ids.append(job_id)
+                except ValueError:
+                    continue
+        
+        if not recent_job_ids:
+            print("No recent SLURM jobs found for dask-workers")
+            return False
+        
+        running_jobs = []
+        pending_jobs = []
+        
+        # Check status of each job
+        for job_id in recent_job_ids:
+            job_info = _get_slurm_job_info(job_id)
+            if not job_info:
+                continue
+            
+            if job_info['state'] == 'RUNNING':
+                running_jobs.append(job_id)
+            elif job_info['state'] == 'PENDING':
+                pending_jobs.append(job_id)
+        
+        # If we have any running jobs, check if we have enough workers
+        if running_jobs:
+            n_workers = len(client.scheduler_info()['workers'])
+            if n_workers >= min_workers:
+                return True
+            else:
+                print(f"Cluster has {n_workers} workers, but {min_workers} required")
+                return False
+        
+        if pending_jobs:
+            print(f"All jobs are pending. Job IDs: {', '.join(pending_jobs)}")
+            return False
+        
+        return False
+    
+    except Exception as e:
+        print(f"Error checking cluster status: {e}")
+        return False
+
+
+def _get_slurm_job_info(job_id: str) -> dict:
+    """Get information about a SLURM job using squeue."""
+    try:
+        cmd = f"squeue -j {job_id} -o '%i|%T|%S' -h"
+        output = sp.check_output(cmd, shell=True).decode('utf-8').strip()
+        
+        if not output:  # Job not found
+            return {}
+        
+        job_id, state, start_time = output.split('|')
+        
+        return {
+            'job_id': job_id,
+            'state': state.strip(),
+            'start_time': start_time.strip()
+        }
+    except sp.SubprocessError:
+        return {}
