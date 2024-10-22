@@ -39,8 +39,8 @@ def load_s1_rtc(bounds: tuple[float, float, float, float],
         parameters, see documentation of `odc.stac.load`:
         https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
         If `None` (default), the default parameters will be used: 
-        - crs: 'EPSG:6933'
-        - resolution: 20
+        - crs: 'EPSG:4326'
+        - resolution: 0.0002
         - resampling: 'bilinear'
         - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
     bands : list of str, optional
@@ -117,8 +117,8 @@ def load_s1_surfmi(bounds: tuple[float, float, float, float],
         parameters, see documentation of `odc.stac.load`:
         https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
         If `None` (default), the default parameters will be used: 
-        - crs: 'EPSG:6933'
-        - resolution: 20
+        - crs: 'EPSG:4326'
+        - resolution: 0.0002
         - resampling: 'bilinear'
         - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
     
@@ -198,8 +198,8 @@ def load_s1_coherence(bounds: tuple[float, float, float, float],
         parameters, see documentation of `odc.stac.load`:
         https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
         If `None` (default), the default parameters will be used: 
-        - crs: 'EPSG:6933'
-        - resolution: 20
+        - crs: 'EPSG:4326'
+        - resolution: 0.0002
         - resampling: 'bilinear'
         - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
     
