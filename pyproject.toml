@@ -7,13 +7,16 @@ authors = [
 description = "Tools and tutorials for the SALDi Data Cube (SDC)"
 readme = "README.md"
 license = {text = "MIT License"}
-requires-python = ">=3.11"
+requires-python = "<3.13"
 dependencies = [
+    "dask",
     "dask-jobqueue>=0.8.5",
-    "fiona",
+    "datashader",
     "flox",
     "geopandas",
+    "hvplot",
     "jupyterlab>=4.1.0",
+    "matplotlib",
     "numbagg>=0.8.0",
     "odc-stac>=0.3.9",
     "rioxarray",

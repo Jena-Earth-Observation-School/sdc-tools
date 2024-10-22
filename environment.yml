@@ -2,11 +2,11 @@ name: sdc_env
 channels:
   - conda-forge
 dependencies:
-  - python>=3.11
+  - python<3.13
+  - dask
   - dask-jobqueue>=0.8.5
   - dask-labextension
   - datashader
-  - fiona
   - flox
   - geopandas
   - hvplot
