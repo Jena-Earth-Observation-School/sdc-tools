@@ -52,8 +52,8 @@ def load_s2_l2a(bounds: tuple[float, float, float, float] = None,
         parameters, see documentation of `odc.stac.load`:
         https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load
         If `None` (default), the default parameters will be used: 
-        - crs: 'EPSG:6933'
-        - resolution: 20
+        - crs: 'EPSG:4326'
+        - resolution: 0.0002
         - resampling: 'bilinear'
         - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
     bands : list of str, optional
