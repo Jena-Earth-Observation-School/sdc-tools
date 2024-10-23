@@ -1,3 +1,4 @@
+import numpy as np
 from pystac import Catalog
 from odc.stac import load as odc_stac_load
 import rioxarray
@@ -48,12 +49,9 @@ def load_copdem(bounds: tuple[float],
     params = anc.common_params()
     if override_defaults is not None:
         params = anc.override_common_params(params=params, **override_defaults)
-    da = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='float32',
-                       **params)
+    da = odc_stac_load(items=items, bands=bands, bbox=bounds, 
+                       nodata=np.nan, dtype='float32', **params)
     da = da.elevation.squeeze()
-    
-    # Write nodata value
-    da.rio.write_nodata(-32767, inplace=True)
     
     # Calculate slope and aspect
     da_slope, da_aspect = _calc_slope_aspect(da=da)

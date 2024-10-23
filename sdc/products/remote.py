@@ -13,6 +13,8 @@ def load_from_dea_stac(bounds: tuple[float, float, float, float],
                        time_range: tuple[str, str],
                        stac_filter: Optional[dict] = None,
                        bands: Optional[list[str]] = None,
+                       nodata: Optional[int | float] = None,
+                       dtype: Optional[str] = None,
                        override_defaults: Optional[dict] = None,
                        verbose: Optional[bool] = False
                        ) -> Dataset:
@@ -33,6 +35,10 @@ def load_from_dea_stac(bounds: tuple[float, float, float, float],
         filter extension for more information.
     bands : list of str, optional
         A list of band names to load. Defaults to None, which will load all bands.
+    nodata : int or float, optional
+        The nodata value to use for the loaded data. Defaults to None.
+    dtype : str, optional
+        The data type to cast the loaded data to. Defaults to None.
     override_defaults : dict, optional
         Dictionary of loading parameters to override the default parameters with.
         Partial overriding is possible, i.e. only override a specific parameter while
@@ -44,6 +50,7 @@ def load_from_dea_stac(bounds: tuple[float, float, float, float],
         - resolution: 0.0002
         - resampling: 'bilinear'
         - chunks: {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}
+    
     verbose : bool, optional
         Whether to print information about the loading process. Defaults to False.
     
@@ -75,5 +82,6 @@ def load_from_dea_stac(bounds: tuple[float, float, float, float],
         print(f"Loading {len(items)} STAC Items with the following parameters: "
               f"{params}")
     
-    ds = stac_load(items=items, bands=bands, bbox=bounds, **params)
+    ds = stac_load(items=items, bands=bands, bbox=bounds, 
+                   nodata=nodata, dtype=dtype, **params)
     return ds

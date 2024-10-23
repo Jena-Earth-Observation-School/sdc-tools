@@ -61,7 +61,6 @@ def load_s1_rtc(bounds: tuple[float, float, float, float],
     if bands is None:
         bands = ['vv', 'vh', 'area', 'angle']
     
-    # Load and filter STAC Items
     catalog = Catalog.from_file(anc.get_catalog_path(product=product))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds,
                                          time_range=time_range,
@@ -71,9 +70,8 @@ def load_s1_rtc(bounds: tuple[float, float, float, float],
     if override_defaults is not None:
         params = anc.override_common_params(params=params, **override_defaults)
     
-    # Turn into dask-based xarray.Dataset
-    ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='float32',
-                       **params)
+    ds = odc_stac_load(items=items, bands=bands, bbox=bounds, 
+                       nodata=np.nan, dtype='float32', **params)
     if 'angle' in bands:
         ds['angle'] = _angle(items=items, bounds=bounds, params=params)
     return ds
@@ -85,8 +83,8 @@ def _angle(items: Iterable[Item],
            ) -> DataArray:
     """Loads the angle band from Sentinel-1 RTC product"""
     params['resampling'] = 'nearest'
-    ds = odc_stac_load(items=items, bands='angle', bbox=bounds, dtype='uint8',
-                       **params)
+    ds = odc_stac_load(items=items, bands='angle', bbox=bounds, 
+                       nodata=255, dtype='uint8', **params)
     return ds.angle
 
 
@@ -144,7 +142,8 @@ def load_s1_surfmi(bounds: tuple[float, float, float, float],
     # Load dry and wet reference as well as s1_rtc data chunked per time step
     catalog = Catalog.from_file(anc.get_catalog_path(product='s1_smi_2'))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds)
-    ds_ref = odc_stac_load(items=items, bbox=bounds, dtype='float32',
+    ds_ref = odc_stac_load(items=items, bbox=bounds, 
+                           nodata=np.nan, dtype='float32',
                            chunks=chunks, **params)
     meta_dry = items[0].assets['vv_q05'].href.removeprefix('./')
     meta_wet = items[0].assets['vv_q95'].href.removeprefix('./')
@@ -153,7 +152,8 @@ def load_s1_surfmi(bounds: tuple[float, float, float, float],
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds,
                                          time_range=time_range,
                                          time_pattern=time_pattern)
-    ds_s1 = odc_stac_load(items=items, bands=['vv'], bbox=bounds, dtype='float32',
+    ds_s1 = odc_stac_load(items=items, bands=['vv'], bbox=bounds, 
+                          nodata=np.nan, dtype='float32',
                           chunks=chunks, **params)
     
     # Squeeze time dimension from reference data and persist in cluster memory
@@ -221,15 +221,13 @@ def load_s1_coherence(bounds: tuple[float, float, float, float],
     if override_defaults is not None:
         params = anc.override_common_params(params=params, **override_defaults)
     
-    # Load and filter STAC Items
     catalog = Catalog.from_file(anc.get_catalog_path(product=product))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds,
                                          time_range=time_range,
                                          time_pattern=time_pattern)
     
-    # Turn into dask-based xarray.Dataset
-    ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='float32',
-                       **params)
+    ds = odc_stac_load(items=items, bands=bands, bbox=bounds, 
+                       nodata=np.nan, dtype='float32', **params)
     ds = xr.where(ds > 0, ds, np.nan)
     
     return ds.coh_vv

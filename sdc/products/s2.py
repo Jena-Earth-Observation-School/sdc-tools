@@ -80,8 +80,7 @@ def load_s2_l2a(bounds: tuple[float, float, float, float] = None,
     
     if bounds is None and collection_ids is None:
         raise ValueError("Either `bounds` or `collection_ids` must be provided.")
-
-    # Load and filter STAC Items
+    
     catalog = Catalog.from_file(anc.get_catalog_path(product=product))
     _, items = query.filter_stac_catalog(catalog=catalog, 
                                          bbox=bounds,
@@ -100,9 +99,8 @@ def load_s2_l2a(bounds: tuple[float, float, float, float] = None,
         chunks = anc.common_params()['chunks']
         chunks['time'] = 1
     
-    # Turn into dask-based xarray.Dataset
-    ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='uint16',
-                       chunks=chunks, **params)
+    ds = odc_stac_load(items=items, bands=bands, bbox=bounds,
+                       nodata=0, dtype='uint16', chunks=chunks, **params)
     
     if apply_mask:
         valid = _mask(items=items, bounds=bounds, chunks=chunks, params=params)
@@ -138,8 +136,8 @@ def _mask(items: Iterable[Item],
     The selection of which classes to consider as valid data is based on
     Baetens et al. (2019): https://doi.org/10.3390/rs11040433 (Table 4).
     """
-    ds = odc_stac_load(items=items, bands='SCL', bbox=bounds, dtype='uint8',
-                       chunks=chunks, **params)
+    ds = odc_stac_load(items=items, bands='SCL', bbox=bounds, 
+                       nodata=0, dtype='uint8', chunks=chunks, **params)
     mask = ((ds.SCL == 2) |  # dark area pixels
             (ds.SCL > 3) &   # vegetation, bare soils, water, unclassified
             (ds.SCL <= 7) |
