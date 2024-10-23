@@ -278,7 +278,8 @@ SITE06 = '''{
 
 
 def get_site_bounds(site: str,
-                    crs: str) -> tuple[float]:
+                    crs: str | int = 4326
+                    ) -> tuple[float]:
     """
     Get the bounds as a tuple of (min_x, min_y, max_x, max_y) of a SALDi site.
     
@@ -294,19 +295,18 @@ def get_site_bounds(site: str,
     tuple of float
         The bounds as a tuple of (min_x, min_y, max_x, max_y).    
     """
-    driver = "GeoJSON"
     if site.lower() == 'site01':
-        gdf = gpd.read_file(SITE01, driver=driver)
+        gdf = gpd.read_file(SITE01)
     elif site.lower() == 'site02':
-        gdf = gpd.read_file(SITE02, driver=driver)
+        gdf = gpd.read_file(SITE02)
     elif site.lower() == 'site03':
-        gdf = gpd.read_file(SITE03, driver=driver)
+        gdf = gpd.read_file(SITE03)
     elif site.lower() == 'site04':
-        gdf = gpd.read_file(SITE04, driver=driver)
+        gdf = gpd.read_file(SITE04)
     elif site.lower() == 'site05':
-        gdf = gpd.read_file(SITE05, driver=driver)
+        gdf = gpd.read_file(SITE05)
     elif site.lower() == 'site06':
-        gdf = gpd.read_file(SITE06, driver=driver)
+        gdf = gpd.read_file(SITE06)
     else:
         raise ValueError(f'Site {site} not supported')
     

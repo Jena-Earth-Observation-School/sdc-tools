@@ -66,10 +66,8 @@ def load_product(product: str,
         Xarray Dataset or DataArray containing the loaded data.
     """
     from sdc.vec import get_site_bounds
-    from sdc.products._ancillary import common_params
     import sdc.products as prod
     
-    crs = common_params().get('crs')
     if override_defaults is not None:
         print("[WARNING] Overriding default loading parameters is only recommended for "
               "advanced users. Start with the default parameters and only override "
@@ -78,8 +76,9 @@ def load_product(product: str,
             print("[INFO] Overriding default loading parameters is currently not "
                   "supported for the MSWEP product. Default parameters will be used "
                   "instead.")
-        crs = override_defaults.get('crs')
     
+    # `bbox`-parameter of `odc.stac.load` needs to be in lat/lon!
+    crs = 4326
     if isinstance(vec, Path):
         vec = str(vec)
     if vec.lower() in ['site01', 'site02', 'site03', 'site04', 'site05', 'site06']:
@@ -100,18 +99,14 @@ def load_product(product: str,
               'time_pattern': time_pattern}
     
     if product == 's1_rtc':
-        ds = prod.load_s1_rtc(override_defaults=override_defaults, 
-                              **kwargs)
+        ds = prod.load_s1_rtc(override_defaults=override_defaults, **kwargs)
     elif product == 's1_surfmi':
-        ds = prod.load_s1_surfmi(override_defaults=override_defaults, 
-                                 **kwargs)
+        ds = prod.load_s1_surfmi(override_defaults=override_defaults, **kwargs)
     elif product == 's1_coh':
-        ds = prod.load_s1_coherence(override_defaults=override_defaults, 
-                                    **kwargs)
+        ds = prod.load_s1_coherence(override_defaults=override_defaults, **kwargs)
     elif product == 's2_l2a':
         ds = prod.load_s2_l2a(apply_mask=s2_apply_mask, 
-                              override_defaults=override_defaults, 
-                              **kwargs)
+                              override_defaults=override_defaults, **kwargs)
     elif product == 'sanlc':
         ds = prod.load_sanlc(bounds=bounds, 
                              year=sanlc_year, 
