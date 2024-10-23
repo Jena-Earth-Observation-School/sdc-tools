@@ -6,7 +6,7 @@ from xarray import Dataset, DataArray
 
 
 def load_product(product: str,
-                 vec: str | Path,
+                 vec: str | Path | list[float, float, float, float],
                  time_range: Optional[tuple[str, str]] = None,
                  time_pattern: Optional[str] = None,
                  s2_apply_mask: bool = True,
@@ -27,10 +27,13 @@ def load_product(product: str,
         - sanlc
         - mswep
         - cop_dem
-    vec : str or Path
-        Path to a vector file readable by fiona (e.g. shapefile, GeoJSON, etc.) or
-        SALDi site name in the format 'siteXX', where XX is the site number. If a
-        vector file is provided, its bounding box will be used to load the data.
+    vec : str or Path or list of float
+        Several options to define the spatial extent of the data to load:
+        - Path to a vector file readable by GeoPandas (e.g. GeoJSON, Geopackage etc.). 
+        In this case, the bounding box of the vector file will be used to load the data.
+        - A list of float values defining a bounding box in the format: [minx, miny, 
+        maxx, maxy].
+        - A SALDi site name in the format 'siteXX', where XX is the site number.
     time_range : tuple of str, optional
         Time range to load as a tuple of strings in the form of: (start_time, stop_time)
         , where start_time and stop_time are strings in the format specified by
@@ -68,6 +71,7 @@ def load_product(product: str,
     from sdc.vec import get_site_bounds
     import sdc.products as prod
     
+    
     if override_defaults is not None:
         print("[WARNING] Overriding default loading parameters is only recommended for "
               "advanced users. Start with the default parameters and only override "
@@ -79,20 +83,24 @@ def load_product(product: str,
     
     # `bbox`-parameter of `odc.stac.load` needs to be in lat/lon!
     crs = 4326
-    if isinstance(vec, Path):
+    if isinstance(vec, list):
+        bounds = tuple(vec)
+    elif isinstance(vec, (Path, str)):
         vec = str(vec)
-    if vec.lower() in ['site01', 'site02', 'site03', 'site04', 'site05', 'site06']:
-        if product in ['s1_rtc', 's1_surfmi', 's2_l2a']:
-            print("[WARNING] Loading data for an entire SALDi site will likely result "
-                  "in performance issues as it will load data from multiple tiles. "
-                  "Only do so if you know what you are doing and have optimized your "
-                  "workflow! It is recommended to start with a small subset to test "
-                  "your workflow before scaling up.")
-        bounds = get_site_bounds(site=vec.lower(), crs=crs)
+        if vec.lower() in ['site01', 'site02', 'site03', 'site04', 'site05', 'site06']:
+            if product in ['s1_rtc', 's1_surfmi', 's2_l2a']:
+                print("[WARNING] Loading data for an entire SALDi site will likely result "
+                    "in performance issues as it will load data from multiple tiles. "
+                    "Only do so if you know what you are doing and have optimized your "
+                    "workflow! It is recommended to start with a small subset to test "
+                    "your workflow before scaling up.")
+            bounds = get_site_bounds(site=vec.lower(), crs=crs)
+        else:
+            vec_gdf = gpd.read_file(vec)
+            vec_gdf = vec_gdf.to_crs(crs)
+            bounds = tuple(vec_gdf.total_bounds)
     else:
-        vec_gdf = gpd.read_file(vec)
-        vec_gdf = vec_gdf.to_crs(crs)
-        bounds = tuple(vec_gdf.total_bounds)
+        raise ValueError(f'Vector input {vec} not supported')
     
     kwargs = {'bounds': bounds,
               'time_range': time_range,
