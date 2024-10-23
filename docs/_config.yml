@@ -21,3 +21,9 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
+
+sphinx:
+  recursive_update: true
+  config:
+    html_context:
+      default_mode: light
