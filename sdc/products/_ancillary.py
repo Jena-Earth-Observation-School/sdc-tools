@@ -45,8 +45,8 @@ def common_params() -> dict[str, Any]:
     dict
          Dictionary of parameters that are common to all products.
     """
-    return {"crs": 'EPSG:6933',
-            "resolution": 20,
+    return {"crs": 'EPSG:4326',
+            "resolution": 0.0002,
             "resampling": 'bilinear',
             "chunks": {'time': -1, 'latitude': 'auto', 'longitude': 'auto'}}
 
