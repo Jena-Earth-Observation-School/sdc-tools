@@ -48,7 +48,6 @@ def load_sanlc(bounds: tuple[float],
     product = 'sanlc'
     bands = ['nlc']
     
-    # Load and filter STAC Items
     catalog = Catalog.from_file(anc.get_catalog_path(product=product))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds)
     
@@ -57,9 +56,8 @@ def load_sanlc(bounds: tuple[float],
         params = anc.override_common_params(params=params, **override_defaults)
     params['resampling'] = 'nearest'
     
-    # Turn into dask-based xarray.Dataset
-    ds = odc_stac_load(items=items, bands=bands, bbox=bounds, dtype='uint8',
-                       **params)
+    ds = odc_stac_load(items=items, bands=bands, bbox=bounds,
+                       nodata=256, dtype='uint8', **params)
     
     if year is not None:
         if year not in [2018, 2020]:
