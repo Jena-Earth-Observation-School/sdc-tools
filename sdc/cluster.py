@@ -79,23 +79,28 @@ def start_slurm_cluster(cores: int = 16,
     
     start_time = time.time()
     time.sleep(10)
-    print("[INFO] Trying to allocate requested resources on the cluster (timeout after 5 minutes)...")
+    print("[INFO] Trying to allocate requested resources on the cluster (timeout after "
+          "5 minutes)...")
     queue_switched = False
     
     while not is_cluster_ready(dask_client):
         if time.time() - start_time > wait_timeout:
             if not queue_switched:
-                print("[INFO] The default 'short' queue is busy. Switching to 'standard' queue and retrying (timeout after 5 minutes)...")
+                print("[INFO] The default 'short' queue is busy. Switching to "
+                      "'standard' queue and retrying (timeout after 5 minutes)...")
                 cluster.close()
                 kwargs['queue'] = 'standard'
                 dask_client, cluster = _create_cluster(**kwargs)
                 start_time = time.time()
                 queue_switched = True
             else:
-                raise TimeoutError("[INFO] Cluster failed to start within timeout period of 5 minutes. This could be due to high demand on the cluster.")
+                raise TimeoutError("[INFO] Cluster failed to start within timeout "
+                                   "period of 5 minutes. This could be due to high "
+                                   "demand on the cluster.")
         time.sleep(10)
     
-    print(f"[INFO] Cluster is ready for computation! :) Dask dashboard available via 'localhost:{port}'")
+    print(f"[INFO] Cluster is ready for computation! :) Dask dashboard available via "
+          f"'localhost:{port}'")
     return dask_client, cluster
 
 
@@ -162,7 +167,8 @@ def is_cluster_ready(client: Client,
                 recent_job_ids.append(job_id)
             else:
                 try:
-                    start_dt = datetime.datetime.strptime(start_time, '%Y-%m-%dT%H:%M:%S')
+                    start_dt = datetime.datetime.strptime(start_time,
+                                                          '%Y-%m-%dT%H:%M:%S')
                     if (current_time - start_dt).total_seconds() <= recent_job_time:
                         recent_job_ids.append(job_id)
                 except ValueError:
