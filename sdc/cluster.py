@@ -62,32 +62,37 @@ def start_slurm_cluster(cores: int = 16,
     port = _dashboard_port()
     scheduler_options = {'dashboard_address': f':{port}'}
     
-    cluster = SLURMCluster(queue='short',
-                           cores=cores,
-                           processes=processes,
-                           memory=memory,
-                           walltime=walltime,
-                           interface='ib0',
-                           job_script_prologue=['mkdir -p /scratch/$USER'],
-                           worker_extra_args=['--lifetime', '25m',
-                                              '--lifetime-stagger', '4m'],
-                           local_directory=os.path.join('/', 'scratch', user_name),
-                           log_directory=log_directory,
-                           scheduler_options=scheduler_options)
+    kwargs = {'queue': 'short',
+              'cores': cores,
+              'processes': processes,
+              'memory': memory,
+              'walltime': walltime,
+              'interface': 'ib0',
+              'job_script_prologue': ['mkdir -p /scratch/$USER'],
+              'worker_extra_args': ['--lifetime', '25m',
+                                    '--lifetime-stagger', '4m'],
+              'local_directory': os.path.join('/', 'scratch', user_name),
+              'log_directory': log_directory,
+              'scheduler_options': scheduler_options}
     
-    dask_client = Client(cluster)
-    cluster.adapt(minimum_jobs=1, maximum_jobs=3,
-                  # https://github.com/dask/dask-jobqueue/issues/498#issuecomment-1233716189
-                  worker_key=lambda state: state.address.split(':')[0],
-                  interval='10s')
+    dask_client, cluster = _create_cluster(**kwargs)
     
     start_time = time.time()
     time.sleep(10)
     print("[INFO] Trying to allocate requested resources on the cluster (timeout after 5 minutes)...")
+    queue_switched = False
     
     while not is_cluster_ready(dask_client):
         if time.time() - start_time > wait_timeout:
-            raise TimeoutError("[INFO] Cluster failed to start within timeout period of 5 minutes. This could be due to high demand on the cluster.")
+            if not queue_switched:
+                print("[INFO] The default 'short' queue is busy. Switching to 'standard' queue and retrying (timeout after 5 minutes)...")
+                cluster.close()
+                kwargs['queue'] = 'standard'
+                dask_client, cluster = _create_cluster(**kwargs)
+                start_time = time.time()
+                queue_switched = True
+            else:
+                raise TimeoutError("[INFO] Cluster failed to start within timeout period of 5 minutes. This could be due to high demand on the cluster.")
         time.sleep(10)
     
     print(f"[INFO] Cluster is ready for computation! :) Dask dashboard available via 'localhost:{port}'")
@@ -105,6 +110,17 @@ def _dashboard_port(port: int = 8787) -> int:
                    if x != '']:
         port += 1
     return port
+
+
+def _create_cluster(**kwargs) -> tuple[Client, SLURMCluster]:
+    """Create a dask_jobqueue.SLURMCluster and a distributed.Client."""
+    cluster = SLURMCluster(**kwargs)
+    dask_client = Client(cluster)
+    cluster.adapt(minimum_jobs=1, maximum_jobs=3,
+                # https://github.com/dask/dask-jobqueue/issues/498#issuecomment-1233716189
+                worker_key=lambda state: state.address.split(':')[0],
+                interval='10s')
+    return dask_client, cluster
 
 
 def is_cluster_ready(client: Client,
