@@ -116,7 +116,7 @@ def _create_cluster(**kwargs) -> tuple[Client, SLURMCluster]:
     """Create a dask_jobqueue.SLURMCluster and a distributed.Client."""
     cluster = SLURMCluster(**kwargs)
     dask_client = Client(cluster)
-    cluster.adapt(minimum_jobs=1, maximum_jobs=3,
+    cluster.adapt(minimum=1, maximum=6,
                 # https://github.com/dask/dask-jobqueue/issues/498#issuecomment-1233716189
                 worker_key=lambda state: state.address.split(':')[0],
                 interval='10s')
