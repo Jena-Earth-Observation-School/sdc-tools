@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>…load data from remote STAC Catalogs? &#8212; SALDi Data Cube - Tools &amp; Tutorials</title>
+    <title>Remote STAC Catalogs &#8212; SALDi Data Cube - Tools &amp; Tutorials</title>
   
   
   
@@ -60,10 +60,11 @@
     <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'content/03/06_00_STAC_data';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/02/08_00_STAC_data';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="prev" title="…visualize a valid pixel count?" href="05_00_Count_valid.html" />
+    <link rel="next" title="…use other loading parameters with load_product?" href="../03/01_00_Override_Params.html" />
+    <link rel="prev" title="Copernicus DEM GLO-30 (COP-DEM)" href="07_00_Copernicus_DEM.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -172,23 +173,23 @@
 <li class="toctree-l1"><a class="reference internal" href="../01/03_00_Resources.html">Additional Resources</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Products</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../02/01_00_Sentinel2.html">Sentinel-2 L2A</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../02/02_00_SANLC.html">South African National Land Cover (SANLC)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../02/03_00_MSWEP.html">Multi-Source Weighted-Ensemble Precipitation (MSWEP)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../02/04_00_Sentinel1.html">Sentinel-1 RTC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../02/05_00_S1_SurfMI.html">Sentinel-1 Surface Moisture Index (SurfMI)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../02/06_00_S1_Coherence.html">Sentinel-1 Coherence</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../02/07_00_Copernicus_DEM.html">Copernicus DEM GLO-30 (COP-DEM)</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_00_Sentinel2.html">Sentinel-2 L2A</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_00_SANLC.html">South African National Land Cover (SANLC)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_00_MSWEP.html">Multi-Source Weighted-Ensemble Precipitation (MSWEP)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_00_Sentinel1.html">Sentinel-1 RTC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_00_S1_SurfMI.html">Sentinel-1 Surface Moisture Index (SurfMI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_00_S1_Coherence.html">Sentinel-1 Coherence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_00_Copernicus_DEM.html">Copernicus DEM GLO-30 (COP-DEM)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Remote STAC Catalogs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">How to...</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="01_00_Override_Params.html">…use other loading parameters with <code class="docutils literal notranslate"><span class="pre">load_product</span></code>?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="02_00_Dask_Dashboard.html">…use the Dask Dashboard to monitor computations?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="03_00_Clip_to_vec.html">…clip data to the extent of a vector file?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="04_00_Spyndex.html">…calculate indices using the <code class="docutils literal notranslate"><span class="pre">spyndex</span></code> package?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="05_00_Count_valid.html">…visualize a valid pixel count?</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">…load data from remote STAC Catalogs?</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../03/01_00_Override_Params.html">…use other loading parameters with <code class="docutils literal notranslate"><span class="pre">load_product</span></code>?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03/02_00_Dask_Dashboard.html">…use the Dask Dashboard to monitor computations?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03/03_00_Clip_to_vec.html">…clip data to the extent of a vector file?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03/04_00_Spyndex.html">…calculate indices using the <code class="docutils literal notranslate"><span class="pre">spyndex</span></code> package?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03/05_00_Count_valid.html">…visualize a valid pixel count?</a></li>
 </ul>
 
     </div>
@@ -260,7 +261,7 @@
       
       
       
-      <li><a href="https://github.com/Jena-Earth-Observation-School/sdc-tools/issues/new?title=Issue%20on%20page%20%2Fcontent/03/06_00_STAC_data.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/Jena-Earth-Observation-School/sdc-tools/issues/new?title=Issue%20on%20page%20%2Fcontent/02/08_00_STAC_data.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -290,7 +291,7 @@
       
       
       
-      <li><a href="../../_sources/content/03/06_00_STAC_data.ipynb" target="_blank"
+      <li><a href="../../_sources/content/02/08_00_STAC_data.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -366,7 +367,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>…load data from remote STAC Catalogs?</h1>
+    <h1>Remote STAC Catalogs</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -389,34 +390,36 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="load-data-from-remote-stac-catalogs">
-<h1>…load data from remote STAC Catalogs?<a class="headerlink" href="#load-data-from-remote-stac-catalogs" title="Link to this heading">#</a></h1>
-<p>In order to load data products from remote <a class="reference external" href="https://stacspec.org/en/">SpatioTemporal Asset Catalogs (STAC)</a>, we can make use of the <code class="docutils literal notranslate"><span class="pre">load_from_stac</span></code> function provided by the <code class="docutils literal notranslate"><span class="pre">sdc-tools</span></code> package. Currently, this function supports loading data products hosted by <a class="reference external" href="https://planetarycomputer.microsoft.com/catalog">Microsoft Planetary Computer (MPC)</a> and <a class="reference external" href="https://explorer.digitalearth.africa/">Digital Earth Africa (DEA)</a>.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="remote-stac-catalogs">
+<h1>Remote STAC Catalogs<a class="headerlink" href="#remote-stac-catalogs" title="Link to this heading">#</a></h1>
+<p>In order to load data products from remote <a class="reference external" href="https://stacspec.org/en/">SpatioTemporal Asset Catalogs (STAC)</a>, we can make use of the <code class="docutils literal notranslate"><span class="pre">load_from_stac</span></code>-function provided by the <code class="docutils literal notranslate"><span class="pre">sdc-tools</span></code> package. Currently, this function supports loading data products hosted by <a class="reference external" href="https://planetarycomputer.microsoft.com/catalog">Microsoft Planetary Computer (MPC)</a> and <a class="reference external" href="https://explorer.digitalearth.africa/">Digital Earth Africa (DEA)</a>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Please be aware that working with remote data products might be quite inefficient. This is especially true, if the data is loaded with inappropriatly chosen parameters. Before loading a data product, you should get to know its basic characteristics. If you know the answer to at least the following questions, you are good to go:</p>
+<p>Up until now, we have worked with data products that are hosted on our local file servers. The loading of these is optimized by the <code class="docutils literal notranslate"><span class="pre">sdc-tools</span></code> package. In case of remote data products, <strong>you are responsible</strong> for choosing the right parameters for loading the data. An inappropriate choice can potentially lead to inefficient loading times and high memory usage, so please be aware of this. Create an issue or contact me directly if you have any questions.</p>
+<p>Before loading a remote data product, you should get to know some of its basic characteristics. If you know the answer to at least the following questions, you are good to go:</p>
 <ul class="simple">
 <li><p><strong>What is the pixel spacing / resolution of the data?</strong></p>
 <ul>
 <li><p>Override the default <code class="docutils literal notranslate"><span class="pre">resolution</span></code> parameter if necessary.</p></li>
 </ul>
 </li>
-<li><p><strong>Is the data categorical or continuous?</strong> E.g., land cover is categorical, while spectral bands are continuous.</p>
+<li><p><strong>Is the data categorical/discrete or continuous?</strong> E.g., land cover is categorical, while spectral bands are continuous.</p>
 <ul>
-<li><p>If the data is categorical you should override the default <code class="docutils literal notranslate"><span class="pre">resampling</span></code> method to <code class="docutils literal notranslate"><span class="pre">'nearest'</span></code>.</p></li>
+<li><p>If the data is categorical you should override the default <code class="docutils literal notranslate"><span class="pre">resampling</span></code> method to <code class="docutils literal notranslate"><span class="pre">'nearest'</span></code>. <a class="reference external" href="https://gisgeography.com/raster-resampling">Here</a> you can find a short summary of a few common resampling methods.</p></li>
 </ul>
 </li>
-<li><p><strong>In which datatype is the data stored and are there differences between the bands?</strong> Common types are <code class="docutils literal notranslate"><span class="pre">uint8</span></code>, <code class="docutils literal notranslate"><span class="pre">uint16</span></code> and <code class="docutils literal notranslate"><span class="pre">float32</span></code>, for example.</p>
+<li><p><strong>In which data type is the product stored and are there differences between the bands?</strong> Common types are <code class="docutils literal notranslate"><span class="pre">uint8</span></code>, <code class="docutils literal notranslate"><span class="pre">uint16</span></code> and <code class="docutils literal notranslate"><span class="pre">float32</span></code>, for example.</p>
 <ul>
-<li><p>If there are differences in datatype between the bands you’re interested in, it’s probably best to load these separately by specifiying the <code class="docutils literal notranslate"><span class="pre">bands</span></code> parameter and using the appropriate <code class="docutils literal notranslate"><span class="pre">dtype</span></code> for each band.</p></li>
+<li><p>If there are differences in data types between the bands you’re interested in, it’s probably best to load these separately by specifiying the <code class="docutils literal notranslate"><span class="pre">bands</span></code> parameter and using the appropriate <code class="docutils literal notranslate"><span class="pre">dtype</span></code> for each band.</p></li>
 </ul>
 </li>
 </ul>
-<p>You should get an idea of how to handle these cases by having a look at the examples below. If something is unclear, please let me know!</p>
+<p>You should get an idea of how to handle these cases by having a look at the examples below. I also recommend you to read the guide on how to <a class="reference internal" href="../03/01_00_Override_Params.html#override-defaults"><span class="std std-ref">…use other loading parameters with load_product?</span></a> if you haven’t already.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>In both examples we will use the bounding box of an entire SALDi site as an example. If you have a specific area of interest, you can replace the bounding box with your own. E.g., by using the utility function <code class="docutils literal notranslate"><span class="pre">sdc.vec.get_vec_bounds</span></code>. In general it is recommended to try things out on a small subset first, before scaling up to larger areas and time periods.</p>
+<p>In both examples we will use the bounding box of an entire SALDi site as an example. If you have a specific area of interest, you can replace the bounding box with your own. E.g., by using the utility function <code class="docutils literal notranslate"><span class="pre">sdc.vec.get_vec_bounds</span></code> to generate a bounding box from a vector file.</p>
+<p>In general it is recommended to test on a small subset first, before scaling up to larger areas and time periods.</p>
 </div>
 <section id="example-planetary-computer">
 <h2>Example: Planetary Computer<a class="headerlink" href="#example-planetary-computer" title="Link to this heading">#</a></h2>
@@ -430,10 +433,12 @@
 
 <span class="n">bounds</span> <span class="o">=</span> <span class="n">get_site_bounds</span><span class="p">(</span><span class="n">site</span><span class="o">=</span><span class="s2">&quot;site06&quot;</span><span class="p">)</span>
 <span class="n">time_range</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;2018&quot;</span><span class="p">,</span> <span class="s2">&quot;2023&quot;</span><span class="p">)</span>
-<span class="n">override_defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;crs&#39;</span><span class="p">:</span> <span class="s1">&#39;EPSG:4326&#39;</span><span class="p">,</span> <span class="c1"># this is already the default, but just to be explicit I wanted to show it here</span>
-                     <span class="s1">&#39;resolution&#39;</span><span class="p">:</span> <span class="mf">0.005</span><span class="p">,</span> <span class="c1"># equal to approx. 500 m pixel spacing, similar to the original data</span>
-                     <span class="s1">&#39;resampling&#39;</span><span class="p">:</span> <span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="c1"># the data is categorical, so `nearest` resampling is appropriate!</span>
-                     <span class="s1">&#39;chunks&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="s1">&#39;auto&#39;</span><span class="p">}}</span> <span class="c1"># if you&#39;re not sure, you can set all to &#39;auto&#39;</span>
+<span class="n">override_defaults</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;crs&#39;</span><span class="p">:</span> <span class="s1">&#39;EPSG:4326&#39;</span><span class="p">,</span> <span class="c1"># this is already the default, but just to be explicit I wanted to show it here</span>
+    <span class="s1">&#39;resolution&#39;</span><span class="p">:</span> <span class="mf">0.005</span><span class="p">,</span> <span class="c1"># equal to approx. 500 m pixel spacing, similar to the original data</span>
+    <span class="s1">&#39;resampling&#39;</span><span class="p">:</span> <span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="c1"># the data is categorical, so `nearest` resampling is appropriate!</span>
+    <span class="s1">&#39;chunks&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="s1">&#39;auto&#39;</span><span class="p">}</span> <span class="c1"># if you&#39;re not sure, you can set all to &#39;auto&#39;</span>
+    <span class="p">}</span> 
 
 <span class="n">modis_burned</span> <span class="o">=</span> <span class="n">load_from_stac</span><span class="p">(</span>
     <span class="n">stac_endpoint</span><span class="o">=</span><span class="s1">&#39;pc&#39;</span><span class="p">,</span>
@@ -1560,10 +1565,12 @@ Attributes:
 
 <span class="n">bounds</span> <span class="o">=</span> <span class="n">get_site_bounds</span><span class="p">(</span><span class="n">site</span><span class="o">=</span><span class="s2">&quot;site04&quot;</span><span class="p">)</span>
 <span class="n">time_range</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;2019&quot;</span><span class="p">,</span> <span class="s2">&quot;2019&quot;</span><span class="p">)</span> <span class="c1"># only a mask for the year 2019 is available</span>
-<span class="n">override_defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;crs&#39;</span><span class="p">:</span> <span class="s1">&#39;EPSG:4326&#39;</span><span class="p">,</span> <span class="c1"># this is already the default, but just to be explicit I wanted to show it here</span>
-                     <span class="s1">&#39;resolution&#39;</span><span class="p">:</span> <span class="mf">0.0001</span><span class="p">,</span> <span class="c1"># equal to approx. 10 m pixel spacing, similar to the original data</span>
-                     <span class="s1">&#39;resampling&#39;</span><span class="p">:</span> <span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="c1"># the data is categorical, so `nearest` resampling is appropriate!</span>
-                     <span class="s1">&#39;chunks&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">}}</span> <span class="c1"># it&#39;s a single time slice and the dtype is uint8 (&quot;smaller&quot; data), so we can load it all into one chunk</span>
+<span class="n">override_defaults</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;crs&#39;</span><span class="p">:</span> <span class="s1">&#39;EPSG:4326&#39;</span><span class="p">,</span> <span class="c1"># this is already the default, but just to be explicit I wanted to show it here</span>
+    <span class="s1">&#39;resolution&#39;</span><span class="p">:</span> <span class="mf">0.0001</span><span class="p">,</span> <span class="c1"># equal to approx. 10 m pixel spacing, similar to the original data</span>
+    <span class="s1">&#39;resampling&#39;</span><span class="p">:</span> <span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="c1"># the data is categorical, so `nearest` resampling is appropriate!</span>
+    <span class="s1">&#39;chunks&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span> <span class="c1"># single time slice and the small dtype (uint8), so loading it into one chunk should be fine</span>
+    <span class="p">}</span> 
 
 <span class="n">crop_2019</span> <span class="o">=</span> <span class="n">load_from_stac</span><span class="p">(</span>
     <span class="n">stac_endpoint</span><span class="o">=</span><span class="s1">&#39;deafrica&#39;</span><span class="p">,</span>
@@ -2551,7 +2558,7 @@ Attributes:
         },
         kernelOptions: {
             name: "python3",
-            path: "./content/03"
+            path: "./content/02"
         },
         predefinedOutput: true
     }
@@ -2569,13 +2576,22 @@ Attributes:
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="05_00_Count_valid.html"
+       href="07_00_Copernicus_DEM.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">…visualize a valid pixel count?</p>
+        <p class="prev-next-title">Copernicus DEM GLO-30 (COP-DEM)</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="../03/01_00_Override_Params.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">…use other loading parameters with <code class="docutils literal notranslate"><span class="pre">load_product</span></code>?</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
