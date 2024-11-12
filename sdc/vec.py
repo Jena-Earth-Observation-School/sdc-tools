@@ -1,3 +1,4 @@
+from pathlib import Path
 import geopandas as gpd
 
 SITE01 = '''{
@@ -287,7 +288,7 @@ def get_site_bounds(site: str,
     ----------
     site : str
         The SALDi site name in the format 'siteXX', where XX is the site number.
-    crs : str
+    crs : str or int
         The CRS of the bounds to return.
     
     Returns
@@ -310,5 +311,28 @@ def get_site_bounds(site: str,
     else:
         raise ValueError(f'Site {site} not supported')
     
+    gdf = gdf.to_crs(crs)
+    return tuple(gdf.total_bounds)
+
+
+def get_vec_bounds(vec: str | Path,
+                   crs: str | int = 4326
+                   ) -> tuple[float]:
+    """
+    Get the bounds as a tuple of (min_x, min_y, max_x, max_y) of a vector file.
+    
+    Parameters
+    ----------
+    vec : str or Path
+        Path to a vector file readable by geopandas (e.g. GeoPackage, GeoJSON, etc.).
+    crs : str or int
+        The CRS of the bounds to return.
+    
+    Returns
+    -------
+    tuple of float
+        The bounds as a tuple of (min_x, min_y, max_x, max_y).    
+    """
+    gdf = gpd.read_file(str(vec))
     gdf = gdf.to_crs(crs)
     return tuple(gdf.total_bounds)
