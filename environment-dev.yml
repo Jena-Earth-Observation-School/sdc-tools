@@ -16,6 +16,7 @@ dependencies:
   - nodejs
   - numbagg>=0.8.0
   - odc-stac<=0.3.9
+  - planetary-computer
   - rioxarray
   - rio-cogeo
   - rio-stac
