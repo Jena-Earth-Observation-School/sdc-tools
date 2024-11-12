@@ -15,6 +15,7 @@ parts:
     - file: content/02/05_00_S1_SurfMI
     - file: content/02/06_00_S1_Coherence
     - file: content/02/07_00_Copernicus_DEM
+    - file: content/02/08_00_STAC_data
   - caption: How to...
     chapters:
     - file: content/03/01_00_Override_Params
@@ -22,4 +23,3 @@ parts:
     - file: content/03/03_00_Clip_to_vec
     - file: content/03/04_00_Spyndex
     - file: content/03/05_00_Count_valid
-    - file: content/03/06_00_STAC_data
