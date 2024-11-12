@@ -57,7 +57,7 @@ def load_sanlc(bounds: tuple[float],
     params['resampling'] = 'nearest'
     
     ds = odc_stac_load(items=items, bands=bands, bbox=bounds,
-                       nodata=256, dtype='uint8', **params)
+                       nodata=0, dtype='uint8', **params)
     
     if year is not None:
         if year not in [2018, 2020]:
