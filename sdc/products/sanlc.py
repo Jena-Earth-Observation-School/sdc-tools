@@ -26,6 +26,7 @@ def load_sanlc(bounds: tuple[float],
         available years, which currently are:
         - 2018
         - 2020
+        - 2022
     override_defaults : dict, optional
         Dictionary of loading parameters to override the default parameters with. 
         Partial overriding is possible, i.e. only override a specific parameter while 
@@ -45,8 +46,7 @@ def load_sanlc(bounds: tuple[float],
     DataArray
         An xarray DataArray containing the SANLC data.
     """
-    product = 'sanlc'
-    bands = ['nlc']
+    product = 'sanlc_2'
     
     catalog = Catalog.from_file(anc.get_catalog_path(product=product))
     _, items = query.filter_stac_catalog(catalog=catalog, bbox=bounds)
@@ -56,13 +56,13 @@ def load_sanlc(bounds: tuple[float],
         params = anc.override_common_params(params=params, **override_defaults)
     params['resampling'] = 'nearest'
     
-    ds = odc_stac_load(items=items, bands=bands, bbox=bounds,
+    ds = odc_stac_load(items=items, bbox=bounds,
                        nodata=0, dtype='uint8', **params)
     
     if year is not None:
-        if year not in [2018, 2020]:
-            raise ValueError('The SANLC product is only available for the years 2018 '
-                             'and 2020.')
+        if year not in [2018, 2020, 2022]:
+            raise ValueError('The SANLC product is only available for the years 2018, '
+                             '2020 and 2022')
         ds = ds.sel(time=f'{year}-01-01', method='nearest')
     
-    return ds.nlc
+    return ds.asset

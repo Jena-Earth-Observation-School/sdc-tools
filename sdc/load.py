@@ -51,6 +51,7 @@ def load_product(product: str,
         Currently supported years are:
         - 2018
         - 2020
+        - 2022
     override_defaults : dict, optional
         Dictionary of loading parameters to override the default parameters with. 
         Partial overriding is possible, i.e. only override a specific parameter while 

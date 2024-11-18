@@ -57,7 +57,7 @@ prefix (e.g. _s2_ for Sentinel-2 L2A):
 its Scene Classification Layer (SCL) band. The default value is _True_.
 - `sanlc_year`: Select a specific year of the SANLC product by providing an
 integer in the format _YYYY_. The default value is _None_, which will return the
-product for all available years: 2018 & 2020.
+product for all available years: 2018, 2020 and 2022.
 
 ```{warning}
 While it is possible to load data for an entire SALDi site by providing the site 
