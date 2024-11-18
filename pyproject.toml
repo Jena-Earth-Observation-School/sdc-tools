@@ -9,12 +9,14 @@ readme = "README.md"
 license = {text = "MIT License"}
 requires-python = "<3.13"
 dependencies = [
+    "cftime",
     "dask",
     "dask-jobqueue>=0.8.5",
     "datashader",
     "flox",
     "geopandas",
     "hvplot",
+    "h5netcdf",
     "jupyterlab>=4.1.0",
     "matplotlib",
     "nodejs",
