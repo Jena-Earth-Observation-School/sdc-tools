@@ -1,6 +1,6 @@
 [project]
 name = "sdc"
-version = "0.7.0"
+version = "0.8.0"
 authors = [
   {name="Marco Wolsza", email="marco.wolsza@uni-jena.de" },
 ]
