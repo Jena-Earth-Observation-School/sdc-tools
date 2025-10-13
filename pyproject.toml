@@ -7,31 +7,40 @@ authors = [
 description = "Tools and tutorials for the SALDi Data Cube (SDC)"
 readme = "README.md"
 license = {text = "MIT License"}
-requires-python = "<3.13"
+requires-python = ">=3.10,<3.13"
 dependencies = [
     "cftime",
     "dask",
-    "dask-jobqueue>=0.8.5",
+    "dask-jobqueue",
+    "dask-labextension",
     "datashader",
     "flox",
     "geopandas",
     "hvplot",
     "h5netcdf",
-    "jupyterlab>=4.1.0",
+    "jupyterlab",
+    "jupyter-book",
+    "libgdal-arrow-parquet",
     "matplotlib",
     "nodejs",
-    "numbagg>=0.8.0",
-    "odc-stac<=0.3.9",
+    "numbagg",
+    "odc-stac",
     "planetary-computer",
     "rioxarray",
+    "rio-cogeo",
+    "rio-stac",
     "spyndex",
-    "xarray>=2024.2.0",
+    "xarray",
     "xarray-spatial",
+    "xvec"
 ]
 
 [project.urls]
 Repository = "https://github.com/Jena-Earth-Observation-School/sdc-tools"
 
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
