@@ -14,7 +14,13 @@ micromamba activate sdc_env
 
 If you are not able to install the environment directly from the GitHub 
 repository (e.g., due to firewall restrictions on HPC systems), you can also 
-download the `environment.yml` file and install the environment from it locally.
+download the `environment.yml` file and install the environment from it locally:
+
+```bash
+wget https://raw.githubusercontent.com/Jena-Earth-Observation-School/sdc-tools/main/environment.yml
+micromamba create --file environment.yml
+micromamba activate sdc_env
+```
 
 ## Install `sdc-tools` package
 
