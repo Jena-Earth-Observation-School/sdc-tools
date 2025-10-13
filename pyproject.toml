@@ -43,3 +43,36 @@ requires = ["hatchling"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-arm64", "osx-64", "win-64"]
+
+[tool.pixi.system-requirements]
+linux="4.18.0"
+
+[tool.pixi.dependencies]
+jupyterlab = ">=4.4.9,<5"
+nodejs = ">=24.4.1,<24.10"
+jupyter-book = ">=1.0.4.post1,<2"
+dask-labextension = ">=7.0.0,<8"
+dask = ">=2025.9.1,<2026"
+dask-jobqueue = ">=0.9.0,<0.10"
+xarray = ">=2025.10.1,<2026"
+xarray-spatial = ">=0.4.0,<0.5"
+flox = ">=0.10.7,<0.11"
+numbagg = ">=0.9.3,<0.10"
+odc-stac = ">=0.4.0,<0.5"
+rioxarray = ">=0.19.0,<0.20"
+rio-cogeo = ">=5.4.2,<6"
+rio-stac = ">=0.12.0,<0.13"
+geopandas = ">=1.1.1,<2"
+libgdal-arrow-parquet = ">=3.10.3,<4"
+xvec = ">=0.5.1,<0.6"
+spyndex = ">=0.8.0,<0.9"
+planetary-computer = ">=1.0.0,<2"
+h5netcdf = ">=1.6.4,<2"
+cftime = ">=1.6.4,<2"
+datashader = ">=0.18.2,<0.19"
+hvplot = ">=0.12.1,<0.13"
+matplotlib = ">=3.10.6,<4"
