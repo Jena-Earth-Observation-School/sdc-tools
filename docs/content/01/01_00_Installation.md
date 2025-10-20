@@ -42,3 +42,18 @@ pip install git+https://github.com/Jena-Earth-Observation-School/sdc-tools.git@v
 
 See the [releases page](https://github.com/Jena-Earth-Observation-School/sdc-tools/releases) 
 for a list of available versions.
+
+### _Optional_: Use Pixi instead of Conda/(Micro)mamba
+
+If you want to use [Pixi](https://pixi.sh) as your package manager, you can follow
+these steps: 
+
+```bash
+wget https://raw.githubusercontent.com/Jena-Earth-Observation-School/sdc-tools/main/environment.yml
+pixi init -- environment.yml
+pixi install
+pixi add --pypi 'sdc @ git+https://github.com/Jena-Earth-Observation-School/sdc-tools.git’
+```
+
+_Note_: As far as I know, Pixi currently does not support installing environments 
+directly from  remote URLs, so you need to download the `environment.yml` file first.
