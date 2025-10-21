@@ -5,8 +5,8 @@
 ```{warning}
 The following section is only relevant if you deliberately want to override the
 default loading parameters and if you know what you are doing. If you are not 
-sure, please skip this section and just be happy with the default values 🙂 or 
-get in contact with me to discuss your use case.
+sure, please skip this section and just be happy with the default values or 
+get in contact with me to discuss your use case 🙂
 ```
 
 All data products except for the MSWEP product are loaded internally using the
@@ -47,7 +47,7 @@ from sdc.load import load_product
 override_defaults = {"resolution": 0.0001}
 s1_data = load_product(product="s1_rtc", 
                        vec="/path/to/my_area_of_interest.geojson", 
-                       time_range=("2020-01-01", "2021-01-01),
+                       time_range=("2020-01-01", "2021-01-01"),
                        override_defaults=override_defaults)
 ```
 
