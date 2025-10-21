@@ -404,8 +404,8 @@ document.write(`
 <p class="admonition-title">Warning</p>
 <p>The following section is only relevant if you deliberately want to override the
 default loading parameters and if you know what you are doing. If you are not
-sure, please skip this section and just be happy with the default values 🙂 or
-get in contact with me to discuss your use case.</p>
+sure, please skip this section and just be happy with the default values or
+get in contact with me to discuss your use case 🙂</p>
 </div>
 <p>All data products except for the MSWEP product are loaded internally using the
 <a class="reference external" href="https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load"><code class="docutils literal notranslate"><span class="pre">odc.stac.load</span></code></a>
@@ -418,17 +418,17 @@ the following defaults are used:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">resampling='bilinear'</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">chunks={'time':</span> <span class="pre">-1,</span> <span class="pre">'latitude':</span> <span class="pre">'auto',</span> <span class="pre">'longitude':</span> <span class="pre">'auto'}</span></code></p></li>
 </ul>
-<p>The default values for <code class="docutils literal notranslate"><span class="pre">crs</span></code> and <code class="docutils literal notranslate"><span class="pre">resolution</span></code>, for example, are the native CRS
-and resolution of the Sentinel-1 RTC and the Sentinel-2 L2A products (most bands
-of the latter at least). The <code class="docutils literal notranslate"><span class="pre">resampling</span></code>-parameter is only relevant if a data
-product needs to be reprojected (note that this is overriden by default for the
-SANLC product to use <code class="docutils literal notranslate"><span class="pre">resampling='nearest'</span></code>, which is a better choice for
-categorical data). The <code class="docutils literal notranslate"><span class="pre">chunks</span></code>-parameter is important for loading the data
+<p>The default values for <code class="docutils literal notranslate"><span class="pre">crs</span></code> and <code class="docutils literal notranslate"><span class="pre">resolution</span></code>, for example, are the native coordinate
+reference system (CRS) and resolution of the Sentinel-1 RTC and the Sentinel-2 L2A
+products (most bands of the latter at least).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">resampling</span></code>-parameter is only relevant if a data product needs to be
+reprojected. Note that by default this parameter is overriden for the SANLC
+product to use <code class="docutils literal notranslate"><span class="pre">resampling='nearest'</span></code>, which is a better choice for categorical
+data.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">chunks</span></code>-parameter is important for loading the data
 lazily using Dask (see <a class="reference internal" href="../01/03_00_Resources.html#xarray-dask-intro"><span class="std std-ref">Xarray, Dask and lazy loading</span></a> for more information). The
 default values have been chosen to work well for time series analysis
-(alignment of chunks along the time dimension) and to be memory efficient
-(automatically choose the chunk size along the spatial dimensions based on
-Dask’s default).</p>
+(alignment of chunks along the time dimension) and to be memory efficient.</p>
 <p>If you want to override these defaults or add additional parameters that
 influence the loading process, you can do so by providing the
 <code class="docutils literal notranslate"><span class="pre">override_defaults</span></code>-parameter to the <a class="reference internal" href="../01/02_00_Introduction.html#load-product-intro"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">load_product</span></code></span></a>
@@ -436,14 +436,16 @@ influence the loading process, you can do so by providing the
 parameter names of the <a class="reference external" href="https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load"><code class="docutils literal notranslate"><span class="pre">odc.stac.load</span></code></a>
 -function and values corresponding to the desired values. It is also possible to
 partially override the defaults while keeping the rest unchanged. The following
-is a simple example of how to override only the default <code class="docutils literal notranslate"><span class="pre">resolution</span></code>-parameter
-when loading the Sentinel-1 RTC product:</p>
+is a simple example of how to override the default <code class="docutils literal notranslate"><span class="pre">crs</span></code>-parameter to use
+NSIDC EASE-Grid 2.0 Global (<a class="reference external" href="https://epsg.io/6933">https://epsg.io/6933</a>), which is an equal-area projection.
+Because the unit of this CRS is in meters, we also have to adjust the
+<code class="docutils literal notranslate"><span class="pre">resolution</span></code>-parameter.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
 
-<span class="n">override_defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;resolution&quot;</span><span class="p">:</span> <span class="mf">0.0001</span><span class="p">}</span>
+<span class="n">override_defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;crs&quot;</span><span class="p">:</span> <span class="mi">6933</span><span class="p">,</span> <span class="s2">&quot;resolution&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">}</span>
 <span class="n">s1_data</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;s1_rtc&quot;</span><span class="p">,</span> 
                        <span class="n">vec</span><span class="o">=</span><span class="s2">&quot;/path/to/my_area_of_interest.geojson&quot;</span><span class="p">,</span> 
-                       <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2020-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2021-01-01),</span>
+                       <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2020-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2021-01-01&quot;</span><span class="p">),</span>
                        <span class="n">override_defaults</span><span class="o">=</span><span class="n">override_defaults</span><span class="p">)</span>
 </pre></div>
 </div>

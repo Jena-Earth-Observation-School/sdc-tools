@@ -397,6 +397,7 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#product-description">Product description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-packages">Import packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-data">Loading data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#converting-to-decibel-scale">Converting to decibel scale</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-shorts-groupby-operations">Xarray Shorts: Groupby-operations</a></li>
@@ -418,19 +419,27 @@ document.write(`
 <p>The Sentinel-1 Radiometric Terrain Corrected (RTC) data product available in the
 SALDi Data Cube (SDC) is a mirror of <a class="reference external" href="https://www.digitalearthafrica.org/">Digital Earth Africa</a>’s
 product of the same name.</p>
-<p>Detailed information can be found <a class="reference external" href="https://registry.opendata.aws/deafrica-sentinel-1/">here</a>.</p>
+<p>Detailed information can be found <a class="reference external" href="https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-1_specs.html">here</a> and <a class="reference external" href="https://registry.opendata.aws/deafrica-sentinel-1/">here</a>.</p>
 <p>The product abbreviation used in this package is <code class="docutils literal notranslate"><span class="pre">s1_rtc</span></code></p>
+</section>
+<section id="import-packages">
+<h2>Import packages<a class="headerlink" href="#import-packages" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="loading-data">
 <h2>Loading data<a class="headerlink" href="#loading-data" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
-
-<span class="n">ds</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;s1_rtc&quot;</span><span class="p">,</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;s1_rtc&quot;</span><span class="p">,</span>
                   <span class="n">vec</span><span class="o">=</span><span class="s2">&quot;site06&quot;</span><span class="p">,</span> 
                   <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2021-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2022-01-01&quot;</span><span class="p">))</span>
 <span class="n">ds</span>
@@ -2390,7 +2399,7 @@ visualization purposes in the end.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>The <a class="reference external" href="https://servirglobal.net/resources/sar-handbook">SAR Handbook</a> is a great resource
+<p>The <a class="reference external" href="https://earthdata.nasa.gov/s3fs-public/2025-04/SARHB_FullRes_2019.pdf?VersionId=XU9mWLgLcPtEZiL3.m72A2L8lcJOxub4">SAR Handbook</a> is a great resource
 on topics related to SAR data processing and interpretation. Regarding power vs decibel
 scale, have a closer look at <a class="reference external" href="https://gis1.servirglobal.net/TrainingMaterials/SAR/3B_TrainingModule.pdf">Chapter 3 Tutorial</a>
 and the sections “Comparing histograms of the amplitude, power, and dB scaled data”
@@ -3125,6 +3134,7 @@ just convert the result to decibel scale, select the month of June and plot it:<
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#product-description">Product description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-packages">Import packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-data">Loading data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#converting-to-decibel-scale">Converting to decibel scale</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-shorts-groupby-operations">Xarray Shorts: Groupby-operations</a></li>

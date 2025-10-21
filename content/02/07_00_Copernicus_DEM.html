@@ -397,6 +397,7 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#product-description">Product description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-packages">Import packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-data">Loading data</a></li>
 </ul>
             </nav>
@@ -419,15 +420,24 @@ platform.</p>
 <p>Detailed information can be found <a class="reference external" href="https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model">here</a>.</p>
 <p>The product abbreviation used in this package is <code class="docutils literal notranslate"><span class="pre">cop_dem</span></code></p>
 </section>
+<section id="import-packages">
+<h2>Import packages<a class="headerlink" href="#import-packages" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 <section id="loading-data">
 <h2>Loading data<a class="headerlink" href="#loading-data" title="Link to this heading">#</a></h2>
 <p>As no time series is available for this product, the <code class="docutils literal notranslate"><span class="pre">load_data</span></code> function only requires
 the <code class="docutils literal notranslate"><span class="pre">product</span></code> and <code class="docutils literal notranslate"><span class="pre">vec</span></code> parameters:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
-
-<span class="n">ds</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;cop_dem&quot;</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s2">&quot;site06&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;cop_dem&quot;</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s2">&quot;site06&quot;</span><span class="p">)</span>
 <span class="n">ds</span>
 </pre></div>
 </div>
@@ -1844,6 +1854,7 @@ Attributes:
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#product-description">Product description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-packages">Import packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-data">Loading data</a></li>
 </ul>
   </nav></div>

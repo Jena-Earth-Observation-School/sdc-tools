@@ -407,9 +407,17 @@ a multipolygon. When we plot a single time step, we notice that the data is by d
 loaded for the bounding box of the vector file and not the multipolygon itself:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
-
-<span class="n">ds</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s1">&#39;s2_l2a&#39;</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="n">vec</span><span class="p">,</span> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sdc.utils</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">utils</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vec</span> <span class="o">=</span> <span class="s2">&quot;path/to/your/multipolygon.geojson&quot;</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s1">&#39;s2_l2a&#39;</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="n">vec</span><span class="p">,</span>
                   <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2018-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2022-12-01&quot;</span><span class="p">))</span>
 
 <span class="n">ds</span><span class="o">.</span><span class="n">B04</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -424,13 +432,11 @@ loaded for the bounding box of the vector file and not the multipolygon itself:<
 </div>
 </div>
 <p>Before using the <code class="docutils literal notranslate"><span class="pre">mask_from_vec</span></code>-function, let’s first have a look at its docstring to
-understand what it does and what it needs as input. We can do this by typing a question
-mark followed by the function name:</p>
+understand what it does and what it needs as input. We can do this by typing a function name
+followed by a question mark:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sdc.utils</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">utils</span>
-
-<span class="n">utils</span><span class="o">.</span><span class="n">mask_from_vec</span><span class="err">?</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">utils</span><span class="o">.</span><span class="n">mask_from_vec</span><span class="err">?</span>
 </pre></div>
 </div>
 </div>

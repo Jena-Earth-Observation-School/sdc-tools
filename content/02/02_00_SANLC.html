@@ -397,6 +397,7 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#product-description">Product description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-packages">Import packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-data">Loading data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-shorts-creating-and-applying-a-boolean-mask">Xarray Shorts: Creating and applying a boolean mask</a></li>
 </ul>
@@ -416,7 +417,7 @@ document.write(`
 <h2>Product description<a class="headerlink" href="#product-description" title="Link to this heading">#</a></h2>
 <p>The South African National Land Cover (SANLC) product available in the
 SALDi Data Cube (SDC) has been acquired from the
-<a class="reference external" href="https://egis.environment.gov.za/sa_national_land_cover_datasets">Department of Forest, Fisheries and the Environment of the Republic of South Africa</a>.</p>
+<a class="reference external" href="https://www.dffe.gov.za/egis">Department of Forest, Fisheries and the Environment of the Republic of South Africa</a>.</p>
 <p>The product abbreviation used in this package is <code class="docutils literal notranslate"><span class="pre">sanlc</span></code>.</p>
 <p>The following table shows the classes of the <strong>2020 SANLC product</strong>. Please note that classification schemes may vary
 between years. Reports and color palettes are available on the website mentioned above.</p>
@@ -424,15 +425,24 @@ between years. Reports and color palettes are available on the website mentioned
 <p><em>Source: Thompson, M., 2021, “2020 SANLC Technical Presentation”, Presentation
 to the South African National Land Cover Data Users 2020 SANLC Data Launch</em></p>
 </section>
+<section id="import-packages">
+<h2>Import packages<a class="headerlink" href="#import-packages" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 <section id="loading-data">
 <h2>Loading data<a class="headerlink" href="#loading-data" title="Link to this heading">#</a></h2>
 <p>The product is currently available for the years 2018, 2020 and 2022. A special parameter
 <code class="docutils literal notranslate"><span class="pre">sanlc_year</span></code> of the <code class="docutils literal notranslate"><span class="pre">load_product</span></code>-function can be used to select the year of interest:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
-
-<span class="n">lc2022</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;sanlc&quot;</span><span class="p">,</span> 
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lc2022</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;sanlc&quot;</span><span class="p">,</span>
                       <span class="n">vec</span><span class="o">=</span><span class="s2">&quot;site06&quot;</span><span class="p">,</span> 
                       <span class="n">sanlc_year</span><span class="o">=</span><span class="mi">2022</span><span class="p">)</span>
 <span class="n">lc2022</span>
@@ -1856,8 +1866,7 @@ pixels that are of interest, the 0s the pixels that are not:</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s2</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;s2_l2a&quot;</span><span class="p">,</span> 
                   <span class="n">vec</span><span class="o">=</span><span class="s2">&quot;site06&quot;</span><span class="p">,</span> 
-                  <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2022-06-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2022-08-01&quot;</span><span class="p">),</span>
-                  <span class="n">s2_apply_mask</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                  <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2022-06-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2022-08-01&quot;</span><span class="p">))</span>
 
 <span class="n">s2_masked</span> <span class="o">=</span> <span class="n">s2</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
 </pre></div>
@@ -1952,6 +1961,7 @@ are of interest are left. The rest has been set to <code class="docutils literal
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#product-description">Product description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-packages">Import packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-data">Loading data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-shorts-creating-and-applying-a-boolean-mask">Xarray Shorts: Creating and applying a boolean mask</a></li>
 </ul>

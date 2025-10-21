@@ -397,6 +397,7 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#product-description">Product description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-packages">Import packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-data">Loading data</a></li>
 </ul>
             </nav>
@@ -419,13 +420,22 @@ The product was generated for VV-polarization and ascending orbits only.</p>
 <p>Detailed information can be found <a class="reference external" href="https://hyp3-docs.asf.alaska.edu/guides/insar_product_guide">here</a>.</p>
 <p>The product abbreviation used in this package is <code class="docutils literal notranslate"><span class="pre">s1_coh</span></code></p>
 </section>
+<section id="import-packages">
+<h2>Import packages<a class="headerlink" href="#import-packages" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 <section id="loading-data">
 <h2>Loading data<a class="headerlink" href="#loading-data" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
-
-<span class="n">vec</span> <span class="o">=</span> <span class="s2">&quot;../../_assets/vec_01_06_01.geojson&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vec</span> <span class="o">=</span> <span class="s2">&quot;../../_assets/vec_01_06_01.geojson&quot;</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;s1_coh&quot;</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="n">vec</span><span class="p">)</span>
 <span class="n">ds</span>
 </pre></div>
@@ -1102,6 +1112,7 @@ Attributes:
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#product-description">Product description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-packages">Import packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-data">Loading data</a></li>
 </ul>
   </nav></div>

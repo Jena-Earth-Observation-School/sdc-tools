@@ -5,8 +5,8 @@ is hosted on the Draco HPC cluster at the University of Jena and contains variou
 Observation data sets for the six study areas of the [SALDi project](https://www.saldi.uni-jena.de/en).
 
 The following pages provide information on how to install and use the `sdc-tools` 
-package, as well as several introductory tutorials tailored to our students of the M.Sc. 
-Geoinformatics program at the University of Jena. 
+package, as well as several introductory tutorials tailored to our students of the 
+Master of Science Geoinformatics program at the University of Jena. 
 
 Please note:
 - Access to the SDC is restricted to employees and students affiliated with the 
@@ -21,7 +21,7 @@ or reach out directly to me via the email provided [here](https://github.com/maa
 :align: center
 ```
 
-_The SDC illustrations have been created by P. Kluter (2020) of the Remote Sensing 
+_The SDC illustrations have been created by Pawel Kluter ©2020 of the Remote Sensing 
 department at the University of Würzburg for the [project page](https://eo2cube.org/projects/saldi) 
 of the first SALDi Data Cube implementation. Thanks for letting us use them here as 
 well!_

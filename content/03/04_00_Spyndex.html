@@ -399,7 +399,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="calculate-indices-using-the-spyndex-package">
-<h1>…calculate indices using the <code class="docutils literal notranslate"><span class="pre">spyndex</span></code> package?<a class="headerlink" href="#calculate-indices-using-the-spyndex-package" title="Link to this heading">#</a></h1>
+<span id="spectral-indices"></span><h1>…calculate indices using the <code class="docutils literal notranslate"><span class="pre">spyndex</span></code> package?<a class="headerlink" href="#calculate-indices-using-the-spyndex-package" title="Link to this heading">#</a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">spyndex</span></code> is an awesome package that let’s you calculate a wide range of spectral
 indices accessed from the curated <a class="reference external" href="https://github.com/davemlz/awesome-spectral-indices">Awesome Spectral Indices</a>
 list, which contains an overview of spectral indices, their formulas and their
@@ -415,9 +415,17 @@ the Sentinel-2 L2A data product provided via the <code class="docutils literal n
 vegetation indices:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">spyndex</span>
-
-<span class="n">spyndex</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">NDVI</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">spyndex</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spyndex</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">NDVI</span>
 </pre></div>
 </div>
 </div>
@@ -526,9 +534,7 @@ same Sentinel-2 L2A dataset using the <code class="docutils literal notranslate"
 default values:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
-
-<span class="n">ds</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s1">&#39;s2_l2a&#39;</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="n">vec</span><span class="p">,</span> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s1">&#39;s2_l2a&#39;</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s2">&quot;path/to/your/aoi.geojson&quot;</span><span class="p">,</span>
                   <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2020-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2021-01-01&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -1044,8 +1050,7 @@ Attributes:
           <span class="s1">&#39;R&#39;</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">B04</span><span class="p">,</span>
           <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">B02</span><span class="p">}</span>
 
-<span class="n">ds_indices</span> <span class="o">=</span> <span class="n">spyndex</span><span class="o">.</span><span class="n">computeIndex</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NDVI&#39;</span><span class="p">,</span> <span class="s1">&#39;EVI&#39;</span><span class="p">],</span> 
-                                  <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+<span class="n">ds_indices</span> <span class="o">=</span> <span class="n">spyndex</span><span class="o">.</span><span class="n">computeIndex</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NDVI&#39;</span><span class="p">,</span> <span class="s1">&#39;EVI&#39;</span><span class="p">],</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
 <span class="n">ds_indices</span>
 </pre></div>
 </div>
@@ -1120,8 +1125,7 @@ L: Canopy background adjustment
           <span class="s1">&#39;C2&#39;</span><span class="p">:</span> <span class="mf">7.5</span><span class="p">,</span>
           <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
 
-<span class="n">ds_indices</span> <span class="o">=</span> <span class="n">spyndex</span><span class="o">.</span><span class="n">computeIndex</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NDVI&#39;</span><span class="p">,</span> <span class="s1">&#39;EVI&#39;</span><span class="p">],</span> 
-                                  <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+<span class="n">ds_indices</span> <span class="o">=</span> <span class="n">spyndex</span><span class="o">.</span><span class="n">computeIndex</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NDVI&#39;</span><span class="p">,</span> <span class="s1">&#39;EVI&#39;</span><span class="p">],</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
 <span class="n">ds_indices</span>
 </pre></div>
 </div>
@@ -2154,9 +2158,7 @@ Attributes:
 in the area of interest:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-
-<span class="n">pt</span> <span class="o">=</span> <span class="p">(</span><span class="mf">20.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">34.18</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pt</span> <span class="o">=</span> <span class="p">(</span><span class="mf">20.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">34.18</span><span class="p">)</span>
 <span class="n">ndvi_pt</span> <span class="o">=</span> <span class="n">ndvi</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">longitude</span><span class="o">=</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">latitude</span><span class="o">=</span><span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
 <span class="n">evi_pt</span> <span class="o">=</span> <span class="n">evi</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">longitude</span><span class="o">=</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">latitude</span><span class="o">=</span><span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
 

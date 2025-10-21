@@ -397,11 +397,13 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#product-description">Product description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-packages">Import packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-data">Loading data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-shorts-indexing-and-basic-plotting">Xarray Shorts: Indexing and basic plotting</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-shorts-spatial-subset">Xarray Shorts: Spatial subset</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cloud-mask">Cloud mask</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#group-acquisition-slices">Group acquisition slices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spectral-indices">Spectral indices</a></li>
 </ul>
             </nav>
         </div>
@@ -420,19 +422,30 @@ document.write(`
 <p>The Sentinel-2 L2A data product available in the SALDi Data Cube (SDC) is a
 mirror of <a class="reference external" href="https://www.digitalearthafrica.org/">Digital Earth Africa</a>’s product
 of the same name.</p>
-<p>Detailed information can be found <a class="reference external" href="https://registry.opendata.aws/deafrica-sentinel-2/">here</a>.</p>
+<p>Detailed information can be found <a class="reference external" href="https://docs.digitalearthafrica.org/en/latest/data_specs/Sentinel-2_Level-2A_specs.html">here</a> and <a class="reference external" href="https://registry.opendata.aws/deafrica-sentinel-2/">here</a>.</p>
 <p>The product abbreviation used in this package is <code class="docutils literal notranslate"><span class="pre">s2_l2a</span></code></p>
+</section>
+<section id="import-packages">
+<h2>Import packages<a class="headerlink" href="#import-packages" title="Link to this heading">#</a></h2>
+<p>Let’s first import all packages that we need in this notebook. The <code class="docutils literal notranslate"><span class="pre">%matplotlib</span> <span class="pre">inline</span></code> is a <a class="reference external" href="https://ipython.readthedocs.io/en/stable/interactive/tutorial.html#magics-explained">“magic” function</a> useful in Jupyter notebooks, which enables the rendering of Matplotlib plots directly below code cells.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sdc.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">groupby_acq_slices</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="loading-data">
 <h2>Loading data<a class="headerlink" href="#loading-data" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
-
-<span class="n">ds</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;s2_l2a&quot;</span><span class="p">,</span> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;s2_l2a&quot;</span><span class="p">,</span>
                   <span class="n">vec</span><span class="o">=</span><span class="s2">&quot;site06&quot;</span><span class="p">,</span> 
-                  <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2021-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2022-01-01&quot;</span><span class="p">),</span>
-                  <span class="n">s2_apply_mask</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># True by default</span>
+                  <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2021-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2022-01-01&quot;</span><span class="p">))</span>
 <span class="n">ds</span>
 </pre></div>
 </div>
@@ -4870,16 +4883,14 @@ Attributes:
 <p>Let’s visualize the time series of the selected pixels. We can use the
 <code class="docutils literal notranslate"><span class="pre">.plot</span></code>-methods of the <code class="docutils literal notranslate"><span class="pre">xarray.DataArray</span></code> object to create different plots using
 the <a class="reference external" href="https://matplotlib.org/">Matplotlib</a> backend. An overview of different
-types can be found <a class="reference external" href="https://docs.xarray.dev/en/stable/api.html#id12">here</a>,
+types can be found <a class="reference external" href="https://docs.xarray.dev/en/stable/api/plotting.html">here</a>,
 where you can also find more information on which arguments can be passed.</p>
 <p>We use the <code class="docutils literal notranslate"><span class="pre">.plot.scatter</span></code>-method to create a scatter plot of the time series.
 Even though Matplotlib is already used in the background by Xarray, we can also load it
 here directly in order to further customize the plot.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-
-<span class="n">nir1_px_water</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Water&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nir1_px_water</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Water&quot;</span><span class="p">)</span>
 <span class="n">nir1_px_veg1</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Vegetation 1&quot;</span><span class="p">)</span>
 <span class="n">nir1_px_veg2</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Vegetation 2&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Comparison of Sentinel-2 L2A Near Infrared time series&quot;</span><span class="p">)</span>
@@ -4901,7 +4912,7 @@ here directly in order to further customize the plot.</p>
 obvious choice. However, this can often times lead to confusing or misleading time
 series plots. See <a class="reference external" href="https://github.com/Jena-Earth-Observation-School/sdc-tools/issues/44">here</a>
 for what I mean exactly. Better start with a simple scatter plot and then move on to
-more complex plots, e.g. line plots in combination with interpolation methods.</p>
+more complex plots, e.g. line plots in combination with <a class="reference external" href="https://docs.xarray.dev/en/stable/user-guide/interpolation.html">interpolation methods</a>.</p>
 </div>
 <p>Have you noticed that all cells up to this point were executed almost
 instantly, whereas this one took some time to finish?</p>
@@ -5897,8 +5908,8 @@ make sure everything is as expected.</p>
 <p>Sentinel-2 L2A data loaded via the <code class="docutils literal notranslate"><span class="pre">load_product</span></code> function is by default cloud
 masked. The mask is created from the <code class="docutils literal notranslate"><span class="pre">SCL</span></code> (Scene Classification) band and valid
 classes defined according to Table 4 in <a class="reference external" href="https://doi.org/10.3390/rs11040433">Baetens et al. (2019)</a>.</p>
-<p>Set the <code class="docutils literal notranslate"><span class="pre">s2_apply_mask</span></code>-parameter to <code class="docutils literal notranslate"><span class="pre">False</span></code> to load the data without the cloud
-mask.</p>
+<p>You can set the <code class="docutils literal notranslate"><span class="pre">s2_apply_mask</span></code>-parameter to <code class="docutils literal notranslate"><span class="pre">False</span></code> to load the data without any cloud
+masking applied.</p>
 <p>Let’s have a look at the Near Infrared band again and plot a scene by selecting
 a time index (10th scene in the array) instead of a specific date:</p>
 <div class="cell docutils container">
@@ -5924,7 +5935,9 @@ a time index (10th scene in the array) instead of a specific date:</p>
 <p>Notice, that you can see some areas that are not perfectly masked (e.g., cloud
 shadows). Depending on your analysis, further cleaning steps of the data might
 be necessary.</p>
-<p>Masked areas are <a class="reference external" href="https://numpy.org/doc/stable/reference/constants.html#numpy.nan"><code class="docutils literal notranslate"><span class="pre">numpy.nan</span></code></a> values in the data array, which we can plot by selecting them using Xarray’s <a class="reference external" href="https://docs.xarray.dev/en/stable/generated/xarray.Dataset.isnull.html#xarray.Dataset.isnull"><code class="docutils literal notranslate"><span class="pre">isnull</span></code>-method</a>:</p>
+<p>Masked areas are <a class="reference external" href="https://numpy.org/doc/stable/reference/constants.html#numpy.nan"><code class="docutils literal notranslate"><span class="pre">numpy.nan</span></code></a>
+values in the data array. By using Xarray’s <a class="reference external" href="https://docs.xarray.dev/en/stable/generated/xarray.Dataset.isnull.html#xarray.Dataset.isnull"><code class="docutils literal notranslate"><span class="pre">isnull</span></code>-method</a>
+we can create (and visualise) a binary layer with nodata values encoded as 1 and valid pixels as 0:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scene_B08</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;cividis&quot;</span><span class="p">)</span>
@@ -5939,6 +5952,8 @@ be necessary.</p>
 <img alt="../../_images/43754bc55eeaf1f7d8b00768ede8af6f5c460e711cd64b99328deaef0f774b70.png" src="../../_images/43754bc55eeaf1f7d8b00768ede8af6f5c460e711cd64b99328deaef0f774b70.png" />
 </div>
 </div>
+<p>Try loading the same data with the <code class="docutils literal notranslate"><span class="pre">s2_apply_mask</span></code>-parameter set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+How does the 2021-01-08 acquisition look like without cloud masking applied?</p>
 </section>
 <section id="group-acquisition-slices">
 <span id="group-acq-slices"></span><h2>Group acquisition slices<a class="headerlink" href="#group-acquisition-slices" title="Link to this heading">#</a></h2>
@@ -5947,7 +5962,7 @@ multiple acquisition slices due to the overlapping grid used (which
 unfortunately is not the most efficient, see this recent publication by <a class="reference external" href="https://doi.org/10.1016/j.isprsjprs.2023.07.015">Bauer-Marschallinger et al. (2023)</a>.</p>
 <p>You can view the entire grid over continental Africa in the Digital Earth Africa
 <a class="reference external" href="https://explorer.digitalearth.africa/products/s2_l2a">Explorer</a>.</p>
-<p>The following example shows an acquisition that has been sliced into four parts:</p>
+<p>The following example shows an acquisition that has been sliced into four parts with their timestamps only differing by a few seconds:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">date</span> <span class="o">=</span> <span class="s2">&quot;2021-01-08&quot;</span>
@@ -6341,9 +6356,7 @@ Coordinates:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">date</span><span class="p">)</span><span class="o">.</span><span class="n">B08</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">robust</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                           <span class="n">col</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span>
-                           <span class="n">col_wrap</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">date</span><span class="p">)</span><span class="o">.</span><span class="n">B08</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">robust</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">col_wrap</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -6362,9 +6375,7 @@ slices aggregated by calculating the mean of each group.</p>
 to 146.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sdc.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">groupby_acq_slices</span>
-
-<span class="n">ds_grouped</span> <span class="o">=</span> <span class="n">groupby_acq_slices</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds_grouped</span> <span class="o">=</span> <span class="n">groupby_acq_slices</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 <span class="n">ds_grouped</span><span class="o">.</span><span class="n">B08</span>
 </pre></div>
 </div>
@@ -7383,6 +7394,10 @@ Coordinates:
 </div>
 </div>
 </section>
+<section id="spectral-indices">
+<h2>Spectral indices<a class="headerlink" href="#spectral-indices" title="Link to this heading">#</a></h2>
+<p>Please refer to the following guide on how to <a class="reference internal" href="../03/04_00_Spyndex.html#spectral-indices"><span class="std std-ref">…calculate indices using the spyndex package?</span></a></p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -7450,11 +7465,13 @@ Coordinates:
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#product-description">Product description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-packages">Import packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-data">Loading data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-shorts-indexing-and-basic-plotting">Xarray Shorts: Indexing and basic plotting</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xarray-shorts-spatial-subset">Xarray Shorts: Spatial subset</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cloud-mask">Cloud mask</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#group-acquisition-slices">Group acquisition slices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spectral-indices">Spectral indices</a></li>
 </ul>
   </nav></div>
 

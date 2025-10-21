@@ -396,6 +396,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-packages">Import packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-planetary-computer">Example: Planetary Computer</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-digital-earth-africa">Example: Digital Earth Africa</a></li>
 </ul>
@@ -440,17 +441,26 @@ document.write(`
 <p>In both examples we will use the bounding box of an entire SALDi site as an example. If you have a specific area of interest, you can replace the bounding box with your own. E.g., by using the utility function <code class="docutils literal notranslate"><span class="pre">sdc.vec.get_vec_bounds</span></code> to generate a bounding box from a vector file.</p>
 <p>In general it is recommended to test on a small subset first, before scaling up to larger areas and time periods.</p>
 </div>
+<section id="import-packages">
+<h2>Import packages<a class="headerlink" href="#import-packages" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">folium</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sdc.products.remote</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_from_stac</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sdc.vec</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_site_bounds</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 <section id="example-planetary-computer">
 <h2>Example: Planetary Computer<a class="headerlink" href="#example-planetary-computer" title="Link to this heading">#</a></h2>
 <p>In this example, we load the <code class="docutils literal notranslate"><span class="pre">MCD64A1</span> <span class="pre">Version</span> <span class="pre">6.1</span> <span class="pre">Burned</span> <span class="pre">Area</span> <span class="pre">data</span> <span class="pre">product</span></code> from MPC. You can find more details about this data product <a class="reference external" href="https://planetarycomputer.microsoft.com/dataset/modis-64A1-061">here</a> on the MPC website and <a class="reference external" href="https://lpdaac.usgs.gov/products/mcd64a1v061/">here</a> from the original data source, the USGS Land Processes Distributed Active Archive Center (LP DAAC).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sdc.products.remote</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_from_stac</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sdc.vec</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_site_bounds</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">folium</span>
-
-<span class="n">bounds</span> <span class="o">=</span> <span class="n">get_site_bounds</span><span class="p">(</span><span class="n">site</span><span class="o">=</span><span class="s2">&quot;site06&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bounds</span> <span class="o">=</span> <span class="n">get_site_bounds</span><span class="p">(</span><span class="n">site</span><span class="o">=</span><span class="s2">&quot;site06&quot;</span><span class="p">)</span>
 <span class="n">time_range</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;2018&quot;</span><span class="p">,</span> <span class="s2">&quot;2023&quot;</span><span class="p">)</span>
 <span class="n">override_defaults</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;crs&#39;</span><span class="p">:</span> <span class="s1">&#39;EPSG:4326&#39;</span><span class="p">,</span> <span class="c1"># this is already the default, but just to be explicit I wanted to show it here</span>
@@ -2628,6 +2638,7 @@ Attributes:
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-packages">Import packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-planetary-computer">Example: Planetary Computer</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-digital-earth-africa">Example: Digital Earth Africa</a></li>
 </ul>

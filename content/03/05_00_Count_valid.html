@@ -406,26 +406,18 @@ further analysis.</p>
 <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.isfinite.html"><code class="docutils literal notranslate"><span class="pre">isfinite</span></code>-method</a> and Xarray’s <a class="reference external" href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.sum.html"><code class="docutils literal notranslate"><span class="pre">sum</span></code>-method</a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sdc</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[INFO] Trying to allocate requested resources on the cluster (timeout after 5 minutes)...
-All jobs are pending. Job IDs: 2252156
-All jobs are pending. Job IDs: 2252156
-[INFO] Cluster is ready for computation! :) Dask dashboard available via &#39;localhost:8806&#39;
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sdc.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">groupby_acq_slices</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
-
-<span class="n">time_range</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;2021-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2022-01-01&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time_range</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;2021-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2022-01-01&quot;</span><span class="p">)</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;s2_l2a&quot;</span><span class="p">,</span> 
                   <span class="n">vec</span><span class="o">=</span><span class="s2">&quot;site06&quot;</span><span class="p">,</span> 
                   <span class="n">time_range</span><span class="o">=</span><span class="n">time_range</span><span class="p">)</span>
@@ -943,9 +935,7 @@ case 😉 (Hint: <a class="reference internal" href="../02/01_00_Sentinel2.html#
 order to not count the same pixels multiple times:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sdc.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">groupby_acq_slices</span>
-
-<span class="n">ds_grouped</span> <span class="o">=</span> <span class="n">groupby_acq_slices</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds_grouped</span> <span class="o">=</span> <span class="n">groupby_acq_slices</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 
 <span class="n">valid_px_count_grouped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">ds_grouped</span><span class="o">.</span><span class="n">B08</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
 <span class="n">valid_px_count_grouped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">robust</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
