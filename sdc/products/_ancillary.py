@@ -81,6 +81,15 @@ def override_common_params(params: dict[str, Any],
         if val is not None:
             params[key] = val
     
+    if params.get('crs') not in ['EPSG:4326', 4326]:
+        if 'chunks' in params:
+            chunks = params['chunks']
+            if 'latitude' in chunks:
+                chunks['y'] = chunks.pop('latitude')
+            if 'longitude' in chunks:
+                chunks['x'] = chunks.pop('longitude')
+            params['chunks'] = chunks
+    
     if verbose:
         print(f"[INFO] odc.stac.load parameters: {params}")
     return params
