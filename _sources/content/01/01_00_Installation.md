@@ -35,9 +35,9 @@ specifying the version tag. It is important to specify the same version tag for
 both the environment and the package installation.
 
 ```bash
-micromamba create --file https://raw.githubusercontent.com/Jena-Earth-Observation-School/sdc-tools/v0.6.0/environment.yml
+micromamba create --file https://raw.githubusercontent.com/Jena-Earth-Observation-School/sdc-tools/v0.9.0/environment.yml
 micromamba activate sdc_env
-pip install git+https://github.com/Jena-Earth-Observation-School/sdc-tools.git@v0.6.0
+pip install git+https://github.com/Jena-Earth-Observation-School/sdc-tools.git@v0.9.0
 ```
 
 See the [releases page](https://github.com/Jena-Earth-Observation-School/sdc-tools/releases) 
