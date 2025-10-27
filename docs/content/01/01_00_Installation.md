@@ -50,7 +50,7 @@ these steps:
 
 ```bash
 wget https://raw.githubusercontent.com/Jena-Earth-Observation-School/sdc-tools/main/environment.yml
-pixi init -- environment.yml
+pixi init --import environment.yml
 pixi install
 pixi add --pypi 'sdc @ git+https://github.com/Jena-Earth-Observation-School/sdc-tools.git’
 ```
