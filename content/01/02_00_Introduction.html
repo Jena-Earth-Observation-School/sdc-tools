@@ -196,11 +196,11 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">How to...</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../03/01_00_Override_Params.html">…use other loading parameters with <code class="docutils literal notranslate"><span class="pre">load_product</span></code>?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../03/02_00_Dask_Dashboard.html">…use the Dask Dashboard to monitor computations?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../03/03_00_Clip_to_vec.html">…clip data to the extent of a vector file?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../03/04_00_Spyndex.html">…calculate indices using the <code class="docutils literal notranslate"><span class="pre">spyndex</span></code> package?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../03/05_00_Count_valid.html">…visualize a valid pixel count?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03/01_00_Dask_Dashboard.html">…use the Dask Dashboard to monitor computations?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03/02_00_Clip_to_vec.html">…clip data to the extent of a vector file?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03/03_00_Spyndex.html">…calculate indices using the <code class="docutils literal notranslate"><span class="pre">spyndex</span></code> package?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03/04_00_Count_valid.html">…visualize a valid pixel count?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03/05_00_Override_Params.html">…use other loading parameters with <code class="docutils literal notranslate"><span class="pre">load_product</span></code>?</a></li>
 </ul>
 
     </div>
@@ -441,7 +441,7 @@ can handle, e.g. GeoJSON, GeoPackage or ESRI Shapefile) that defines an area of
 interest as a subset of a SALDi site. Providing a vector file outside the
 spatial extent of the SALDi sites will result in an empty dataset. Please note,
 that the bounding box of the provided geometry will be used to load the
-data (see <a class="reference internal" href="../03/03_00_Clip_to_vec.html#clip-to-vec"><span class="std std-ref">…clip data to the extent of a vector file?</span></a> for how to clip to the exact geometry).</p></li>
+data (see <a class="reference internal" href="../03/02_00_Clip_to_vec.html#clip-to-vec"><span class="std std-ref">…clip data to the extent of a vector file?</span></a> for how to clip to the exact geometry).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">time_range</span></code>: Filter the returned data temporally by providing a tuple of
 strings in the format <em>(“YY-MM-dd”, “YY-MM-dd”)</em>, or <em>None</em> to return all
 available data. If you want to use a different date format, you can also provide

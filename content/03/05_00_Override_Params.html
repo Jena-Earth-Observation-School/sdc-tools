@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>…use the Dask Dashboard to monitor computations? &#8212; SALDi Data Cube - Tools &amp; Tutorials</title>
+    <title>…use other loading parameters with load_product? &#8212; SALDi Data Cube - Tools &amp; Tutorials</title>
   
   
   
@@ -57,11 +57,10 @@
     <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'content/03/02_00_Dask_Dashboard';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/03/05_00_Override_Params';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="…clip data to the extent of a vector file?" href="03_00_Clip_to_vec.html" />
-    <link rel="prev" title="…use other loading parameters with load_product?" href="01_00_Override_Params.html" />
+    <link rel="prev" title="…visualize a valid pixel count?" href="04_00_Count_valid.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -196,11 +195,11 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">How to...</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="01_00_Override_Params.html">…use other loading parameters with <code class="docutils literal notranslate"><span class="pre">load_product</span></code>?</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">…use the Dask Dashboard to monitor computations?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="03_00_Clip_to_vec.html">…clip data to the extent of a vector file?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="04_00_Spyndex.html">…calculate indices using the <code class="docutils literal notranslate"><span class="pre">spyndex</span></code> package?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="05_00_Count_valid.html">…visualize a valid pixel count?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_00_Dask_Dashboard.html">…use the Dask Dashboard to monitor computations?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_00_Clip_to_vec.html">…clip data to the extent of a vector file?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_00_Spyndex.html">…calculate indices using the <code class="docutils literal notranslate"><span class="pre">spyndex</span></code> package?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_00_Count_valid.html">…visualize a valid pixel count?</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">…use other loading parameters with <code class="docutils literal notranslate"><span class="pre">load_product</span></code>?</a></li>
 </ul>
 
     </div>
@@ -272,7 +271,7 @@
       
       
       
-      <li><a href="https://github.com/Jena-Earth-Observation-School/sdc-tools/issues/new?title=Issue%20on%20page%20%2Fcontent/03/02_00_Dask_Dashboard.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/Jena-Earth-Observation-School/sdc-tools/issues/new?title=Issue%20on%20page%20%2Fcontent/03/05_00_Override_Params.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -302,7 +301,7 @@
       
       
       
-      <li><a href="../../_sources/content/03/02_00_Dask_Dashboard.md" target="_blank"
+      <li><a href="../../_sources/content/03/05_00_Override_Params.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -384,7 +383,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>…use the Dask Dashboard to monitor computations?</h1>
+    <h1>…use other loading parameters with load_product?</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -398,10 +397,67 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="use-the-dask-dashboard-to-monitor-computations">
-<h1>…use the Dask Dashboard to monitor computations?<a class="headerlink" href="#use-the-dask-dashboard-to-monitor-computations" title="Link to this heading">#</a></h1>
-<p><em>Coming soon…</em></p>
-<p><img alt="https://media.giphy.com/media/KxoA5wFunRz5EFIVHn/giphy.gif" src="https://media.giphy.com/media/KxoA5wFunRz5EFIVHn/giphy.gif" /></p>
+  <section class="tex2jax_ignore mathjax_ignore" id="use-other-loading-parameters-with-load-product">
+<span id="override-defaults"></span><h1>…use other loading parameters with <code class="docutils literal notranslate"><span class="pre">load_product</span></code>?<a class="headerlink" href="#use-other-loading-parameters-with-load-product" title="Link to this heading">#</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The following section is only relevant if you deliberately want to override the
+default loading parameters and if you know what you are doing. If you are not
+sure, please skip this section and just be happy with the default values or
+get in contact with me to discuss your use case 🙂</p>
+</div>
+<p>All data products except for the MSWEP product are loaded internally using the
+<a class="reference external" href="https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load"><code class="docutils literal notranslate"><span class="pre">odc.stac.load</span></code></a>
+-function. As mentioned above, some loading parameters are set to default values
+to make this package beginner-friendly and easier to use. To be more precise,
+the following defaults are used:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">crs='EPSG:4326'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">resolution=0.0002</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">resampling='bilinear'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">chunks={'time':</span> <span class="pre">-1,</span> <span class="pre">'latitude':</span> <span class="pre">'auto',</span> <span class="pre">'longitude':</span> <span class="pre">'auto'}</span></code></p></li>
+</ul>
+<p>The default values for <code class="docutils literal notranslate"><span class="pre">crs</span></code> and <code class="docutils literal notranslate"><span class="pre">resolution</span></code>, for example, are the native coordinate
+reference system (CRS) and resolution of the Sentinel-1 RTC and the Sentinel-2 L2A
+products (most bands of the latter at least).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">resampling</span></code>-parameter is only relevant if a data product needs to be
+reprojected. Note that by default this parameter is overriden for the SANLC
+product to use <code class="docutils literal notranslate"><span class="pre">resampling='nearest'</span></code>, which is a better choice for categorical
+data.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">chunks</span></code>-parameter is important for loading the data
+lazily using Dask (see <a class="reference internal" href="../01/03_00_Resources.html#xarray-dask-intro"><span class="std std-ref">Xarray, Dask and lazy loading</span></a> for more information). The
+default values have been chosen to work well for time series analysis
+(alignment of chunks along the time dimension) and to be memory efficient.</p>
+<p>If you want to override these defaults or add additional parameters that
+influence the loading process, you can do so by providing the
+<code class="docutils literal notranslate"><span class="pre">override_defaults</span></code>-parameter to the <a class="reference internal" href="../01/02_00_Introduction.html#load-product-intro"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">load_product</span></code></span></a>
+-function. This parameter should be a dictionary with keys corresponding to
+parameter names of the <a class="reference external" href="https://odc-stac.readthedocs.io/en/latest/_api/odc.stac.load.html#odc-stac-load"><code class="docutils literal notranslate"><span class="pre">odc.stac.load</span></code></a>
+-function and values corresponding to the desired values. It is also possible to
+partially override the defaults while keeping the rest unchanged. The following
+is a simple example of how to override the default <code class="docutils literal notranslate"><span class="pre">crs</span></code>-parameter to use
+NSIDC EASE-Grid 2.0 Global (<a class="reference external" href="https://epsg.io/6933">https://epsg.io/6933</a>), which is an equal-area projection.
+Because the unit of this CRS is in meters, we also have to adjust the
+<code class="docutils literal notranslate"><span class="pre">resolution</span></code>-parameter.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sdc.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_product</span>
+
+<span class="n">override_defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;crs&quot;</span><span class="p">:</span> <span class="mi">6933</span><span class="p">,</span> <span class="s2">&quot;resolution&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">}</span>
+<span class="n">s1_data</span> <span class="o">=</span> <span class="n">load_product</span><span class="p">(</span><span class="n">product</span><span class="o">=</span><span class="s2">&quot;s1_rtc&quot;</span><span class="p">,</span> 
+                       <span class="n">vec</span><span class="o">=</span><span class="s2">&quot;/path/to/my_area_of_interest.geojson&quot;</span><span class="p">,</span> 
+                       <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2020-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2021-01-01&quot;</span><span class="p">),</span>
+                       <span class="n">override_defaults</span><span class="o">=</span><span class="n">override_defaults</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The above example might be a bit misleading, especially for beginners, as we
+can’t magically increase the spatial resolution of Earth Observation data by
+simply changing a parameter called <code class="docutils literal notranslate"><span class="pre">resolution</span></code>. What we do here instead is
+changing the pixel spacing of the loaded data. Both terms are often used
+interchangeably, but they are not the same. Please keep this in mind! In the
+example we need to use the term <code class="docutils literal notranslate"><span class="pre">resolution</span></code> as this is the name of the
+corresponding parameter of the <code class="docutils literal notranslate"><span class="pre">odc.stac.load</span></code>-function.</p>
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -435,22 +491,13 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="01_00_Override_Params.html"
+       href="04_00_Count_valid.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">…use other loading parameters with <code class="docutils literal notranslate"><span class="pre">load_product</span></code>?</p>
+        <p class="prev-next-title">…visualize a valid pixel count?</p>
       </div>
-    </a>
-    <a class="right-next"
-       href="03_00_Clip_to_vec.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">…clip data to the extent of a vector file?</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
