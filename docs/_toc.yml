@@ -21,5 +21,6 @@ parts:
     - file: content/03/01_00_Dask_Dashboard
     - file: content/03/02_00_Clip_to_vec
     - file: content/03/03_00_Spyndex
-    - file: content/03/04_00_Count_valid
-    - file: content/03/05_00_Override_Params
+    - file: content/03/04_00_Time_series
+    - file: content/03/05_00_Count_valid
+    - file: content/03/06_00_Override_Params
