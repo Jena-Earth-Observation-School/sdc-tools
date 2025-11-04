@@ -20,7 +20,7 @@ dependencies = [
     "hvplot",
     "h5netcdf",
     "jupyterlab",
-    "jupyter-book",
+    "jupyter-book==1.0.4",
     "matplotlib",
     "nodejs",
     "numbagg",

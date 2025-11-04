@@ -14,7 +14,7 @@ dependencies:
   - hvplot
   - h5netcdf
   - jupyterlab
-  - jupyter-book
+  - jupyter-book == 1.0.4
   - libgdal-arrow-parquet
   - matplotlib
   - nodejs
