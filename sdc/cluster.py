@@ -14,7 +14,8 @@ def start_slurm_cluster(cores: int = 16,
                         memory: str = '16 GiB',
                         walltime: str = '00:45:00',
                         log_directory: Optional[str] = None,
-                        wait_timeout: int = 300
+                        wait_timeout: int = 300,
+                        reservation: Optional[str] = None
                         ) -> tuple[Client, SLURMCluster]:
     """
     Start a dask_jobqueue.SLURMCluster and a distributed.Client. The cluster will
@@ -53,61 +54,81 @@ def start_slurm_cluster(cores: int = 16,
     home_directory = os.getenv('HOME')
     if any(x is None for x in [user_name, home_directory]):
         raise RuntimeError("Cannot determine user name or home directory")
-    
     if log_directory is None:
         if os.path.exists(home_directory):
             now = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')
             log_directory = os.path.join(home_directory, '.sdc_logs', now)
+    if reservation is None:
+        reservation = "SALDI"
     
     port = _dashboard_port()
     scheduler_options = {'dashboard_address': f':{port}'}
     job_name = f"dask-worker-{port}"
-    kwargs = {'queue': 'short',
-              'cores': cores,
-              'processes': processes,
-              'memory': memory,
-              'walltime': walltime,
-              'interface': 'ib0',
-              'job_script_prologue': ['mkdir -p /scratch/$USER'],
-              'worker_extra_args': ['--lifetime', '40m', '--lifetime-stagger', '4m'],
-              'local_directory': os.path.join('/', 'scratch', user_name),
-              'log_directory': log_directory,
-              'scheduler_options': scheduler_options,
-              'job_name': job_name}
+    common_params = {
+        'cores': cores,
+        'processes': processes,
+        'memory': memory,
+        'walltime': walltime,
+        'interface': 'ib0',
+        'job_script_prologue': ['mkdir -p /scratch/$USER'],
+        'worker_extra_args': ['--lifetime', '40m', '--lifetime-stagger', '4m'],
+        'local_directory': os.path.join('/', 'scratch', user_name),
+        'log_directory': log_directory,
+        'scheduler_options': scheduler_options,
+        'job_name': job_name
+    }
     
-    dask_client, cluster = _create_cluster(**kwargs)
+    configurations = []
+    if _check_reservation_active(reservation):
+        configurations.append({
+            **common_params, 'queue': 'short',
+            'job_extra_directives': [f'--reservation={reservation}']
+        })
+    else:
+        reservation = None
+    configurations.append({**common_params, 'queue': 'short'})
+    configurations.append({**common_params, 'queue': 'standard'})
     
     start_time = time.time()
-    time.sleep(10)
-    print("[INFO] Trying to allocate requested resources on the cluster (timeout after "
-          "5 minutes)...")
-    queue_switched = False
-    
+    config_index = 0
     try:
-        while not is_cluster_ready(dask_client):
-            if time.time() - start_time > wait_timeout:
-                if not queue_switched:
-                    print("[INFO] The default 'short' queue is busy. Switching to "
-                        "'standard' queue and retrying (timeout after 5 minutes)...")
-                    cluster.close()
-                    kwargs['queue'] = 'standard'
-                    dask_client, cluster = _create_cluster(**kwargs)
-                    start_time = time.time()
-                    queue_switched = True
-                else:
-                    raise TimeoutError("[INFO] Cluster failed to start within timeout "
-                                    "period of 5 minutes. This could be due to high "
-                                    "demand on the cluster.")
-            time.sleep(10)
-        else:
-            print(f"[INFO] Cluster is ready for computation! :) Dask dashboard available via "
-                f"'localhost:{port}'")
-            return dask_client, cluster
+        while config_index < len(configurations):
+            config = configurations[config_index]
+            print(f"[INFO] Trying to allocate requested resources using configuration "
+                  f"{config_index + 1}/{len(configurations)}:\nqueue={config['queue']}, "
+                  f"reservation={reservation if reservation else 'None'}")
+            
+            dask_client, cluster = _create_cluster(**config)
+
+            while not is_cluster_ready(dask_client, job_name=job_name):
+                if time.time() - start_time > wait_timeout:
+                    if config_index < len(configurations) - 1:
+                        # Move to the next configuration
+                        config_index += 1
+                        cluster.close()
+                        start_time = time.time()  # Reset the timer
+                        break
+                    else:
+                        raise TimeoutError("[INFO] Cluster failed to start within timeout "
+                                           "period of 5 minutes. This could be due to high "
+                                           "demand on the cluster.")
+                time.sleep(10)
+            else:
+                # If we exited the while loop without breaking (i.e., cluster is ready)
+                print(f"[INFO] Cluster is ready for computation! :) Dask dashboard "
+                      f"available via 'localhost:{port}'")
+                return dask_client, cluster
+
+        # If we exhausted all configurations
+        raise TimeoutError("[INFO] Cluster failed to start with any configuration within "
+                           "the timeout period. This could be due to high demand on the "
+                           "cluster.")
     except (SystemExit, KeyboardInterrupt):
         _cancel_slurm_jobs(job_name)
     except Exception as e:
         _cancel_slurm_jobs(job_name)
         raise e
+
 
 def _dashboard_port(port: int = 8787) -> int:
     """Finding a free port for the dask dashboard based on the user id."""
@@ -120,6 +141,18 @@ def _dashboard_port(port: int = 8787) -> int:
                    if x != '']:
         port += 1
     return port
+
+
+def _check_reservation_active(reservation_name: str) -> bool:
+    """Check if a SLURM reservation is active."""
+    try:
+        cmd = f"scontrol show reservation {reservation_name}"
+        output = sp.check_output(cmd, shell=True).decode('utf-8').strip()
+        if f"ReservationName={reservation_name}" in output and "State=ACTIVE" in output:
+            return True
+    except sp.SubprocessError:
+        pass
+    return False
 
 
 def _create_cluster(**kwargs) -> tuple[Client, SLURMCluster]:
@@ -135,7 +168,8 @@ def _create_cluster(**kwargs) -> tuple[Client, SLURMCluster]:
 
 def is_cluster_ready(client: Client,
                      min_workers: int = 1,
-                     recent_job_time: int = 120
+                     recent_job_time: int = 120,
+                     job_name: str = "dask-worker"
                      ) -> bool:
     """
     Check if the cluster is ready for computation by checking the status of recent SLURM 
@@ -149,6 +183,8 @@ def is_cluster_ready(client: Client,
         Minimum number of workers required
     recent_job_time : int
         Time in seconds to consider a job as recent. Default is 120 seconds.
+    job_name : str
+        The name of the SLURM job to check. Default is "dask-worker".
     
     Returns
     -------
@@ -159,7 +195,7 @@ def is_cluster_ready(client: Client,
         current_time = datetime.datetime.now()
         
         # Get all Slurm job IDs for current user and name "dask-worker"
-        cmd = f"squeue -u {os.getenv('USER')} -n dask-worker -h -o '%i %S'"
+        cmd = f"squeue -u {os.getenv('USER')} -n {job_name} -h -o '%i %S'"
         output = sp.check_output(cmd, shell=True).decode('utf-8').strip().split('\n')
         
         # Filter jobs that are N/A or started recently
@@ -180,7 +216,7 @@ def is_cluster_ready(client: Client,
                     continue
         
         if not recent_job_ids:
-            print("No recent SLURM jobs found for dask-workers")
+            print(f"No recent SLURM jobs found for {job_name}")
             return False
         
         running_jobs = []
