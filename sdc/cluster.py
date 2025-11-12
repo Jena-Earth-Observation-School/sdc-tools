@@ -61,7 +61,7 @@ def start_slurm_cluster(cores: int = 16,
     
     port = _dashboard_port()
     scheduler_options = {'dashboard_address': f':{port}'}
-    
+    job_name = f"dask-worker-{port}"
     kwargs = {'queue': 'short',
               'cores': cores,
               'processes': processes,
@@ -69,11 +69,11 @@ def start_slurm_cluster(cores: int = 16,
               'walltime': walltime,
               'interface': 'ib0',
               'job_script_prologue': ['mkdir -p /scratch/$USER'],
-              'worker_extra_args': ['--lifetime', '40m',
-                                    '--lifetime-stagger', '4m'],
+              'worker_extra_args': ['--lifetime', '40m', '--lifetime-stagger', '4m'],
               'local_directory': os.path.join('/', 'scratch', user_name),
               'log_directory': log_directory,
-              'scheduler_options': scheduler_options}
+              'scheduler_options': scheduler_options,
+              'job_name': job_name}
     
     dask_client, cluster = _create_cluster(**kwargs)
     
@@ -83,26 +83,31 @@ def start_slurm_cluster(cores: int = 16,
           "5 minutes)...")
     queue_switched = False
     
-    while not is_cluster_ready(dask_client):
-        if time.time() - start_time > wait_timeout:
-            if not queue_switched:
-                print("[INFO] The default 'short' queue is busy. Switching to "
-                      "'standard' queue and retrying (timeout after 5 minutes)...")
-                cluster.close()
-                kwargs['queue'] = 'standard'
-                dask_client, cluster = _create_cluster(**kwargs)
-                start_time = time.time()
-                queue_switched = True
-            else:
-                raise TimeoutError("[INFO] Cluster failed to start within timeout "
-                                   "period of 5 minutes. This could be due to high "
-                                   "demand on the cluster.")
-        time.sleep(10)
-    
-    print(f"[INFO] Cluster is ready for computation! :) Dask dashboard available via "
-          f"'localhost:{port}'")
-    return dask_client, cluster
-
+    try:
+        while not is_cluster_ready(dask_client):
+            if time.time() - start_time > wait_timeout:
+                if not queue_switched:
+                    print("[INFO] The default 'short' queue is busy. Switching to "
+                        "'standard' queue and retrying (timeout after 5 minutes)...")
+                    cluster.close()
+                    kwargs['queue'] = 'standard'
+                    dask_client, cluster = _create_cluster(**kwargs)
+                    start_time = time.time()
+                    queue_switched = True
+                else:
+                    raise TimeoutError("[INFO] Cluster failed to start within timeout "
+                                    "period of 5 minutes. This could be due to high "
+                                    "demand on the cluster.")
+            time.sleep(10)
+        else:
+            print(f"[INFO] Cluster is ready for computation! :) Dask dashboard available via "
+                f"'localhost:{port}'")
+            return dask_client, cluster
+    except (SystemExit, KeyboardInterrupt):
+        _cancel_slurm_jobs(job_name)
+    except Exception as e:
+        _cancel_slurm_jobs(job_name)
+        raise e
 
 def _dashboard_port(port: int = 8787) -> int:
     """Finding a free port for the dask dashboard based on the user id."""
@@ -230,3 +235,21 @@ def _get_slurm_job_info(job_id: str) -> dict:
         }
     except sp.SubprocessError:
         return {}
+
+
+def _cancel_slurm_jobs(job_name: str):
+    """Cancel all SLURM jobs for the current user with the given job name."""
+    try:
+        cmd = f"squeue -u {os.getenv('USER')} -n {job_name} -h -o '%i'"
+        output = sp.check_output(cmd, shell=True).decode('utf-8').strip().split('\n')
+        job_ids = [line.strip() for line in output if line.strip()]
+        for job_id in job_ids:
+            try:
+                sp.run(f"scancel {job_id}", shell=True, check=True, timeout=5)
+                print(f"Canceled job {job_id}")
+            except sp.TimeoutExpired:
+                print(f"Timeout while trying to cancel job {job_id}")
+            except sp.SubprocessError as e:
+                print(f"Failed to cancel job {job_id}: {e}")
+    except Exception as e:
+        print(f"Error canceling jobs: {e}")
