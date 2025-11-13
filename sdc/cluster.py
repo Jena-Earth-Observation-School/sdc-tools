@@ -9,10 +9,10 @@ from distributed.utils import TimeoutError
 from typing import Optional
 
 
-def start_slurm_cluster(cores: int = 16,
-                        processes: int = 2,
-                        memory: str = '16 GiB',
-                        walltime: str = '00:45:00',
+def start_slurm_cluster(cores: int = 12,
+                        processes: int = 3,
+                        memory: str = '18 GiB',
+                        walltime: str = '01:00:00',
                         log_directory: Optional[str] = None,
                         wait_timeout: int = 300,
                         reservation: Optional[str] = None
@@ -71,7 +71,7 @@ def start_slurm_cluster(cores: int = 16,
         'walltime': walltime,
         'interface': 'ib0',
         'job_script_prologue': ['mkdir -p /scratch/$USER'],
-        'worker_extra_args': ['--lifetime', '40m', '--lifetime-stagger', '4m'],
+        'worker_extra_args': ['--lifetime', '55m', '--lifetime-stagger', '4m'],
         'local_directory': os.path.join('/', 'scratch', user_name),
         'log_directory': log_directory,
         'scheduler_options': scheduler_options,
@@ -80,10 +80,9 @@ def start_slurm_cluster(cores: int = 16,
     
     configurations = []
     if _check_reservation_active(reservation):
-        configurations.append({
-            **common_params, 'queue': 'short',
-            'job_extra_directives': [f'--reservation={reservation}']
-        })
+        configurations.append({**common_params, 'queue': 'short',
+                  'job_extra_directives': [f'--reservation={reservation}'],
+                  'cores': 8, 'processes': 2, 'memory': '16 GiB'})
     else:
         reservation = None
     configurations.append({**common_params, 'queue': 'short'})
@@ -159,10 +158,9 @@ def _create_cluster(**kwargs) -> tuple[Client, SLURMCluster]:
     """Create a dask_jobqueue.SLURMCluster and a distributed.Client."""
     cluster = SLURMCluster(**kwargs)
     dask_client = Client(cluster)
-    cluster.adapt(minimum=1, maximum=6,
+    cluster.adapt(minimum=1, maximum=2*kwargs['processes'],
                 # https://github.com/dask/dask-jobqueue/issues/498#issuecomment-1233716189
-                worker_key=lambda state: state.address.split(':')[0],
-                interval='10s')
+                worker_key=lambda state: state.address.split(':')[0], interval='10s')
     return dask_client, cluster
 
 
