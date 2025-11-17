@@ -62,8 +62,6 @@ def start_slurm_cluster(cores: int = 12,
         if os.path.exists(home_directory):
             now = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')
             log_directory = os.path.join(home_directory, '.sdc_logs', now)
-    if reservation is None:
-        reservation = "SALDI"
     
     port = _dashboard_port()
     scheduler_options = {'dashboard_address': f':{port}'}
@@ -107,6 +105,8 @@ def start_slurm_cluster(cores: int = 12,
                 if time.time() - start_time > wait_timeout:
                     if config_index < len(configurations) - 1:
                         # Move to the next configuration
+                        if reservation:
+                            reservation = None
                         config_index += 1
                         cluster.close()
                         start_time = time.time()  # Reset the timer
