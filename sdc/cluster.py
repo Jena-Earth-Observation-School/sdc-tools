@@ -103,7 +103,7 @@ def start_slurm_cluster(cores: int = 12,
             
             dask_client, cluster = _create_cluster(**config)
 
-            while not is_cluster_ready(dask_client, job_name=job_name):
+            while not _is_cluster_ready(dask_client, job_name=job_name):
                 if time.time() - start_time > wait_timeout:
                     if config_index < len(configurations) - 1:
                         # Move to the next configuration
@@ -168,35 +168,16 @@ def _create_cluster(**kwargs) -> tuple[Client, SLURMCluster]:
     return dask_client, cluster
 
 
-def is_cluster_ready(client: Client,
+def _is_cluster_ready(client: Client,
                      min_workers: int = 1,
                      recent_job_time: int = 120,
                      job_name: str = "dask-worker"
                      ) -> bool:
-    """
-    Check if the cluster is ready for computation by checking the status of recent SLURM 
-    jobs for dask workers.
-    
-    Parameters
-    ----------
-    client : Client
-        The dask distributed Client object
-    min_workers : int
-        Minimum number of workers required
-    recent_job_time : int
-        Time in seconds to consider a job as recent. Default is 120 seconds.
-    job_name : str
-        The name of the SLURM job to check. Default is "dask-worker".
-    
-    Returns
-    -------
-    bool
-        True if cluster is ready for computation, False otherwise.
-    """
+    """Check if the cluster is ready for computation by checking the status of recent SLURM jobs for dask workers."""
     try:
         current_time = datetime.datetime.now()
         
-        # Get all Slurm job IDs for current user and name "dask-worker"
+        # Get all Slurm job IDs for current user with the given job name
         cmd = f"squeue -u {os.getenv('USER')} -n {job_name} -h -o '%i %S'"
         output = sp.check_output(cmd, shell=True).decode('utf-8').strip().split('\n')
         
