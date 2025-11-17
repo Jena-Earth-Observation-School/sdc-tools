@@ -4,8 +4,8 @@ import time
 import subprocess as sp
 from dask_jobqueue import SLURMCluster
 from distributed import Client
-from distributed.utils import TimeoutError
 
+from distributed.utils import TimeoutError
 from typing import Optional
 
 
@@ -13,9 +13,9 @@ def start_slurm_cluster(cores: int = 12,
                         processes: int = 3,
                         memory: str = '18 GiB',
                         walltime: str = '01:00:00',
-                        log_directory: Optional[str] = None,
                         wait_timeout: int = 300,
-                        reservation: Optional[str] = None
+                        reservation: str = 'SALDI',
+                        log_directory: Optional[str] = None
                         ) -> tuple[Client, SLURMCluster]:
     """
     Start a dask_jobqueue.SLURMCluster and a distributed.Client. The cluster will
@@ -24,19 +24,23 @@ def start_slurm_cluster(cores: int = 12,
     Parameters
     ----------
     cores : int, optional
-        Total number of cores per job. Default is 16.
+        Total number of cores per job. Default is 12.
     processes : int, optional
-        Number of processes per job. Default is 2.
+        Number of processes per job. Default is 3.
     memory : str, optional
-        Total amount of memory per job. Default is '16 GiB'.
+        Total amount of memory per job. Default is '18 GiB'.
     walltime : str, optional
-        The walltime for the job in the format HH:MM:SS. Default is '00:45:00'.
+        The walltime for the job in the format HH:MM:SS. Default is '01:00:00'.
+    wait_timeout : int, optional
+        Timeout in seconds to wait for each configuration to start. Default is 300 seconds
+        (5 minutes).
+    reservation : str, optional
+        The SLURM reservation name to use. Default is 'SALDI'. If the reservation is
+        not active, it will be ignored. If it is active, the resources will be set to
+        8 cores, 2 processes, and 16 GiB memory to better fit within the reservation limits.
     log_directory : str, optional
         The directory to write the log files to. Default is None, which writes the log
         files to ~/.sdc_logs/<YYYY-mm-ddTHH:MM>.
-    wait_timeout : int, optional
-        Timeout in seconds to wait for the cluster to start. Default is 300 seconds
-        (5 minutes).
     
     Returns
     -------
@@ -108,8 +112,8 @@ def start_slurm_cluster(cores: int = 12,
                         start_time = time.time()  # Reset the timer
                         break
                     else:
-                        raise TimeoutError("[INFO] Cluster failed to start within timeout "
-                                           "period of 5 minutes. This could be due to high "
+                        raise TimeoutError("[INFO] Cluster failed to start within "
+                                           "timeout period. This could be due to high "
                                            "demand on the cluster.")
                 time.sleep(10)
             else:
