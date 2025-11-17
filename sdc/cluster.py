@@ -1,4 +1,6 @@
 import os
+from pathlib import Path
+import shutil
 import datetime
 import time
 import subprocess as sp
@@ -6,7 +8,6 @@ from dask_jobqueue import SLURMCluster
 from distributed import Client
 
 from distributed.utils import TimeoutError
-from typing import Optional
 
 
 def start_slurm_cluster(cores: int = 12,
@@ -14,8 +15,7 @@ def start_slurm_cluster(cores: int = 12,
                         memory: str = '18 GiB',
                         walltime: str = '01:00:00',
                         wait_timeout: int = 300,
-                        reservation: str = 'SALDI',
-                        log_directory: Optional[str] = None
+                        reservation: str = 'SALDI'
                         ) -> tuple[Client, SLURMCluster]:
     """
     Start a dask_jobqueue.SLURMCluster and a distributed.Client. The cluster will
@@ -38,9 +38,6 @@ def start_slurm_cluster(cores: int = 12,
         The SLURM reservation name to use. Default is 'SALDI'. If the reservation is
         not active, it will be ignored. If it is active, the resources will be set to
         8 cores, 2 processes, and 16 GiB memory to better fit within the reservation limits.
-    log_directory : str, optional
-        The directory to write the log files to. Default is None, which writes the log
-        files to ~/.sdc_logs/<YYYY-mm-ddTHH:MM>.
     
     Returns
     -------
@@ -58,10 +55,14 @@ def start_slurm_cluster(cores: int = 12,
     home_directory = os.getenv('HOME')
     if any(x is None for x in [user_name, home_directory]):
         raise RuntimeError("Cannot determine user name or home directory")
-    if log_directory is None:
-        if os.path.exists(home_directory):
-            now = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')
-            log_directory = os.path.join(home_directory, '.sdc_logs', now)
+    
+    log_directory = None
+    home_directory = Path(home_directory)
+    if home_directory.exists():
+        now = datetime.datetime.now()
+        _clean_old_logs(home_directory.joinpath('.sdc_logs'), now)
+        log_directory = home_directory.joinpath('.sdc_logs', 
+                                                now.strftime('%Y-%m-%dT%H:%M'))            
     
     port = _dashboard_port()
     scheduler_options = {'dashboard_address': f':{port}'}
@@ -75,7 +76,7 @@ def start_slurm_cluster(cores: int = 12,
         'job_script_prologue': ['mkdir -p /scratch/$USER'],
         'worker_extra_args': ['--lifetime', '55m', '--lifetime-stagger', '4m'],
         'local_directory': os.path.join('/', 'scratch', user_name),
-        'log_directory': log_directory,
+        'log_directory': str(log_directory) if log_directory else None,
         'scheduler_options': scheduler_options,
         'job_name': job_name
     }
@@ -272,3 +273,21 @@ def _cancel_slurm_jobs(job_name: str):
                 print(f"Failed to cancel job {job_id}: {e}")
     except Exception as e:
         print(f"Error canceling jobs: {e}")
+
+
+def _clean_old_logs(log_directory, now):
+    log_path = Path(log_directory)
+    if not log_path.exists():
+        return
+    
+    one_week_ago = now - datetime.timedelta(weeks=1)
+    for dir_path in log_path.iterdir():
+        if dir_path.is_dir():
+            try:
+                dir_date = datetime.datetime.strptime(dir_path.name, "%Y-%m-%dT%H:%M")
+                if dir_date < one_week_ago:
+                    shutil.rmtree(dir_path)
+            except ValueError:
+                print(f"Skipping {dir_path}: name does not match expected date format.")
+            except Exception as e:
+                print(f"Error processing {dir_path}: {e}")
