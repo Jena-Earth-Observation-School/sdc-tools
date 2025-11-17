@@ -10,7 +10,7 @@ parts:
     chapters:
     - file: content/02/01_00_Sentinel2
     - file: content/02/02_00_SANLC
-    - file: content/02/03_00_MSWEP
+    - file: content/02/03_00_Precipitation
     - file: content/02/04_00_Sentinel1
     - file: content/02/05_00_S1_SurfMI
     - file: content/02/06_00_S1_Coherence

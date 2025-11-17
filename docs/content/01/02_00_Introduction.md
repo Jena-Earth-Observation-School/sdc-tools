@@ -35,6 +35,7 @@ supported at the moment:
     - _"s2_l2a"_: Sentinel-2 Level 2A (L2A)
     - _"sanlc"_: South African National Land Cover (SANLC)
     - _"mswep"_: Multi-Source Weighted-Ensemble Precipitation (MSWEP) daily
+    - _"chirps"_: Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS) monthly
     - _"cop_dem"_: Copernicus Digital Elevation Model GLO-30
 - `vec`: Filter the returned data spatially by either providing the name of a 
 SALDi site in the format _"siteXX"_, where XX is the site number (e.g. 

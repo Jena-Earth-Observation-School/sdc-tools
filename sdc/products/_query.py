@@ -1,4 +1,5 @@
 import glob
+import re
 from datetime import datetime
 import pytz
 from shapely.geometry import box
@@ -182,6 +183,47 @@ def filter_mswep_nc(directory: Path,
         years = [start_time.year + i for i in range(end_time.year -
                                                     start_time.year + 1)]
         files = [f for f in files if any(str(y) in f for y in years)]
+    return files
+
+
+def filter_chirps(directory: Path,
+                  time_range: Optional[tuple[str, str]] = None,
+                  time_pattern: Optional[str] = None
+                  ) -> list[str]:
+    """
+    Find and filter CHIRPS GeoTIFF files based on a time range.
+    
+    Parameters
+    ----------
+    directory : Path
+        The directory to search for CHIRPS NetCDF files.
+    time_range : tuple of str, optional
+        Time range to load as a tuple of (start_time, stop_time), where start_time and
+        stop_time are strings in the format specified by `time_pattern`. Default is
+        None, which loads all available data.
+    time_pattern : str, optional
+        Time pattern to parse the time range. Only needed if it deviates from the
+        default: '%Y-%m-%d'.
+    
+    Returns
+    -------
+    files : list of str
+        A list of paths to CHIRPS GeoTIFF files.
+    """
+    files = glob.glob(str(directory.joinpath('*.tif')))
+    if time_range is not None:
+        start_time = _timestring_to_utc_datetime(time_range[0], time_pattern)
+        end_time = _timestring_to_utc_datetime(time_range[1], time_pattern)
+        files_flt = []
+        for file in files:
+            match = re.search(r'chirps-v3\.0\.(\d{4})\.(\d{1,2})\.tif', file)
+            if not match:
+                continue
+            year, month = map(int, match.groups())
+            file_time = datetime(year, month, 1, tzinfo=pytz.UTC)
+            if start_time <= file_time < end_time:
+                files_flt.append(file)
+        files = files_flt
     return files
 
 
