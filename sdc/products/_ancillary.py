@@ -27,7 +27,7 @@ def get_catalog_path(product: str) -> str | Path:
     if not _dir.exists():
         raise FileNotFoundError(f"Product '{product}': "
                                 f"Could not find product directory {_dir}")
-    if product == 'mswep':
+    if product in ['mswep', 'chirps']:
         return _dir
     if not _file.exists():
         raise FileNotFoundError(f"Product '{product}': "

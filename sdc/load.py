@@ -77,10 +77,10 @@ def load_product(product: str,
         print("[WARNING] Overriding default loading parameters is only recommended for "
               "advanced users. Start with the default parameters and only override "
               "them if you know what you are doing.")
-        if product == 'mswep':
+        if product in ['mswep', 'chirps']:
             print("[INFO] Overriding default loading parameters is currently not "
-                  "supported for the MSWEP product. Default parameters will be used "
-                  "instead.")
+                  f"supported for the {product.upper()} product. Default parameters will "
+                  "be used instead.")
     
     # `bbox`-parameter of `odc.stac.load` needs to be in lat/lon!
     crs = 4326
@@ -122,6 +122,8 @@ def load_product(product: str,
                              override_defaults=override_defaults)
     elif product == 'mswep':
         ds = prod.load_mswep(**kwargs)
+    elif product == 'chirps':
+        ds = prod.load_chirps(**kwargs)
     elif product == 'cop_dem':
         ds = prod.load_copdem(bounds=bounds, 
                               override_defaults=override_defaults)

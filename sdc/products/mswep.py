@@ -1,5 +1,8 @@
+from pathlib import Path
 import xarray as xr
+import pandas as pd
 from odc.geo.xr import assign_crs
+from rioxarray import open_rasterio
 
 from typing import Optional
 from xarray import DataArray
@@ -58,3 +61,30 @@ def load_mswep(bounds: tuple[float, float, float, float],
         ds = ds.sel(time=slice(time_range[0], time_range[1]))
     
     return ds.precipitation
+
+
+def load_chirps(bounds: tuple[float, float, float, float],
+                time_range: Optional[tuple[str, str]] = None,
+                time_pattern: Optional[str] = None
+                ) -> DataArray:
+    files = query.filter_chirps(directory=anc.get_catalog_path(product='chirps'),
+                                time_range=time_range,
+                                time_pattern=time_pattern)
+    files = [Path(f) for f in files]
+    
+    da_list = []
+    for file_path in files:
+        da = open_rasterio(file_path)
+        year, month = file_path.stem.split("chirps-v3.0.")[1].split(".")
+        date_str = f"{year}-{month}-01"
+        da = da.assign_coords(time=pd.to_datetime(date_str))
+        da_list.append(da)
+
+    da_list = sorted(da_list, key=lambda x: x.time.values)
+    da = xr.concat(da_list, dim='time').squeeze()
+    da = da.where(da !=-9999.)
+    da = da.rename({'x': 'longitude', 'y': 'latitude'})
+    da = assign_crs(da, crs=4326)
+    da = da.sel(longitude=slice(bounds[0], bounds[2]),
+                latitude=slice(bounds[3], bounds[1]))
+    return da
