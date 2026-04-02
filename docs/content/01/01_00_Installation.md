@@ -52,8 +52,14 @@ these steps:
 wget https://raw.githubusercontent.com/Jena-Earth-Observation-School/sdc-tools/main/environment.yml
 pixi init --import environment.yml
 pixi install
-pixi add --pypi 'sdc @ git+https://github.com/Jena-Earth-Observation-School/sdc-tools.git’
+pixi add --pypi 'sdc @ git+https://github.com/Jena-Earth-Observation-School/sdc-tools.git'
 ```
 
-_Note_: As far as I know, Pixi currently does not support installing environments 
-directly from  remote URLs, so you need to download the `environment.yml` file first.
+If the last installation step fails with _"Error: failed to map conda packages to their PyPI equivalents. [...]"_,
+the following steps hopefully resolve this issue (see also https://github.com/prefix-dev/pixi/issues/474): 
+
+```bash
+wget https://raw.githubusercontent.com/prefix-dev/parselmouth/refs/heads/main/files/compressed_mapping.json
+sed -i '/^version = /a conda-pypi-map = { conda-forge = "compressed_mapping.json" }' pixi.toml
+pixi add --pypi 'sdc @ git+https://github.com/Jena-Earth-Observation-School/sdc-tools.git'
+```
