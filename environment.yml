@@ -28,3 +28,6 @@ dependencies:
   - xarray
   - xarray-spatial
   - xvec
+  - pip
+  - pip:
+    - 'draco @ git+https://github.com/maawoo/draco.git'
