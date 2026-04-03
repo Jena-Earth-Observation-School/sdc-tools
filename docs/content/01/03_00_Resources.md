@@ -3,14 +3,11 @@
 ## Python and Jupyter Notebooks 
 
 If you want to get an introduction to [Python](https://www.python.org/) and/or 
-[Jupyter](https://jupyter.org/) Notebooks, I recommend the following resources from 
-Project Pythia:
-- [Quickstart: Zero to Python](https://foundations.projectpythia.org/foundations/quickstart.html)
-- [Getting Started with Jupyter](https://foundations.projectpythia.org/foundations/getting-started-jupyter.html)
-
-[Project Pythia Foundations](https://foundations.projectpythia.org/landing-page.html) 
-also provides tutorials on various core scientific Python packages, such as NumPy, 
-Matplotlib and Pandas, which you will likely encounter at some point.
+[Jupyter](https://jupyter.org/) Notebooks, I recommend the Project Pythia [Foundational 
+Skills](https://foundations.projectpythia.org/foundations/overview) tutorials. These are 
+part of the [Project Pythia Foundations Book](https://foundations.projectpythia.org/preamble/how-to-use/), 
+which also provides tutorials on various core scientific Python packages, such as NumPy, 
+Matplotlib and Pandas.
 
 (xarray-dask-intro)=
 ## Xarray, Dask and lazy loading
