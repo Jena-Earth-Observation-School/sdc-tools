@@ -402,10 +402,10 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="use-the-dask-dashboard-to-monitor-computations">
 <h1>…use the Dask Dashboard to monitor computations?<a class="headerlink" href="#use-the-dask-dashboard-to-monitor-computations" title="Link to this heading">#</a></h1>
 <p>With the power to access large amounts of data and run complex computations on our HPC cluster, it’s important to wield that power responsibly. To help you do so — and ensure your tasks run efficiently — the Dask Dashboard lets you monitor your computations in real time. You can access the dashboard by following these steps:</p>
-<p>First, you can import the <code class="docutils literal notranslate"><span class="pre">dask_client</span></code> as done in the following cell at the beginning of your notebook:</p>
+<p>First, you can import the <code class="docutils literal notranslate"><span class="pre">dask_client</span></code> and <code class="docutils literal notranslate"><span class="pre">dask_cluster</span></code> objects as done in the following cell at the beginning of your notebook. The latter is relevant to properly release resources again as shown in the end of this notebook.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sdc</span><span class="w"> </span><span class="kn">import</span> <span class="n">dask_client</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sdc</span><span class="w"> </span><span class="kn">import</span> <span class="n">dask_client</span><span class="p">,</span> <span class="n">dask_cluster</span>
 
 <span class="n">dask_client</span>
 </pre></div>
@@ -916,6 +916,15 @@ No recent SLURM jobs found for dask-workers
 <li><p>Below the task stream, you have a “progress” panel that shows the overall progress of your computation split into multiple subtasks. While the tasks are being executed, you can see the progress bars filling up, indicating how much of each task has been completed. In this example the progress bars are filling up smoothly, which corresponds to the efficient execution of tasks shown in the task stream above. If you notice that tasks are taking a long time to complete or if there are significant delays between tasks, it may indicate that your computation is not optimized and could benefit from further tuning or adjustments (e.g., changing chunk sizes, optimizing algorithms, etc.).</p></li>
 </ul>
 <p><img alt="Dask dashboard" src="../../_images/dask_dashboard_example.png" /></p>
+<p>It is highly recommended to gracefully close the client and cluster objects when you are done and/or want to restart your Jupyter notebook kernel. This will make sure that all resources are released properly.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dask_client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">dask_cluster</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">
